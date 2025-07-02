@@ -13,6 +13,10 @@ app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-sec
 def track_user_activity(event_type, data=None):
     """Track user activities for analytics"""
     try:
+        # Skip tracking for development/admin IP
+        if request.remote_addr == "172.31.128.93":
+            return
+
         analytics_data = {
             'timestamp': datetime.now().isoformat(),
             'event_type': event_type,
