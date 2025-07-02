@@ -295,5 +295,41 @@
     "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:00:23.857296",
+    "session_id": "ade50aa5-0d60-4126-9e38-73fca39ae072",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:01:24.798020",
+    "session_id": "f1cbd148-d9aa-4589-b6df-0f7c705bd6bf",
+    "file_type": "image",
+    "filename": "afrojoeymay-122.jpg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:01:52.874355",
+    "session_id": "47a95a38-af89-4ae1-9827-c5717cdf073d",
+    "file_type": "image",
+    "filename": "629e0c60-4197-4fb6-a35e-0297b1026647.png",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:02:13.725600",
+    "session_id": "8d27a6e8-f6e4-4cbb-9c2b-1936c21dcfad",
+    "file_type": "image",
+    "filename": "bf92b566-3238-4d2f-8e05-97c7877bbfa7.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
