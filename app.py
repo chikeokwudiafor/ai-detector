@@ -95,6 +95,21 @@ def index():
                          result_icon=result_icon,
                          result_description=result_description)
 
+@app.route("/about")
+def about():
+    """About page"""
+    return render_template("about.html")
+
+@app.route("/roadmap")
+def roadmap():
+    """Roadmap page"""
+    return render_template("roadmap.html")
+
+@app.route("/license")
+def license_page():
+    """License page"""
+    return render_template("license.html")
+
 @app.route("/health")
 def health_check():
     """Health check endpoint"""

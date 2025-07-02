@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap – AIthentic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-blue: #1e40af;
+            --primary-blue-light: #3b82f6;
+            --secondary-gray: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --success-green: #10b981;
+            --warning-amber: #f59e0b;
+            --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-brand::before {
+            content: "🔍";
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .nav-links a.active {
+            color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .roadmap-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid var(--border-light);
+        }
+        
+        .roadmap-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .roadmap-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .roadmap-status {
+            flex-shrink: 0;
+            width: 120px;
+            text-align: center;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .status-completed {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            color: var(--success-green);
+            border: 1px solid #86efac;
+        }
+        
+        .status-in-progress {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            color: var(--warning-amber);
+            border: 1px solid #fcd34d;
+        }
+        
+        .status-planned {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-light);
+        }
+        
+        .roadmap-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .roadmap-timeline {
+            font-size: 0.875rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .roadmap-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .feature-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.875rem;
+        }
+        
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow-medium);
+                border-top: 1px solid var(--border-light);
+                gap: 0;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                padding: 6rem 1rem 2rem;
+            }
+            
+            .roadmap-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .roadmap-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .roadmap-status {
+                width: auto;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">AIthentic</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/roadmap" class="active">Roadmap</a></li>
+                <li><a href="/license">License</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Development Roadmap</h1>
+            <p class="page-subtitle">
+                Explore our planned features and upcoming enhancements to make AIthentic even more powerful.
+            </p>
+        </div>
+
+        <div class="roadmap-section">
+            <div class="roadmap-item">
+                <div class="roadmap-status">
+                    <span class="status-badge status-completed">Completed</span>
+                </div>
+                <div class="roadmap-content">
+                    <h3>Core Detection Platform</h3>
+                    <div class="roadmap-timeline">Released • Q4 2024</div>
+                    <p class="roadmap-description">
+                        Multi-model ensemble detection system for images and text with professional-grade accuracy 
+                        and confidence scoring.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Image detection using specialized AI models</li>
+                        <li>Text detection with RoBERTa-based models</li>
+                        <li>Weighted ensemble voting system</li>
+                        <li>Confidence scoring and agreement metrics</li>
+                        <li>Professional web interface</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-status">
+                    <span class="status-badge status-in-progress">In Progress</span>
+                </div>
+                <div class="roadmap-content">
+                    <h3>Enhanced Video Detection</h3>
+                    <div class="roadmap-timeline">Q1 2025 • In Development</div>
+                    <p class="roadmap-description">
+                        Advanced frame-by-frame analysis and temporal consistency checking for comprehensive 
+                        video content verification.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Frame-by-frame AI detection analysis</li>
+                        <li>Temporal consistency algorithms</li>
+                        <li>Audio deepfake detection</li>
+                        <li>Real-time video stream analysis</li>
+                        <li>Batch video processing capabilities</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-status">
+                    <span class="status-badge status-planned">Planned</span>
+                </div>
+                <div class="roadmap-content">
+                    <h3>Watermark Tracking System</h3>
+                    <div class="roadmap-timeline">Q2 2025 • Research Phase</div>
+                    <p class="roadmap-description">
+                        Advanced watermark detection and tracking capabilities to identify AI-generated content 
+                        through embedded digital signatures.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Invisible watermark detection</li>
+                        <li>Digital signature verification</li>
+                        <li>Provenance tracking chains</li>
+                        <li>Creator attribution systems</li>
+                        <li>Blockchain-based verification</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-status">
+                    <span class="status-badge status-planned">Planned</span>
+                </div>
+                <div class="roadmap-content">
+                    <h3>Real-time Verification API</h3>
+                    <div class="roadmap-timeline">Q3 2025 • Planning</div>
+                    <p class="roadmap-description">
+                        Enterprise-grade API service for real-time content verification with webhooks, 
+                        batch processing, and integration capabilities.
+                    </p>
+                    <ul class="feature-list">
+                        <li>RESTful API with real-time endpoints</li>
+                        <li>Webhook notifications for results</li>
+                        <li>Batch processing for large datasets</li>
+                        <li>Enterprise authentication and rate limiting</li>
+                        <li>Custom model training options</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-status">
+                    <span class="status-badge status-planned">Planned</span>
+                </div>
+                <div class="roadmap-content">
+                    <h3>Advanced Analytics Dashboard</h3>
+                    <div class="roadmap-timeline">Q4 2025 • Concept</div>
+                    <p class="roadmap-description">
+                        Comprehensive analytics platform with trend analysis, model performance insights, 
+                        and customizable reporting capabilities.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Detection trend visualization</li>
+                        <li>Model performance analytics</li>
+                        <li>Custom report generation</li>
+                        <li>Export capabilities (PDF, CSV, JSON)</li>
+                        <li>Team collaboration features</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 AIthentic. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
