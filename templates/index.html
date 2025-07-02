@@ -35,7 +35,12 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             line-height: 1.6;
             color: #e2e8f0;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            /* Solid dark fallback for mobile devices */
+            background-color: #0f0f23;
+            /* Enhanced gradient overlay */
+            background: 
+                linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%),
+                #0f0f23;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
@@ -48,12 +53,31 @@
             left: 0;
             width: 100%;
             height: 100%;
+            /* Stronger base dark background for mobile */
+            background-color: #0f0f23;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+                linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(26, 26, 46, 0.9) 50%, rgba(22, 33, 62, 0.9) 100%),
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.15) 0%, transparent 50%),
+                #0f0f23;
             pointer-events: none;
             z-index: -1;
+        }
+
+        /* Additional mobile-specific background reinforcement */
+        @media (max-width: 768px) {
+            body {
+                background-color: #0f0f23 !important;
+                background-image: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%) !important;
+            }
+            
+            body::before {
+                background-color: #0f0f23 !important;
+                background-image: 
+                    linear-gradient(135deg, rgba(15, 15, 35, 0.98) 0%, rgba(26, 26, 46, 0.95) 50%, rgba(22, 33, 62, 0.95) 100%),
+                    radial-gradient(circle at 50% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 70%) !important;
+            }
         }
 
         /* Animated background particles */
@@ -73,6 +97,7 @@
 
         /* Navigation */
         .navbar {
+            background-color: #0f0f23;
             background: rgba(15, 15, 35, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-light);
@@ -83,6 +108,14 @@
             z-index: 1000;
             padding: 1rem 2rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Mobile navbar reinforcement */
+        @media (max-width: 768px) {
+            .navbar {
+                background-color: #0f0f23 !important;
+                background: rgba(15, 15, 35, 0.98) !important;
+            }
         }
 
         .nav-container {
@@ -305,6 +338,7 @@
         .app-container {
             max-width: 900px;
             width: 100%;
+            background-color: rgba(30, 41, 59, 0.9);
             background: rgba(30, 41, 59, 0.8);
             backdrop-filter: blur(20px);
             border-radius: 1.5rem;
@@ -313,6 +347,14 @@
             border: 1px solid var(--border-light);
             position: relative;
             overflow: hidden;
+        }
+        
+        /* Mobile container reinforcement */
+        @media (max-width: 768px) {
+            .app-container {
+                background-color: rgba(30, 41, 59, 0.95) !important;
+                background: rgba(30, 41, 59, 0.95) !important;
+            }
         }
 
         .app-container::before {
