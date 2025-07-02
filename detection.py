@@ -181,7 +181,7 @@ class EnsembleVoter:
             'agreement': agreement,
             'model_count': len(predictions)
         }
-    
+
     @staticmethod
     def apply_dynamic_weighting(base_confidence, predictions_data):
         """Adjust confidence based on dynamic weighting."""
@@ -224,16 +224,15 @@ class EnsembleVoter:
                     organika_weight = pred_data['weight']
                     break
 
-            if organika_confidence is not None and organika_weight > 2.0:
-                # If Organika is very confident (>85%), let it dominate
-                organika_threshold = HEURISTICS["ensemble"].get("organika_threshold", 0.85)
+            if organika_confidence is not None and organika_weight > 1.0:
+                # OVERRIDE SYSTEM: If Organika is EXACTLY 100% confident, let it completely dominate
+                if organika_confidence >= 1.0:
+                    # Full override - Organika takes complete control
+                    adjusted_confidence = organika_confidence
+                    logger.info(f"🎯 ORGANIKA OVERRIDE: {organika_confidence:.3f} (ABSOLUTE 100% confidence) - bypassing ensemble")
 
-                if organika_confidence > organika_threshold:
-                    # Override: Give Organika much more influence
-                    override_boost = 1.5
-                    adjusted_confidence = organika_confidence * override_boost
-                    logger.info(f"Applied Organika override: {organika_confidence:.3f} -> {adjusted_confidence:.3f}")
-                elif organika_confidence > HEURISTICS["ensemble"]["high_confidence_threshold"]:
+                # WEIGHTED SYSTEM: For everything else, use balanced approach
+                elif organika_confidence >= 0.85:
                     # Regular trust boost for high confidence
                     trust_boost = 1.3
                     adjusted_confidence *= trust_boost
