@@ -231,11 +231,13 @@ class EnsembleVoter:
                     trust_boost = 1.3
                     adjusted_confidence *= trust_boost
                     logger.info(f"Applied Organika trust boost: {trust_boost:.3f}")
-                elif organika_confidence < 0.2:
-                    # If Organika is very confident it's human, reduce final confidence more
+                elif organika_confidence < 0.6:
+                    # Only apply human confidence boost when Organika is truly confident it's human (< 60%)
                     human_boost = 0.7
                     adjusted_confidence *= human_boost
-                    logger.info(f"Applied Organika human confidence boost: {human_boost:.3f}")
+                    logger.info(f"Applied Organika human confidence boost: {human_boost:.3f} (Organika: {organika_confidence:.3f})")
+                # For 0.6-0.999 range, don't apply any Organika-specific adjustments
+                # Let the ensemble process handle it normally
 
         return min(adjusted_confidence, 1.0)
 
