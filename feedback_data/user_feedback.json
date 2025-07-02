@@ -106,5 +106,14 @@
     "model_prediction": "\ud83e\udde0 Likely Human",
     "true_label": "human_created",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:44:48.898370",
+    "session_id": "deaabb78-18ae-4c53-90ee-db0d4e57b917",
+    "file_type": "image",
+    "filename": "af005353-84e3-4cf5-8ab6-2e1a2ee6fd0a.png",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
