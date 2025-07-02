@@ -162,18 +162,20 @@ def index():
             # Generate session ID for feedback
             session_id = str(uuid.uuid4())
 
-            # Store analysis data in session for feedback
+            # Store analysis data in session for feedback (except for video not implemented)
             filename = file.filename if file else "direct_text_input"
             file_type_name = file_type if 'file_type' in locals() else "text"
-
-            session['last_analysis'] = {
-                'session_id': session_id,
-                'filename': filename,
-                'file_type': file_type_name,
-                'result': result,
-                'result_type': result_type,
-                'confidence': confidence
-            }
+            
+            # Don't store session data for video not implemented (no actual analysis occurred)
+            if result_type != "video_not_implemented":
+                session['last_analysis'] = {
+                    'session_id': session_id,
+                    'filename': filename,
+                    'file_type': file_type_name,
+                    'result': result,
+                    'result_type': result_type,
+                    'confidence': confidence
+                }
 
             # Log successful analysis
             log_filename = file.filename if file else "direct_text_input"

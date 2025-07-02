@@ -429,13 +429,14 @@ class AIDetector:
         # Remove file extension and convert to lowercase
         name_without_ext = os.path.splitext(filename)[0].lower()
         
-        # Get AI keywords from config
+        # Get AI keywords from config and convert to lowercase
         ai_keywords = HEURISTICS["filename_semantic"]["ai_keywords"]
         boost_factor = HEURISTICS["filename_semantic"]["ai_boost_factor"]
         
         features = {}
         for keyword in ai_keywords:
-            if keyword in name_without_ext:
+            # Ensure keyword comparison is case-insensitive
+            if keyword.lower() in name_without_ext:
                 # Strong semantic indicator of AI generation
                 features['ai_filename_indicator'] = boost_factor
                 logger.info(f"AI semantic keyword '{keyword}' found in filename: {filename}")

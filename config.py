@@ -1,4 +1,3 @@
-
 """
 Configuration settings for AI Detector
 """
