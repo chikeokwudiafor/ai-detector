@@ -118,6 +118,12 @@
             border: 2px solid #b3ffb3;
         }
         
+        .confidence {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+        
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -178,6 +184,11 @@
                 🤖 This content appears to be AI-generated
             {% else %}
                 👤 This content appears to be human-made
+            {% endif %}
+            {% if confidence is not none and confidence > 0 %}
+                <div class="confidence">
+                    Confidence: {{ "%.1f"|format(confidence * 100) }}%
+                </div>
             {% endif %}
         </div>
         {% endif %}
