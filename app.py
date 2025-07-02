@@ -21,14 +21,14 @@ def track_user_activity(event_type, data=None):
             'referrer': request.headers.get('Referer', ''),
             'data': data or {}
         }
-        
+
         # Ensure analytics directory exists
         os.makedirs('analytics', exist_ok=True)
-        
+
         # Append to analytics log
         with open('analytics/user_activity.json', 'a') as f:
             f.write(json.dumps(analytics_data) + '\n')
-            
+
     except Exception as e:
         app.logger.error(f"Analytics tracking error: {str(e)}")
 
@@ -60,9 +60,9 @@ def process_text_content(text_content, filename="direct_input.txt"):
     try:
         if len(text_content.strip()) == 0:
             return None, 0.0, "Text content is empty."
-        
+
         result_type, confidence, raw_scores = AIDetector.detect_text(text_content, filename)
-        
+
         # Handle model errors
         if result_type in ["model_unavailable", "processing_error"]:
             error_msg = ERROR_MESSAGES.get(result_type, ERROR_MESSAGES["processing_error"])
@@ -88,14 +88,21 @@ def process_file(file, file_type, filename="unknown"):
                 return None, 0.0, "Text file is empty."
             result_type, confidence, raw_scores = AIDetector.detect_text(text_content, filename)
         elif file_type == "video":
-            result_type, confidence, raw_scores = AIDetector.detect_video(file, filename)
+            # Even if you’re not doing video detection yet, log it:
+            app.logger.warning("Video detection not implemented yet. Coming soon.")
+            result_type = "video_not_implemented"
+            confidence = 0.0
+            # result_type, confidence, raw_scores = AIDetector.detect_video(file, filename) #Commented out until video is implemented
         else:
             return None, 0.0, ERROR_MESSAGES["unsupported_format"]
 
-        # Handle model errors
+        # Handle model errors and special cases
         if result_type in ["model_unavailable", "processing_error"]:
             error_msg = ERROR_MESSAGES.get(result_type, ERROR_MESSAGES["processing_error"])
             return None, 0.0, error_msg
+        elif result_type == "video_not_implemented":
+            # For video not implemented, show as a result rather than an error
+            return result_type, 0.0, None
 
         return result_type, confidence, None
 
@@ -128,7 +135,7 @@ def index():
             if len(text_content.strip()) < 10:
                 flash("Please enter at least 10 characters for better analysis.", "error")
                 return render_template("index.html")
-            
+
             # Process text directly
             result_type, confidence, error_msg = process_text_content(text_content.strip())
             if error_msg:
@@ -151,14 +158,14 @@ def index():
         # Get result classification
         if result_type and confidence is not None:
             result, result_class, result_icon, result_description, result_footer = get_result_classification(result_type)
-            
+
             # Generate session ID for feedback
             session_id = str(uuid.uuid4())
-            
+
             # Store analysis data in session for feedback
             filename = file.filename if file else "direct_text_input"
             file_type_name = file_type if 'file_type' in locals() else "text"
-            
+
             session['last_analysis'] = {
                 'session_id': session_id,
                 'filename': filename,
@@ -171,7 +178,7 @@ def index():
             # Log successful analysis
             log_filename = file.filename if file else "direct_text_input"
             app.logger.info(f"Analysis complete: {log_filename} -> {result_type} ({confidence:.3f})")
-            
+
             # Track analysis event
             track_user_activity('analysis_completed', {
                 'filename': log_filename,
@@ -211,19 +218,19 @@ def submit_feedback():
         data = request.get_json()
         session_id = data.get('session_id')
         true_label = data.get('feedback')  # 'ai_generated' or 'human_created'
-        
+
         if not session_id or not true_label:
             return jsonify({"error": "Missing required data"}), 400
-        
+
         # Validate true_label values
         if true_label not in ['ai_generated', 'human_created']:
             return jsonify({"error": "Invalid feedback value"}), 400
-        
+
         # Get session data
         session_data = session.get('last_analysis')
         if not session_data:
             return jsonify({"error": "No recent analysis found"}), 400
-        
+
         # Save feedback
         success = feedback_manager.save_feedback(
             session_id=session_id,
@@ -232,12 +239,12 @@ def submit_feedback():
             model_result=session_data['result'],
             true_label=true_label
         )
-        
+
         if success:
             return jsonify({"message": "Thank you for your feedback!"})
         else:
             return jsonify({"error": "Failed to save feedback"}), 500
-            
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -256,11 +263,11 @@ def analytics_dashboard():
                 for line in f:
                     if line.strip():
                         analytics.append(json.loads(line))
-        
+
         # Basic stats
         total_visits = len([a for a in analytics if a['event_type'] == 'page_visit'])
         total_analyses = len([a for a in analytics if a['event_type'] == 'analysis_completed'])
-        
+
         return jsonify({
             'total_page_visits': total_visits,
             'total_analyses': total_analyses,

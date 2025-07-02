@@ -181,8 +181,11 @@ class EnsembleVoter:
         adjusted_confidence = base_confidence
         
         # Reduce confidence if models disagree significantly
-        if metrics['std_dev'] > 0.3:
-            disagreement_penalty = min(0.3, metrics['std_dev'] / 2)
+        disagreement_threshold = HEURISTICS["ensemble"]["disagreement_threshold"]
+        max_penalty = HEURISTICS["ensemble"]["max_disagreement_penalty"]
+        
+        if metrics['std_dev'] > disagreement_threshold:
+            disagreement_penalty = min(max_penalty, metrics['std_dev'] / 2)
             adjusted_confidence *= (1.0 - disagreement_penalty)
             logger.info(f"Applied disagreement penalty: -{disagreement_penalty:.3f}")
         
@@ -349,10 +352,14 @@ class AIDetector:
     @staticmethod
     def detect_video(video_file, filename="unknown.mp4"):
         """
-        Placeholder for video detection
+        Placeholder for video detection - Coming soon!
         Returns: (result_type, confidence, raw_scores)
         """
-        return "insufficient", 0.0, []
+        logger.warning("Video detection not implemented yet. Coming soon.")
+        logger.info(f"Video upload attempted: {filename}")
+        
+        # Return a specific result type for video not implemented
+        return "video_not_implemented", 0.0, []
     
     @staticmethod
     def _parse_text_result(result):
@@ -398,17 +405,18 @@ class AIDetector:
     def _analyze_text_features(text_content):
         """Analyze text features for confidence adjustments"""
         features = {}
+        text_config = HEURISTICS["text_features"]
         
         # Very short text is harder to classify reliably
         if len(text_content) < 50:
-            features['short_text'] = 0.85
+            features['short_text'] = text_config["short_text_penalty"]
         
         # Check sentence length variation (AI often has uniform patterns)
         sentences = [s.strip() for s in text_content.split('.') if s.strip()]
         if len(sentences) > 3:
             lengths = [len(s) for s in sentences]
-            if np.std(lengths) < 10:  # Very uniform sentence lengths
-                features['uniform_sentences'] = 1.15
+            if np.std(lengths) < text_config["uniform_threshold"]:
+                features['uniform_sentences'] = text_config["uniform_sentences_boost"]
         
         return features
     
@@ -421,21 +429,15 @@ class AIDetector:
         # Remove file extension and convert to lowercase
         name_without_ext = os.path.splitext(filename)[0].lower()
         
-        # Semantic AI indicators (tools, models, generation terms)
-        ai_keywords = [
-            'chatgpt', 'gpt', 'dalle', 'midjourney', 'stable diffusion', 'stablediffusion',
-            'ai generated', 'ai_generated', 'artificial', 'generated', 'synthetic',
-            'deepfake', 'gan', 'diffusion', 'neural', 'model',
-            'openai', 'anthropic', 'claude', 'bard', 'gemini',
-            'leonardo', 'firefly', 'kandinsky', 'playground',
-            'aiart', 'ai_art', 'machinelearning', 'ml_generated'
-        ]
+        # Get AI keywords from config
+        ai_keywords = HEURISTICS["filename_semantic"]["ai_keywords"]
+        boost_factor = HEURISTICS["filename_semantic"]["ai_boost_factor"]
         
         features = {}
         for keyword in ai_keywords:
             if keyword in name_without_ext:
                 # Strong semantic indicator of AI generation
-                features['ai_filename_indicator'] = 1.8  # Boost AI confidence by 80%
+                features['ai_filename_indicator'] = boost_factor
                 logger.info(f"AI semantic keyword '{keyword}' found in filename: {filename}")
                 break
         
@@ -445,11 +447,13 @@ class AIDetector:
     def _analyze_image_features(image):
         """Analyze image features for confidence adjustments"""
         features = {}
+        image_config = HEURISTICS["image_features"]
         
         # Very small images are harder to classify
         width, height = image.size
-        if width < 256 or height < 256:
-            features['small_image'] = 0.85
+        min_size = image_config["min_size_threshold"]
+        if width < min_size or height < min_size:
+            features['small_image'] = image_config["small_image_penalty"]
         
         return features
     
