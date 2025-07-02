@@ -2,16 +2,11 @@
 Configuration settings for AI Detector
 """
 
-# Model configurations
+# Model configurations - Using lighter models for deployment
 TEXT_MODELS = [
     {
-        "name": "roberta-base-openai-detector",
-        "weight": 0.6,
-        "fallback": "Hello-SimpleAI/chatgpt-detector-roberta"
-    },
-    {
         "name": "Hello-SimpleAI/chatgpt-detector-roberta", 
-        "weight": 0.4,
+        "weight": 1.0,
         "fallback": None
     }
 ]
@@ -19,7 +14,7 @@ TEXT_MODELS = [
 IMAGE_MODELS = [
     {
         "name": "umm-maybe/AI-image-detector",
-        "weight": 0.7,
+        "weight": 1.0,
         "fallback": None
     }
 ]
