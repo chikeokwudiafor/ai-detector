@@ -945,12 +945,13 @@
         });
         
         document.getElementById('analysisForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+            
             const fileInput = document.getElementById('file');
             const submitBtn = document.getElementById('submitBtn');
             const loadingDiv = document.getElementById('loadingDiv');
             
             if (!fileInput.files[0]) {
-                e.preventDefault();
                 alert('Please select a file first!');
                 return;
             }
@@ -960,8 +961,76 @@
             submitBtn.innerHTML = 'Processing...';
             loadingDiv.classList.add('show');
             
+            // Clear any existing results or flash messages
+            const existingResult = document.querySelector('.result');
+            const flashMessages = document.querySelector('.flash-messages');
+            if (existingResult) existingResult.remove();
+            if (flashMessages) flashMessages.innerHTML = '';
+            
             // Scroll to loading div
             loadingDiv.scrollIntoView({ behavior: 'smooth' });
+            
+            // Create FormData and submit via AJAX
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                // Parse the response HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Hide loading state
+                loadingDiv.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Analyze Content';
+                
+                // Check for flash messages in response
+                const responseFlash = doc.querySelector('.flash-messages');
+                if (responseFlash && responseFlash.innerHTML.trim()) {
+                    const currentFlash = document.querySelector('.flash-messages');
+                    if (currentFlash) {
+                        currentFlash.innerHTML = responseFlash.innerHTML;
+                    }
+                    return; // Don't process result if there's an error
+                }
+                
+                // Check for result in response
+                const responseResult = doc.querySelector('.result');
+                if (responseResult) {
+                    // Insert the result after the form
+                    const form = document.getElementById('analysisForm');
+                    form.insertAdjacentElement('afterend', responseResult);
+                    
+                    // Scroll to result
+                    responseResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                // Hide loading state
+                loadingDiv.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Analyze Content';
+                
+                // Show error message
+                const flashDiv = document.querySelector('.flash-messages');
+                if (flashDiv) {
+                    flashDiv.innerHTML = `
+                        <div class="flash-message flash-error">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>
+                            </svg>
+                            An error occurred while analyzing your file. Please try again.
+                        </div>
+                    `;
+                }
+            });
         });
         
         // Add some entrance animations
