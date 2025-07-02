@@ -25,5 +25,14 @@
     "model_prediction": "Likely AI-Generated",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T08:37:14.118053",
+    "session_id": "9cb2d7b1-0f3d-499d-9e0e-5bde58d6e6d0",
+    "file_type": "text",
+    "filename": "direct_text_input",
+    "model_prediction": "Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
