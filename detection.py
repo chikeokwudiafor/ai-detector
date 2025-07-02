@@ -147,9 +147,16 @@ class ModelManager:
             logger.warning(f"✗ Failed to load {model_config['name']}: {e}")
             return None
 
-# Global instances
-model_manager = ModelManager()
+# Global instances - lazy loading
+model_manager = None
 model_logger = ModelLogger()
+
+def get_model_manager():
+    """Lazy load model manager to reduce startup time and memory usage"""
+    global model_manager
+    if model_manager is None:
+        model_manager = ModelManager()
+    return model_manager
 
 class EnsembleVoter:
     """Handles weighted voting and confidence calculations"""
@@ -208,7 +215,8 @@ class AIDetector:
         """
         start_time = datetime.now()
         
-        if not model_manager.text_models:
+        manager = get_model_manager()
+        if not manager.text_models:
             return "model_unavailable", 0.0, []
         
         try:
@@ -221,7 +229,7 @@ class AIDetector:
             weights = []
             predictions_data = []
             
-            for model_info in model_manager.text_models:
+            for model_info in manager.text_models:
                 try:
                     result = model_info['model'](text_content)
                     confidence = AIDetector._parse_text_result(result)
@@ -282,7 +290,8 @@ class AIDetector:
         """
         start_time = datetime.now()
         
-        if not model_manager.image_models:
+        manager = get_model_manager()
+        if not manager.image_models:
             return "model_unavailable", 0.0, []
         
         try:
@@ -296,7 +305,7 @@ class AIDetector:
             weights = []
             predictions_data = []
             
-            for model_info in model_manager.image_models:
+            for model_info in manager.image_models:
                 try:
                     results = model_info['model'](image)
                     confidence = AIDetector._parse_image_result(results)

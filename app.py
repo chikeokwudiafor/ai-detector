@@ -258,7 +258,7 @@ def submit_feedback():
 @app.route("/health")
 def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "models_loaded": True}
+    return {"status": "healthy"}
 
 @app.route("/analytics")
 def analytics_dashboard():
@@ -284,4 +284,6 @@ def analytics_dashboard():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host="0.0.0.0", port=port)
