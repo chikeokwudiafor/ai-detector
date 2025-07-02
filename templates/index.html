@@ -476,58 +476,20 @@
         .app-container {
             max-width: 900px;
             width: 100%;
-            background-color: rgba(30, 41, 59, 0.9);
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(20px);
+            background: #1A152A;
             border-radius: 1.5rem;
-            box-shadow: var(--shadow-large), var(--glow-blue);
+            box-shadow: var(--shadow-large);
             padding: 3rem;
-            border: 2px solid transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
-            overflow: hidden;
         }
 
-        .app-container::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #60a5fa, #a855f7, #22d3ee, #ec4899);
-            background-size: 400% 400%;
-            border-radius: 1.5rem;
-            z-index: -1;
-            animation: gradientShift 6s ease infinite;
-        }
-
-        .app-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.8), transparent);
-            animation: topGlow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes topGlow {
-            0% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
+        
         
         /* Mobile container reinforcement */
         @media (max-width: 768px) {
             .app-container {
-                background-color: rgba(30, 41, 59, 0.95) !important;
-                background: rgba(30, 41, 59, 0.95) !important;
+                background: #1A152A !important;
             }
         }
 
@@ -781,39 +743,19 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: var(--glow-intense-blue);
+            box-shadow: var(--shadow-medium);
             width: 100%;
             max-width: 300px;
             margin: 2rem auto 0;
             display: block;
             position: relative;
             overflow: hidden;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #60a5fa, #7c3aed, #22d3ee);
-            border-radius: 0.75rem;
-            z-index: -1;
-            animation: buttonGlow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes buttonGlow {
-            0% { opacity: 0.8; }
-            100% { opacity: 1; }
         }
 
         .submit-btn:hover {
             background: linear-gradient(135deg, var(--primary-blue-light) 0%, #8b5cf6 100%);
             transform: translateY(-3px) scale(1.02);
-            box-shadow: var(--glow-intense-purple);
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+            box-shadow: var(--glow-blue);
         }
 
         .submit-btn:disabled {
@@ -944,11 +886,12 @@
         /* Results Section */
         .result {
             margin-top: 3rem;
-            padding: 2rem;
+            padding: 2.5rem;
             border-radius: 1rem;
             border: 1px solid;
             text-align: center;
             animation: resultSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #241B3C !important;
         }
 
         @keyframes resultSlideIn {
@@ -959,11 +902,12 @@
         .result-main {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
+            line-height: 1.2;
         }
 
         .result-description {
@@ -971,48 +915,54 @@
             margin-bottom: 2rem;
             opacity: 1;
             font-weight: 600;
+            line-height: 1.4;
         }
 
         /* Confidence Meter */
         .confidence-section {
-            margin-top: 2rem;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .confidence-label {
             font-size: 1.125rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
         }
 
         .confidence-meter {
             width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
             overflow: hidden;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
             position: relative;
         }
 
         .confidence-fill {
             height: 100%;
-            border-radius: 4px;
+            border-radius: 5px;
             transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
         .confidence-text {
-            font-size: 0.9375rem;
+            font-size: 1rem;
             font-weight: 600;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 1.4;
+            margin-top: 0.5rem;
         }
 
         /* 5-Tier Result Color Schemes with Improved Text Contrast */
         .confidence-tier-1 {
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            color: #14532d;
-            border-color: #86efac;
+            background: #241B3C !important;
+            color: #22c55e;
+            border-color: #16a34a;
         }
 
         .confidence-tier-1 .confidence-fill {
@@ -1020,24 +970,24 @@
         }
 
         .confidence-tier-1 .result-main {
-            color: #14532d;
-            text-shadow: 0 1px 2px rgba(20, 83, 45, 0.1);
+            color: #22c55e;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-1 .result-description {
-            color: #166534;
+            color: #86efac;
         }
 
         .confidence-tier-1 .confidence-label,
         .confidence-tier-1 .confidence-text {
-            color: #14532d;
-            text-shadow: 0 1px 2px rgba(20, 83, 45, 0.1);
+            color: #22c55e;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-2 {
-            background: linear-gradient(135deg, #fefce8, #fef3c7);
-            color: #713f12;
-            border-color: #fde047;
+            background: #241B3C !important;
+            color: #eab308;
+            border-color: #ca8a04;
         }
 
         .confidence-tier-2 .confidence-fill {
@@ -1045,24 +995,24 @@
         }
 
         .confidence-tier-2 .result-main {
-            color: #713f12;
-            text-shadow: 0 1px 2px rgba(113, 63, 18, 0.1);
+            color: #eab308;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-2 .result-description {
-            color: #92400e;
+            color: #fde047;
         }
 
         .confidence-tier-2 .confidence-label,
         .confidence-tier-2 .confidence-text {
-            color: #713f12;
-            text-shadow: 0 1px 2px rgba(113, 63, 18, 0.1);
+            color: #eab308;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-3 {
-            background: linear-gradient(135deg, #fff7ed, #fed7aa);
-            color: #9a3412;
-            border-color: #fdba74;
+            background: #241B3C !important;
+            color: #f97316;
+            border-color: #ea580c;
         }
 
         .confidence-tier-3 .confidence-fill {
@@ -1070,24 +1020,24 @@
         }
 
         .confidence-tier-3 .result-main {
-            color: #9a3412;
-            text-shadow: 0 1px 2px rgba(154, 52, 18, 0.1);
+            color: #f97316;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-3 .result-description {
-            color: #c2410c;
+            color: #fdba74;
         }
 
         .confidence-tier-3 .confidence-label,
         .confidence-tier-3 .confidence-text {
-            color: #9a3412;
-            text-shadow: 0 1px 2px rgba(154, 52, 18, 0.1);
+            color: #f97316;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-4 {
-            background: linear-gradient(135deg, #fef2f2, #fecaca);
-            color: #991b1b;
-            border-color: #fca5a5;
+            background: #241B3C !important;
+            color: #ef4444;
+            border-color: #dc2626;
         }
 
         .confidence-tier-4 .confidence-fill {
@@ -1095,42 +1045,42 @@
         }
 
         .confidence-tier-4 .result-main {
-            color: #991b1b;
-            text-shadow: 0 1px 2px rgba(153, 27, 27, 0.1);
+            color: #ef4444;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-4 .result-description {
-            color: #dc2626;
+            color: #fca5a5;
         }
 
         .confidence-tier-4 .confidence-label,
         .confidence-tier-4 .confidence-text {
-            color: #991b1b;
-            text-shadow: 0 1px 2px rgba(153, 27, 27, 0.1);
+            color: #ef4444;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-5 {
-            background: linear-gradient(135deg, #4c1d95, #7c3aed);
-            color: #ffffff;
-            border-color: #a855f7;
+            background: #241B3C !important;
+            color: #a855f7;
+            border-color: #7c3aed;
         }
 
         .confidence-tier-5 .confidence-fill {
-            background: linear-gradient(135deg, #ec4899, #db2777);
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
         }
 
         .confidence-tier-5 .result-main {
-            color: #ffffff;
+            color: #a855f7;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .confidence-tier-5 .result-description {
-            color: #e9d5ff;
+            color: #c4b5fd;
         }
 
         .confidence-tier-5 .confidence-label,
         .confidence-tier-5 .confidence-text {
-            color: #ffffff;
+            color: #a855f7;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
@@ -2035,28 +1985,28 @@
         }
 
         // File input and drag/drop functionality
-        const uploadSectionElement = document.getElementById('uploadSection');
-        const fileInputElement = document.getElementById('file');
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInput = document.getElementById('file');
 
-        uploadSectionElement.addEventListener('click', () => fileInputElement.click());
+        uploadSection.addEventListener('click', () => fileInput.click());
 
-        uploadSectionElement.addEventListener('dragover', (e) => {
+        uploadSection.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadSectionElement.classList.add('dragover');
+            uploadSection.classList.add('dragover');
         });
 
-        uploadSectionElement.addEventListener('dragleave', (e) => {
+        uploadSection.addEventListener('dragleave', (e) => {
             e.preventDefault();
-            uploadSectionElement.classList.remove('dragover');
+            uploadSection.classList.remove('dragover');
         });
 
-        uploadSectionElement.addEventListener('drop', (e) => {
+        uploadSection.addEventListener('drop', (e) => {
             e.preventDefault();
-            uploadSectionElement.classList.remove('dragover');
+            uploadSection.classList.remove('dragover');
 
             const files = e.dataTransfer.files;
             if (files.length > 0) {
-                fileInputElement.files = files;
+                fileInput.files = files;
                 handleFileSelect(files[0]);
             }
         });
@@ -2079,7 +2029,7 @@
             fileInfo.classList.add('show');
         }
 
-        fileInputElement.addEventListener('change', function(e) {
+        fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 handleFileSelect(file);
