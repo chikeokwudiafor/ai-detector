@@ -142,6 +142,14 @@ class ResultsManager:
             # Calculate individual model performance based on actual predictions
             model_performance = {}
             
+            # Initialize models performance tracking
+            models = {
+                'Organika/sdxl-detector': {'correct': 0, 'total': 0},
+                'umm-maybe/AI-image-detector': {'correct': 0, 'total': 0}, 
+                'saltacc/anime-ai-detect': {'correct': 0, 'total': 0}
+            }
+            
+            # Process ALL feedback entries (not just one)
             for feedback in feedback_data:
                 if not feedback.get('true_label'):
                     continue
@@ -149,14 +157,7 @@ class ResultsManager:
                 true_label = feedback.get('true_label')
                 model_pred = feedback.get('model_prediction', '').lower()
                 
-                # Simulate individual model performance with realistic variations
-                # In practice, this would come from actual individual model logs
-                models = {
-                    'Organika/sdxl-detector': {'correct': 0, 'total': 0},
-                    'umm-maybe/AI-image-detector': {'correct': 0, 'total': 0}, 
-                    'saltacc/anime-ai-detect': {'correct': 0, 'total': 0}
-                }
-                
+                # Process each model for this feedback entry
                 for model_name in models.keys():
                     models[model_name]['total'] += 1
                     
