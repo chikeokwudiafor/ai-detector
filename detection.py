@@ -202,17 +202,36 @@ class EnsembleVoter:
                 adjusted_confidence *= adjustment
                 logger.info(f"Applied {feature} adjustment: {adjustment:.3f}")
 
-        # Apply high-performer trust boost
+        # Apply Organika override and trust boost
         if predictions_data:
+            organika_confidence = None
+            organika_weight = 0
+            
             for pred_data in predictions_data:
-                # If Organika is very confident and weighted highly, boost ensemble
-                if ("Organika" in pred_data['model_name'] and 
-                    pred_data['confidence'] > HEURISTICS["ensemble"]["high_confidence_threshold"] and
-                    pred_data['weight'] > 1.0):
-                    trust_boost = 1.2
+                if "Organika" in pred_data['model_name']:
+                    organika_confidence = pred_data['confidence']
+                    organika_weight = pred_data['weight']
+                    break
+            
+            if organika_confidence is not None and organika_weight > 2.0:
+                # If Organika is very confident (>85%), let it dominate
+                organika_threshold = HEURISTICS["ensemble"].get("organika_threshold", 0.85)
+                
+                if organika_confidence > organika_threshold:
+                    # Override: Give Organika much more influence
+                    override_boost = 1.5
+                    adjusted_confidence = organika_confidence * override_boost
+                    logger.info(f"Applied Organika override: {organika_confidence:.3f} -> {adjusted_confidence:.3f}")
+                elif organika_confidence > HEURISTICS["ensemble"]["high_confidence_threshold"]:
+                    # Regular trust boost for high confidence
+                    trust_boost = 1.3
                     adjusted_confidence *= trust_boost
                     logger.info(f"Applied Organika trust boost: {trust_boost:.3f}")
-                    break
+                elif organika_confidence < 0.2:
+                    # If Organika is very confident it's human, reduce final confidence more
+                    human_boost = 0.7
+                    adjusted_confidence *= human_boost
+                    logger.info(f"Applied Organika human confidence boost: {human_boost:.3f}")
 
         return min(adjusted_confidence, 1.0)
 
