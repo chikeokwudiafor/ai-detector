@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -970,7 +971,6 @@
             margin-bottom: 2rem;
             opacity: 1;
             font-weight: 600;
-            color: var(--text-primary);
         }
 
         /* Confidence Meter */
@@ -982,7 +982,6 @@
             font-size: 1.125rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            color: var(--text-primary);
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
@@ -1006,7 +1005,6 @@
         .confidence-text {
             font-size: 0.9375rem;
             font-weight: 600;
-            color: var(--text-primary);
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
@@ -1032,7 +1030,7 @@
 
         .confidence-tier-1 .confidence-label,
         .confidence-tier-1 .confidence-text {
-            color: #14532d !important;
+            color: #14532d;
             text-shadow: 0 1px 2px rgba(20, 83, 45, 0.1);
         }
 
@@ -1057,7 +1055,7 @@
 
         .confidence-tier-2 .confidence-label,
         .confidence-tier-2 .confidence-text {
-            color: #713f12 !important;
+            color: #713f12;
             text-shadow: 0 1px 2px rgba(113, 63, 18, 0.1);
         }
 
@@ -1082,7 +1080,7 @@
 
         .confidence-tier-3 .confidence-label,
         .confidence-tier-3 .confidence-text {
-            color: #9a3412 !important;
+            color: #9a3412;
             text-shadow: 0 1px 2px rgba(154, 52, 18, 0.1);
         }
 
@@ -1107,7 +1105,7 @@
 
         .confidence-tier-4 .confidence-label,
         .confidence-tier-4 .confidence-text {
-            color: #991b1b !important;
+            color: #991b1b;
             text-shadow: 0 1px 2px rgba(153, 27, 27, 0.1);
         }
 
@@ -1132,7 +1130,7 @@
 
         .confidence-tier-5 .confidence-label,
         .confidence-tier-5 .confidence-text {
-            color: #ffffff !important;
+            color: #ffffff;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
@@ -1256,64 +1254,16 @@
             text-align: center;
         }
 
+        .feedback-header h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
         .feedback-header p {
             font-size: 0.875rem;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
-        }
-
-        /* Override feedback header text for each tier - stronger selectors */
-        .result.confidence-tier-1 .feedback-section .feedback-header h4 {
-            color: #14532d !important;
-            font-weight: 700 !important;
-        }
-
-        .result.confidence-tier-2 .feedback-section .feedback-header h4 {
-            color: #713f12 !important;
-            font-weight: 700 !important;
-        }
-
-        .result.confidence-tier-3 .feedback-section .feedback-header h4 {
-            color: #9a3412 !important;
-            font-weight: 700 !important;
-        }
-
-        .result.confidence-tier-4 .feedback-section .feedback-header h4 {
-            color: #991b1b !important;
-            font-weight: 700 !important;
-        }
-
-        .result.confidence-tier-5 .feedback-section .feedback-header h4 {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
-        }
-
-        /* Override feedback paragraph text for each tier - stronger selectors */
-        .result.confidence-tier-1 .feedback-section .feedback-header p {
-            color: #166534 !important;
-            font-weight: 500 !important;
-        }
-
-        .result.confidence-tier-2 .feedback-section .feedback-header p {
-            color: #92400e !important;
-            font-weight: 500 !important;
-        }
-
-        .result.confidence-tier-3 .feedback-section .feedback-header p {
-            color: #c2410c !important;
-            font-weight: 500 !important;
-        }
-
-        .result.confidence-tier-4 .feedback-section .feedback-header p {
-            color: #dc2626 !important;
-            font-weight: 500 !important;
-        }
-
-        .result.confidence-tier-5 .feedback-section .feedback-header p {
-            color: #e9d5ff !important;
-            font-weight: 500 !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
         }
 
         .feedback-buttons {
@@ -1810,7 +1760,8 @@
                     </button>
                 </div>
 
-                <!-- File Upload Section --><div class="upload-section" id="uploadSection">
+                <!-- File Upload Section -->
+                <div class="upload-section" id="uploadSection">
                     <span class="upload-icon">📁</span>
                     <div class="upload-text">Drag & drop your file here</div>
                     <div class="upload-subtext">or click to browse • Images and text files supported</div>
@@ -1932,8 +1883,8 @@
                 {% if session_id and session.get('last_analysis') %}
                 <div class="feedback-section">
                     <div class="feedback-header">
-                        <h4>What is this content actually?</h4>
-                        <p>Help us improve by telling us the true source of this content</p>
+                        <h4>Help us improve our accuracy</h4>
+                        <p>Tell us what this content actually is</p>
                     </div>
 
                     <div class="feedback-buttons" id="feedbackButtons">
@@ -2044,8 +1995,6 @@
                     </button>
                 </div>
             </div>
-
-
         </div>
     </section>
 
@@ -2085,29 +2034,29 @@
             return types[ext] || 'Unknown';
         }
 
-        // Drag and drop functionality
-        const uploadSection = document.getElementById('uploadSection');
-        const fileInput = document.getElementById('file');
+        // File input and drag/drop functionality
+        const uploadSectionElement = document.getElementById('uploadSection');
+        const fileInputElement = document.getElementById('file');
 
-        uploadSection.addEventListener('click', () => fileInput.click());
+        uploadSectionElement.addEventListener('click', () => fileInputElement.click());
 
-        uploadSection.addEventListener('dragover', (e) => {
+        uploadSectionElement.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadSection.classList.add('dragover');
+            uploadSectionElement.classList.add('dragover');
         });
 
-        uploadSection.addEventListener('dragleave', (e) => {
+        uploadSectionElement.addEventListener('dragleave', (e) => {
             e.preventDefault();
-            uploadSection.classList.remove('dragover');
+            uploadSectionElement.classList.remove('dragover');
         });
 
-        uploadSection.addEventListener('drop', (e) => {
+        uploadSectionElement.addEventListener('drop', (e) => {
             e.preventDefault();
-            uploadSection.classList.remove('dragover');
+            uploadSectionElement.classList.remove('dragover');
 
             const files = e.dataTransfer.files;
             if (files.length > 0) {
-                fileInput.files = files;
+                fileInputElement.files = files;
                 handleFileSelect(files[0]);
             }
         });
@@ -2130,7 +2079,7 @@
             fileInfo.classList.add('show');
         }
 
-        fileInput.addEventListener('change', function(e) {
+        fileInputElement.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 handleFileSelect(file);
@@ -2186,7 +2135,7 @@
         });
 
         document.getElementById('analysisForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
 
             const fileInput = document.getElementById('file');
             const textInput = document.getElementById('textContent');
@@ -2245,7 +2194,7 @@
                 const doc = parser.parseFromString(html, 'text/html');
 
                 // Hide loading state
-loadingDiv.classList.remove('show');
+                loadingDiv.classList.remove('show');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Analyze Content';
 
@@ -2267,7 +2216,7 @@ loadingDiv.classList.remove('show');
                     form.insertAdjacentElement('afterend', responseResult);
 
                     // Scroll to result
-                    responseResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    responseResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
             })
             .catch(error => {
@@ -2335,7 +2284,6 @@ loadingDiv.classList.remove('show');
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Re-enable buttons on error
                 buttons.forEach(btn => {
                     btn.disabled = false;
                     btn.style.opacity = '1';
