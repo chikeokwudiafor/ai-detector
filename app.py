@@ -287,15 +287,7 @@ if __name__ == "__main__":
     import os
     port = int(os.environ.get('PORT', 5000))
     
-    # Pre-warm models with error handling for deployment
-    try:
-        from detection import AIDetector
-        app.logger.info("Pre-loading AI models...")
-        # This will trigger model loading before serving requests
-        AIDetector._ensure_models_loaded()
-        app.logger.info("Models loaded successfully")
-    except Exception as e:
-        app.logger.warning(f"Model loading failed: {e}")
-        app.logger.info("App will continue with fallback behavior")
+    # Skip model pre-loading for faster startup in production
+    app.logger.info("Starting Flask app...")
     
-    app.run(debug=False, host="0.0.0.0", port=port)
+    app.run(debug=False, host="0.0.0.0", port=port, threaded=True)
