@@ -414,24 +414,29 @@ class AIDetector:
     
     @staticmethod
     def _analyze_filename(filename):
-        """Analyze filename for AI-related keywords"""
+        """Analyze filename for semantic AI-related keywords (not file extensions)"""
         if not filename:
             return {}
         
-        filename_lower = filename.lower()
+        # Remove file extension and convert to lowercase
+        name_without_ext = os.path.splitext(filename)[0].lower()
+        
+        # Semantic AI indicators (tools, models, generation terms)
         ai_keywords = [
-            'chatgpt', 'gpt', 'dalle', 'midjourney', 'stable diffusion',
-            'ai generated', 'artificial', 'generated', 'synthetic',
+            'chatgpt', 'gpt', 'dalle', 'midjourney', 'stable diffusion', 'stablediffusion',
+            'ai generated', 'ai_generated', 'artificial', 'generated', 'synthetic',
             'deepfake', 'gan', 'diffusion', 'neural', 'model',
-            'openai', 'anthropic', 'claude', 'bard', 'gemini'
+            'openai', 'anthropic', 'claude', 'bard', 'gemini',
+            'leonardo', 'firefly', 'kandinsky', 'playground',
+            'aiart', 'ai_art', 'machinelearning', 'ml_generated'
         ]
         
         features = {}
         for keyword in ai_keywords:
-            if keyword in filename_lower:
-                # Strong indicator of AI generation - significantly increase AI confidence
+            if keyword in name_without_ext:
+                # Strong semantic indicator of AI generation
                 features['ai_filename_indicator'] = 1.8  # Boost AI confidence by 80%
-                logger.info(f"AI keyword '{keyword}' found in filename: {filename}")
+                logger.info(f"AI semantic keyword '{keyword}' found in filename: {filename}")
                 break
         
         return features

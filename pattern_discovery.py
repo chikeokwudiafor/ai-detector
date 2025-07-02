@@ -90,15 +90,39 @@ class PatternDiscovery:
         }
     
     def _extract_keywords(self, filenames):
-        """Extract keywords from filenames"""
+        """Extract keywords from filenames, excluding file extensions"""
         keywords = Counter()
         
+        # Common file extensions to exclude
+        file_extensions = {
+            'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff', 'svg',
+            'txt', 'doc', 'docx', 'pdf', 'rtf',
+            'mp4', 'avi', 'mov', 'mkv', 'webm', 'flv',
+            'mp3', 'wav', 'ogg', 'flac'
+        }
+        
+        # Common generic words to exclude (not AI-specific)
+        generic_words = {
+            'image', 'photo', 'picture', 'file', 'document', 'text',
+            'video', 'audio', 'new', 'copy', 'final', 'draft',
+            'untitled', 'screenshot', 'export', 'output'
+        }
+        
         for filename in filenames:
-            # Split on common separators
-            words = re.split(r'[_\-\s\.]+', filename.lower())
+            # Remove file extension first
+            name_without_ext = os.path.splitext(filename)[0]
             
-            # Filter meaningful words (longer than 2 characters)
-            meaningful_words = [w for w in words if len(w) > 2 and w.isalpha()]
+            # Split on common separators
+            words = re.split(r'[_\-\s\.]+', name_without_ext.lower())
+            
+            # Filter meaningful words (longer than 2 characters, alphabetic, not generic)
+            meaningful_words = [
+                w for w in words 
+                if len(w) > 2 
+                and w.isalpha() 
+                and w not in file_extensions 
+                and w not in generic_words
+            ]
             
             keywords.update(meaningful_words)
         
@@ -290,19 +314,29 @@ class PatternDiscovery:
         """Generate actionable insights from discovered patterns"""
         insights = []
         
-        # Filename insights
+        # Filename insights - only for semantic AI indicators
         filename_analysis = patterns.get('filename_analysis', {})
         ai_indicators = filename_analysis.get('ai_indicators', {})
         
+        # Define semantic AI tools/models that are meaningful indicators
+        semantic_ai_keywords = {
+            'chatgpt', 'gpt', 'dalle', 'midjourney', 'stable', 'diffusion',
+            'openai', 'artificial', 'generated', 'synthetic', 'deepfake',
+            'gan', 'neural', 'anthropic', 'claude', 'bard', 'gemini'
+        }
+        
         if ai_indicators:
-            top_ai_keyword = list(ai_indicators.keys())[0]
-            insights.append({
-                'type': 'filename_heuristic',
-                'priority': 'high',
-                'insight': f"Keyword '{top_ai_keyword}' appears {ai_indicators[top_ai_keyword]} times in AI-generated files",
-                'action': f"Add '{top_ai_keyword}' to AI keyword detection list",
-                'confidence_boost': 1.5
-            })
+            # Only suggest insights for semantic keywords
+            for keyword, count in ai_indicators.items():
+                if keyword in semantic_ai_keywords and count >= 2:  # Minimum threshold
+                    insights.append({
+                        'type': 'filename_heuristic',
+                        'priority': 'high',
+                        'insight': f"Semantic keyword '{keyword}' appears {count} times in AI-generated files",
+                        'action': f"Enhance detection for '{keyword}' pattern in filenames",
+                        'confidence_boost': 1.3
+                    })
+                    break  # Only suggest the top meaningful keyword
         
         # Confidence insights
         confidence_analysis = patterns.get('confidence_analysis', {})
@@ -313,21 +347,35 @@ class PatternDiscovery:
                 'type': 'confidence_calibration',
                 'priority': 'medium',
                 'insight': f"High confidence predictions only {high_conf['accuracy']:.1%} accurate",
-                'action': 'Reduce confidence thresholds or add more validation'
+                'action': 'Improve model calibration or add ensemble validation'
             })
         
-        # Error pattern insights
+        # Error pattern insights - focus on semantic patterns
         misclass_analysis = patterns.get('misclassification_analysis', {})
         filename_patterns = misclass_analysis.get('filename_patterns', {})
         
         for pattern_type, keywords in filename_patterns.items():
             if keywords:
-                top_keyword = list(keywords.keys())[0]
+                # Only suggest insights for semantic keywords
+                for keyword, count in keywords.items():
+                    if keyword in semantic_ai_keywords:
+                        insights.append({
+                            'type': 'error_pattern',
+                            'priority': 'medium',
+                            'insight': f"Files with semantic keyword '{keyword}' often misclassified",
+                            'action': f"Improve detection accuracy for '{keyword}' pattern"
+                        })
+                        break
+        
+        # Model performance insights
+        file_type_analysis = patterns.get('file_type_analysis', {})
+        for file_type, stats in file_type_analysis.items():
+            if stats.get('accuracy', 0) < 0.7 and stats.get('total', 0) >= 3:
                 insights.append({
-                    'type': 'error_pattern',
+                    'type': 'model_performance',
                     'priority': 'medium',
-                    'insight': f"Files with '{top_keyword}' often misclassified as {pattern_type}",
-                    'action': f"Create specific rule for '{top_keyword}' pattern"
+                    'insight': f"{file_type.title()} detection accuracy is {stats['accuracy']:.1%}",
+                    'action': f"Consider additional {file_type} detection models or fine-tuning"
                 })
         
         return insights
