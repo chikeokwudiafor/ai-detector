@@ -4,7 +4,7 @@ from detection import AIDetector, get_result_classification
 from config import *
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
 
 def validate_file(file):
     """
