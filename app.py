@@ -92,36 +92,40 @@ def detect_ai_text(text_content):
         return "Model not available", 0.0
     
     try:
-        # Limit text length for processing
-        if len(text_content) > 512:
-            text_content = text_content[:512]
+        # Truncate text to manageable size (RoBERTa models typically handle ~512 tokens)
+        # This prevents memory issues and speeds up processing
+        if len(text_content) > 1000:  # Rough character limit
+            text_content = text_content[:1000]
         
-        # Get prediction
+        # Get prediction - no extra parameters needed
         results = text_classifier(text_content)
         
         # Parse results
         ai_confidence = 0.0
         
-        if isinstance(results, list):
-            for result in results:
-                label = result['label'].lower()
-                score = result['score']
-                
-                # Different models use different labels
-                if any(keyword in label for keyword in ['fake', 'ai', 'generated', 'machine']):
-                    ai_confidence = score
-                elif any(keyword in label for keyword in ['real', 'human', 'authentic']):
-                    ai_confidence = 1.0 - score
-                elif 'label_1' in label or '1' in label:  # Some models use numeric labels
-                    ai_confidence = score
+        if isinstance(results, list) and len(results) > 0:
+            result = results[0]  # Take the first result
+            label = result['label'].lower()
+            score = result['score']
+            
+            # Different models use different labels
+            if any(keyword in label for keyword in ['fake', 'ai', 'generated', 'machine', 'label_1', '1']):
+                ai_confidence = score
+            elif any(keyword in label for keyword in ['real', 'human', 'authentic', 'label_0', '0']):
+                ai_confidence = 1.0 - score
+            else:
+                # Default: assume higher score means AI-generated
+                ai_confidence = score
         else:
-            # Single result
+            # Single result format
             label = results['label'].lower()
             score = results['score']
-            if any(keyword in label for keyword in ['fake', 'ai', 'generated', 'machine']):
+            if any(keyword in label for keyword in ['fake', 'ai', 'generated', 'machine', 'label_1', '1']):
                 ai_confidence = score
-            else:
+            elif any(keyword in label for keyword in ['real', 'human', 'authentic', 'label_0', '0']):
                 ai_confidence = 1.0 - score
+            else:
+                ai_confidence = score
         
         is_ai = ai_confidence > 0.5
         return "AI-generated" if is_ai else "Human-made", ai_confidence
