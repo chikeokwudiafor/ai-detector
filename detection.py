@@ -196,24 +196,9 @@ class EnsembleVoter:
     @staticmethod
     def apply_confidence_adjustments(base_confidence, metrics, content_features=None, predictions_data=None):
         """Apply heuristic adjustments based on model agreement and content"""
-
-        # ABSOLUTE FIRST: Check for Organika 100% override BEFORE any other processing
-        if predictions_data and HEURISTICS["ensemble"]["organika_override"]["enabled"]:
-            for pred_data in predictions_data:
-                if "Organika" in pred_data['model_name']:
-                    organika_confidence = pred_data['confidence']
-                    threshold = HEURISTICS["ensemble"]["organika_override"]["absolute_confidence_threshold"]
-
-                    # CRITICAL: Check for EXACT 1.0 confidence (100%) - BYPASS EVERYTHING
-                    if (organika_confidence >= threshold and 
-                        HEURISTICS["ensemble"]["organika_override"]["bypass_all_processing"]):
-
-                        override_msg = HEURISTICS["ensemble"]["organika_override"]["override_message"]
-                        logger.info(f"🎯 {override_msg}: {organika_confidence:.3f} - BYPASSING ALL ENSEMBLE PROCESSING")
-                        return organika_confidence  # IMMEDIATE RETURN - NO OTHER PROCESSING
-                    break
-
-        # NORMAL PROCESSING: Continue with regular adjustments for all other cases
+        
+        # NOTE: Organika override check is now handled earlier in detect_image/detect_text
+        # This method only handles normal adjustments
         adjusted_confidence = base_confidence
 
         # Reduce confidence if models disagree significantly
