@@ -226,7 +226,7 @@ class EnsembleVoter:
             logger.info(f"Applied disagreement penalty: -{disagreement_penalty:.3f}")
 
         # Apply content-specific adjustments
-        if content_features:```python
+        if content_features:
             for feature, adjustment in content_features.items():
                 adjusted_confidence *= adjustment
                 logger.info(f"Applied {feature} adjustment: {adjustment:.3f}")
