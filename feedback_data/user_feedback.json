@@ -331,5 +331,32 @@
     "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:21:33.831529",
+    "session_id": "32e1df8e-0591-45a6-96c0-18518b6ca60b",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:21:56.968963",
+    "session_id": "156fd3ba-d525-4a71-913e-a5bc3e22e0c8",
+    "file_type": "image",
+    "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:26:04.992241",
+    "session_id": "f5f3cbf3-075e-469c-8e6c-1d74445a59c1",
+    "file_type": "image",
+    "filename": "68587a80-c024-4cfd-b572-7f9dfadf66df.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]

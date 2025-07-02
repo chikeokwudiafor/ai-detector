@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-07-02T14:16:42.721235",
+  "generated_at": "2025-07-02T14:26:12.403934",
   "overview": {
     "total_feedback_samples": 37,
     "total_pattern_files": 3,
@@ -7,21 +7,26 @@
     "latest_accuracy": 0.4
   },
   "model_stats": {
-    "2025-07-02T14:16:42.721437": {
+    "2025-07-02T14:26:12.403978": {
       "Organika/sdxl-detector": {
-        "accuracy": 0.4166666666666667,
-        "total_samples": 36,
-        "correct_predictions": 15
+        "accuracy": 1.0,
+        "total_samples": 1,
+        "correct_predictions": 1
       },
       "umm-maybe/AI-image-detector": {
-        "accuracy": 0.2777777777777778,
-        "total_samples": 36,
-        "correct_predictions": 10
+        "accuracy": 0.0,
+        "total_samples": 1,
+        "correct_predictions": 0
       },
       "saltacc/anime-ai-detect": {
-        "accuracy": 0.3611111111111111,
-        "total_samples": 36,
-        "correct_predictions": 13
+        "accuracy": 0.0,
+        "total_samples": 1,
+        "correct_predictions": 0
+      },
+      "microsoft/resnet-50": {
+        "accuracy": 1.0,
+        "total_samples": 1,
+        "correct_predictions": 1
       }
     }
   },
