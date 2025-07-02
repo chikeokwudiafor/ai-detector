@@ -1199,7 +1199,7 @@
                 {% endif %}
 
                 <!-- Feedback Section - Only show if actual analysis was performed (not video not implemented) -->
-                {% if session_id and result != "🎥 🎬 Video Detection Coming Soon" %}
+                {% if session_id and session.get('last_analysis') %}
                 <div class="feedback-section">
                     <div class="feedback-header">
                         <h4>What is this content actually?</h4>
