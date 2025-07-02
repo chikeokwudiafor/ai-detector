@@ -243,10 +243,12 @@ class AIDetector:
             # Calculate weighted ensemble score
             ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
             
-            # Apply content-based adjustments
+            # Apply content-based and filename adjustments
             content_features = AIDetector._analyze_text_features(text_content)
+            filename_features = AIDetector._analyze_filename(filename)
+            all_features = {**content_features, **filename_features}
             final_confidence = EnsembleVoter.apply_confidence_adjustments(
-                ensemble_confidence, metrics, content_features
+                ensemble_confidence, metrics, all_features
             )
             
             # Classify result
@@ -316,10 +318,12 @@ class AIDetector:
             # Calculate weighted ensemble score
             ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
             
-            # Apply image-based adjustments
+            # Apply image-based and filename adjustments
             content_features = AIDetector._analyze_image_features(image)
+            filename_features = AIDetector._analyze_filename(filename)
+            all_features = {**content_features, **filename_features}
             final_confidence = EnsembleVoter.apply_confidence_adjustments(
-                ensemble_confidence, metrics, content_features
+                ensemble_confidence, metrics, all_features
             )
             
             # Classify result
@@ -405,6 +409,30 @@ class AIDetector:
             lengths = [len(s) for s in sentences]
             if np.std(lengths) < 10:  # Very uniform sentence lengths
                 features['uniform_sentences'] = 1.15
+        
+        return features
+    
+    @staticmethod
+    def _analyze_filename(filename):
+        """Analyze filename for AI-related keywords"""
+        if not filename:
+            return {}
+        
+        filename_lower = filename.lower()
+        ai_keywords = [
+            'chatgpt', 'gpt', 'dalle', 'midjourney', 'stable diffusion',
+            'ai generated', 'artificial', 'generated', 'synthetic',
+            'deepfake', 'gan', 'diffusion', 'neural', 'model',
+            'openai', 'anthropic', 'claude', 'bard', 'gemini'
+        ]
+        
+        features = {}
+        for keyword in ai_keywords:
+            if keyword in filename_lower:
+                # Strong indicator of AI generation - significantly increase AI confidence
+                features['ai_filename_indicator'] = 1.8  # Boost AI confidence by 80%
+                logger.info(f"AI keyword '{keyword}' found in filename: {filename}")
+                break
         
         return features
     
