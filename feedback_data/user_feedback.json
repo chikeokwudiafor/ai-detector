@@ -394,5 +394,14 @@
     "model_prediction": "\ud83e\udd16 Likely AI-Generated",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T22:00:47.410940",
+    "session_id": "a1414f1a-380d-4b6e-9758-b73a5070f8a0",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
