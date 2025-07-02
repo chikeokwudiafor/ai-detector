@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,7 +94,7 @@
                 background-color: #0f0f23 !important;
                 background-image: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%) !important;
             }
-            
+
             body::before {
                 background-color: #0f0f23 !important;
                 background-image: 
@@ -186,7 +185,7 @@
             0% { opacity: 0.3; }
             100% { opacity: 1; }
         }
-        
+
         /* Mobile navbar reinforcement */
         @media (max-width: 768px) {
             .navbar {
@@ -484,8 +483,8 @@
             position: relative;
         }
 
-        
-        
+
+
         /* Mobile container reinforcement */
         @media (max-width: 768px) {
             .app-container {
@@ -816,7 +815,7 @@
         }
 
         .tips-list {
-            margin: 0;
+            margin: 0;```text
             padding: 0;
             list-style: none;
             color: #92400e;
@@ -1198,10 +1197,11 @@
         .feedback-section {
             margin-top: 2rem;
             padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(30, 41, 59, 0.6);
             border-radius: 0.75rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(96, 165, 250, 0.3);
             text-align: center;
+            backdrop-filter: blur(10px);
         }
 
         .feedback-header h4 {
@@ -1230,37 +1230,38 @@
             padding: 0.75rem 1.5rem;
             border: 2px solid;
             border-radius: 0.5rem;
-            background: white;
+            background: rgba(15, 15, 35, 0.8);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.95rem;
             min-width: 120px;
             justify-content: center;
+            backdrop-filter: blur(10px);
         }
 
         .feedback-ai {
-            color: var(--danger-red);
-            border-color: var(--danger-red);
+            color: #ef4444;
+            border-color: #ef4444;
         }
 
         .feedback-ai:hover {
-            background: var(--danger-red);
+            background: #ef4444;
             color: white;
             transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
         }
 
         .feedback-human {
-            color: var(--success-green);
-            border-color: var(--success-green);
+            color: #22c55e;
+            border-color: #22c55e;
         }
 
         .feedback-human:hover {
-            background: var(--success-green);
+            background: #22c55e;
             color: white;
             transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
         }
 
         .feedback-thanks {
@@ -1600,15 +1601,15 @@
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
-            
+
             .use-case-card {
                 padding: 2rem;
             }
-            
+
             .section-header h3 {
                 font-size: 2rem;
             }
-            
+
             .use-cases-section {
                 margin-top: 2rem;
                 padding: 2rem 1rem;
@@ -1890,7 +1891,7 @@
                     <h3>When is AIthentic Useful?</h3>
                     <p>Discover scenarios where AI detection makes a real difference</p>
                 </div>
-                
+
                 <div class="use-cases-grid">
                     <div class="use-case-card">
                         <div class="use-case-icon">🎨</div>
@@ -1898,35 +1899,35 @@
                         <div class="use-case-desc">Verify authenticity of digital artwork, photography, and creative content before purchasing or sharing</div>
                         <div class="use-case-examples">Popular for: NFT verification, art contests, portfolio authenticity</div>
                     </div>
-                    
+
                     <div class="use-case-card">
                         <div class="use-case-icon">📰</div>
                         <div class="use-case-title">Journalism & Media</div>
                         <div class="use-case-desc">Ensure editorial integrity by detecting AI-generated articles, press releases, and news content</div>
                         <div class="use-case-examples">Popular for: Fact-checking, editorial review, source verification</div>
                     </div>
-                    
+
                     <div class="use-case-card">
                         <div class="use-case-icon">🎓</div>
                         <div class="use-case-title">Education & Academia</div>
                         <div class="use-case-desc">Maintain academic integrity by identifying AI-written essays, research papers, and assignments</div>
                         <div class="use-case-examples">Popular for: Homework checking, thesis review, plagiarism detection</div>
                     </div>
-                    
+
                     <div class="use-case-card">
                         <div class="use-case-icon">💼</div>
                         <div class="use-case-title">Business & Marketing</div>
                         <div class="use-case-desc">Validate content authenticity for marketing materials, product descriptions, and brand assets</div>
                         <div class="use-case-examples">Popular for: Content auditing, brand protection, compliance</div>
                     </div>
-                    
+
                     <div class="use-case-card">
                         <div class="use-case-icon">⚖️</div>
                         <div class="use-case-title">Legal & Compliance</div>
                         <div class="use-case-desc">Support legal proceedings with evidence verification and document authenticity analysis</div>
                         <div class="use-case-examples">Popular for: Evidence review, document forensics, litigation support</div>
                     </div>
-                    
+
                     <div class="use-case-card">
                         <div class="use-case-icon">🛡️</div>
                         <div class="use-case-title">Security & Trust</div>
@@ -1934,7 +1935,7 @@
                         <div class="use-case-examples">Popular for: Social media moderation, identity verification, fraud prevention</div>
                     </div>
                 </div>
-                
+
                 <div class="use-cases-cta">
                     <p>Ready to verify your content? Our advanced AI detection works in seconds.</p>
                     <button class="secondary-cta-button" onclick="scrollToApp()">
@@ -2262,7 +2263,7 @@
                 const particle = document.createElement('div');
                 const colorClass = colors[Math.floor(Math.random() * colors.length)];
                 const shouldGlow = Math.random() > 0.5;
-                
+
                 particle.className = `particle ${colorClass}${shouldGlow ? ' glow' : ''}`;
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
@@ -2282,7 +2283,7 @@
                 orb.style.top = Math.random() * 100 + '%';
                 orb.style.animationDelay = Math.random() * 8 + 's';
                 orb.style.animationDuration = (Math.random() * 6 + 6) + 's';
-                
+
                 const orbColors = ['#60a5fa', '#a855f7', '#22d3ee', '#ec4899'];
                 const orbColor = orbColors[Math.floor(Math.random() * orbColors.length)];
                 orb.style.background = orbColor;
