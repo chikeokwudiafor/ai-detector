@@ -890,8 +890,7 @@
             overflow: hidden;
         }
 
-        .use-case-card::before {
-            content: '';
+        .use-case-card::before {            content: '';
             position: absolute;
             top: 0;
             left: 0;
@@ -1495,10 +1494,10 @@
     </footer>
 
     <script>
-        function scrollToApp() {
+         function scrollToApp() {
             document.getElementById('app').scrollIntoView({ 
                 behavior: 'smooth',
-                block: 'start'
+                block: 'start' // changed from 'center' to 'start'
             });
         }
 
