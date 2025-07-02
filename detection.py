@@ -147,12 +147,12 @@ class ModelManager:
             logger.warning(f"✗ Failed to load {model_config['name']}: {e}")
             return None
 
-# Global instances - lazy loading
-model_manager = None
+# Global instances - initialize immediately for deployment
+model_manager = ModelManager()
 model_logger = ModelLogger()
 
 def get_model_manager():
-    """Lazy load model manager to reduce startup time and memory usage"""
+    """Get model manager instance"""
     global model_manager
     if model_manager is None:
         model_manager = ModelManager()
