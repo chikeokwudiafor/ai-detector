@@ -286,5 +286,14 @@
     "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:57:21.382894",
+    "session_id": "1d7fbd70-e345-4486-a3ab-d14d38e36859",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
