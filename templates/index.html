@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧠 AI Detector</title>
+    <title>AI Detector - Professional Content Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,165 +13,313 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --primary-blue: #1e40af;
+            --primary-blue-light: #3b82f6;
+            --secondary-gray: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --success-green: #10b981;
+            --warning-amber: #f59e0b;
+            --danger-red: #ef4444;
+            --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        /* Hero Section */
+        .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            box-shadow: 0 32px 64px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,255,255,0.2);
-            padding: 48px;
-            max-width: 680px;
-            width: 100%;
+            padding: 2rem;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
         }
         
-        .container::before {
-            content: '';
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--primary-blue);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-medium);
+            font-size: 1.125rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: var(--primary-blue-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-large);
+        }
+        
+        .scroll-indicator {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
-            border-radius: 24px 24px 0 0;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
-        .header {
-            margin-bottom: 40px;
+        .scroll-indicator:hover {
+            color: var(--primary-blue);
         }
         
-        .header h1 {
-            color: #1a1a1a;
-            font-size: clamp(2.5rem, 5vw, 3.2rem);
-            font-weight: 800;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
+        .scroll-arrow {
+            width: 24px;
+            height: 24px;
+            border: 2px solid currentColor;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg);
+            animation: bounce 2s infinite;
         }
         
-        .header p {
-            color: #6b7280;
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: rotate(45deg) translateY(0); }
+            40% { transform: rotate(45deg) translateY(-10px); }
+            60% { transform: rotate(45deg) translateY(-5px); }
+        }
+        
+        /* Main App Section */
+        .app-section {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .app-container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-large);
+            padding: 3rem;
+            border: 1px solid var(--border-light);
+        }
+        
+        .app-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .app-header h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .app-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Flash Messages */
+        .flash-messages {
+            margin-bottom: 2rem;
+        }
+        
+        .flash-message {
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
             font-weight: 500;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
         
+        .flash-error {
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+        
+        .flash-success {
+            background: #f0fdf4;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+        
+        /* Upload Section */
         .upload-section {
-            background: #f8fafc;
-            border: 3px dashed #e2e8f0;
-            border-radius: 20px;
-            padding: 48px 24px;
-            margin: 32px 0;
+            background: var(--secondary-gray);
+            border: 2px dashed var(--border-light);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            text-align: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
             overflow: hidden;
         }
         
+        .upload-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
         .upload-section.dragover {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.05);
             transform: scale(1.02);
         }
         
+        .upload-section.dragover::before {
+            left: 100%;
+        }
+        
         .upload-section:hover {
-            border-color: #667eea;
-            background: #f1f5f9;
-            transform: translateY(-2px);
+            border-color: var(--primary-blue-light);
+            background: rgba(59, 130, 246, 0.02);
         }
         
         .upload-icon {
             font-size: 3rem;
-            margin-bottom: 16px;
-            opacity: 0.7;
+            margin-bottom: 1.5rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-section:hover .upload-icon {
+            transform: scale(1.1);
         }
         
         .upload-text {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 600;
-            color: #374151;
-            margin-bottom: 8px;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
         
         .upload-subtext {
-            color: #6b7280;
-            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
         }
         
         .file-input {
             display: none;
         }
         
-        .submit-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 16px 48px;
-            border-radius: 16px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 24px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
-        }
-        
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-        
-        .submit-btn:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
         .file-info {
-            margin-top: 20px;
-            padding: 16px;
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            border-radius: 12px;
-            color: #059669;
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 0.75rem;
+            color: #166534;
             display: none;
             text-align: left;
         }
         
         .file-info.show {
             display: block;
-            animation: slideIn 0.3s ease-out;
+            animation: slideUp 0.3s ease-out;
         }
         
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
+        .submit-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-medium);
+            width: 100%;
+            max-width: 300px;
+            margin: 2rem auto 0;
+            display: block;
+        }
+        
+        .submit-btn:hover {
+            background: var(--primary-blue-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-large);
+        }
+        
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        /* Loading State */
         .loading {
             display: none;
-            margin-top: 32px;
-            padding: 24px;
-            background: #f8fafc;
-            border-radius: 16px;
-            border: 1px solid #e2e8f0;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--secondary-gray);
+            border-radius: 1rem;
+            text-align: center;
         }
         
         .loading.show {
@@ -184,13 +333,13 @@
         }
         
         .spinner {
-            border: 4px solid #f1f5f9;
-            border-top: 4px solid #667eea;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid var(--primary-blue);
             border-radius: 50%;
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 16px auto;
+            margin: 0 auto 1rem;
         }
         
         @keyframes spin {
@@ -199,22 +348,20 @@
         }
         
         .loading-text {
-            color: #667eea;
+            color: var(--primary-blue);
             font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
         }
         
+        /* Results Section */
         .result {
-            margin-top: 40px;
-            padding: 32px;
-            border-radius: 20px;
-            font-size: 1.3rem;
-            font-weight: 600;
-            border: 2px solid;
-            position: relative;
-            animation: resultSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 3rem;
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid;
             text-align: center;
+            animation: resultSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         @keyframes resultSlideIn {
@@ -223,367 +370,373 @@
         }
         
         .result-main {
-            font-size: 1.4rem;
-            margin-bottom: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 0.75rem;
         }
         
         .result-description {
             font-size: 1rem;
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
             opacity: 0.9;
             font-weight: 500;
         }
         
+        /* Confidence Meter */
         .confidence-section {
-            margin-top: 24px;
+            margin-top: 2rem;
         }
         
         .confidence-label {
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-            opacity: 0.8;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
         }
         
         .confidence-meter {
             width: 100%;
-            height: 12px;
+            height: 8px;
             background: rgba(255, 255, 255, 0.3);
-            border-radius: 6px;
+            border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 8px;
+            margin-bottom: 1rem;
             position: relative;
         }
         
         .confidence-fill {
             height: 100%;
-            border-radius: 6px;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 4px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
-        }
-        
-        .confidence-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
         }
         
         .confidence-text {
-            font-size: 0.85rem;
-            opacity: 0.7;
+            font-size: 0.875rem;
+            opacity: 0.8;
+            font-weight: 500;
         }
         
+        /* Result Color Schemes */
         .ai-high {
             background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            color: #dc2626;
-            border-color: #f87171;
-            box-shadow: 0 8px 32px rgba(220, 38, 38, 0.15);
+            color: var(--danger-red);
+            border-color: #fca5a5;
         }
         
         .ai-high .confidence-fill {
-            background: linear-gradient(135deg, #dc2626, #ef4444);
+            background: linear-gradient(135deg, var(--danger-red), #f87171);
         }
         
         .ai-medium {
             background: linear-gradient(135deg, #fffbeb, #fef3c7);
-            color: #d97706;
-            border-color: #fbbf24;
-            box-shadow: 0 8px 32px rgba(217, 119, 6, 0.15);
+            color: var(--warning-amber);
+            border-color: #fcd34d;
         }
         
         .ai-medium .confidence-fill {
-            background: linear-gradient(135deg, #d97706, #f59e0b);
+            background: linear-gradient(135deg, var(--warning-amber), #fbbf24);
         }
         
         .ai-low {
             background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            color: #16a34a;
-            border-color: #4ade80;
-            box-shadow: 0 8px 32px rgba(22, 163, 74, 0.15);
+            color: var(--success-green);
+            border-color: #86efac;
         }
         
         .ai-low .confidence-fill {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
+            background: linear-gradient(135deg, var(--success-green), #34d399);
         }
         
+        /* Features Grid */
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
         
         .feature {
-            background: #f8fafc;
-            padding: 24px;
-            border-radius: 16px;
+            background: var(--secondary-gray);
+            padding: 2rem;
+            border-radius: 1rem;
             text-align: center;
-            transition: transform 0.2s ease;
-            border: 1px solid #e2e8f0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-light);
         }
         
         .feature:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-medium);
+            background: white;
         }
         
         .feature-icon {
             font-size: 2.5rem;
-            margin-bottom: 12px;
+            margin-bottom: 1rem;
+            display: block;
         }
         
         .feature-title {
             font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 8px;
-            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
         }
         
         .feature-desc {
-            font-size: 0.9rem;
-            color: #6b7280;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
         
+        /* Tips Section */
         .tips {
             background: linear-gradient(135deg, #fffbeb, #fef3c7);
-            border: 1px solid #fbbf24;
-            border-radius: 16px;
-            padding: 24px;
-            margin-top: 32px;
-            text-align: left;
+            border: 1px solid #fcd34d;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 3rem;
         }
         
         .tips h4 {
             color: #92400e;
-            margin-bottom: 16px;
-            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .tips ul {
             color: #92400e;
-            font-size: 0.95rem;
-            margin-left: 20px;
+            font-size: 0.875rem;
+            margin-left: 1.5rem;
         }
         
         .tips li {
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
         }
         
-        .flash-messages {
-            margin-bottom: 24px;
-        }
-        
-        .flash-message {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            font-weight: 500;
-            border: 1px solid;
-        }
-        
-        .flash-error {
-            background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            color: #dc2626;
-            border-color: #f87171;
-        }
-        
-        .flash-success {
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            color: #16a34a;
-            border-color: #4ade80;
-        }
-        
-        /* Mobile Responsiveness */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            body {
-                padding: 16px;
+            .hero {
+                padding: 1rem;
+                min-height: 90vh;
             }
             
-            .container {
-                padding: 32px 24px;
-                margin: 0;
-                border-radius: 20px;
-                max-width: none;
+            .app-section {
+                padding: 2rem 1rem;
+            }
+            
+            .app-container {
+                padding: 2rem 1.5rem;
             }
             
             .upload-section {
-                padding: 36px 20px;
-                margin: 24px 0;
-            }
-            
-            .submit-btn {
-                padding: 14px 36px;
-                font-size: 1rem;
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .result {
-                padding: 24px 20px;
-                font-size: 1.1rem;
+                padding: 2rem 1rem;
             }
             
             .result-main {
-                font-size: 1.2rem;
                 flex-direction: column;
-                gap: 8px;
+                gap: 0.5rem;
             }
             
             .features {
                 grid-template-columns: 1fr;
-                gap: 16px;
-                margin-top: 32px;
-            }
-            
-            .feature {
-                padding: 20px;
-            }
-            
-            .tips {
-                padding: 20px;
-                margin-top: 24px;
+                gap: 1.5rem;
             }
         }
         
         @media (max-width: 480px) {
-            .container {
-                padding: 24px 20px;
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .app-container {
+                padding: 1.5rem 1rem;
+                margin: 0 0.5rem;
             }
             
             .upload-section {
-                padding: 32px 16px;
+                padding: 1.5rem 1rem;
             }
-            
-            .submit-btn {
-                width: 100%;
-                margin-top: 20px;
-            }
+        }
+        
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🧠 AI Detector</h1>
-            <p>Upload content to detect if it's AI-generated</p>
-        </div>
-        
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message flash-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-        
-        <form method="POST" enctype="multipart/form-data" id="analysisForm">
-            <div class="upload-section" id="uploadSection">
-                <div class="upload-icon">📁</div>
-                <div class="upload-text">Drag & drop your file here</div>
-                <div class="upload-subtext">or click to browse • Images, text files, and videos supported</div>
-                <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt,.mp4,.mov,.avi" required>
-                
-                <div class="file-info" id="fileInfo">
-                    <strong>📄 Selected:</strong> <span id="fileName"></span><br>
-                    <strong>📏 Size:</strong> <span id="fileSize"></span><br>
-                    <strong>🏷️ Type:</strong> <span id="fileType"></span>
-                </div>
-            </div>
-            
-            <button type="submit" class="submit-btn" id="submitBtn">
-                🔍 Analyze Content
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>AI Content Detector</h1>
+            <p class="hero-subtitle">
+                Advanced ensemble detection for AI-generated images, text, and videos. 
+                Get reliable results with professional-grade accuracy.
+            </p>
+            <button class="cta-button" onclick="scrollToApp()">
+                <span>Get Started</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                </svg>
             </button>
+        </div>
+        
+        <div class="scroll-indicator" onclick="scrollToApp()">
+            <span style="font-size: 0.875rem; font-weight: 500;">Scroll to analyze</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Main App Section -->
+    <section class="app-section" id="app">
+        <div class="app-container">
+            <div class="app-header">
+                <h2>Analyze Your Content</h2>
+                <p>Upload files to detect if they're AI-generated with high precision</p>
+            </div>
             
-            <div class="loading" id="loadingDiv">
-                <div class="spinner"></div>
-                <div class="loading-text">🧠 Analyzing your content...</div>
-                <p style="color: #6b7280; font-size: 0.9rem; margin-top: 8px;">
-                    This may take a few seconds depending on file size
-                </p>
-            </div>
-        </form>
-        
-        {% if result %}
-        <div class="result {{ result_class }}">
-            <div class="result-main">
-                <span>{{ result_icon }}</span>
-                <span>{{ result }}</span>
-            </div>
-            {% if result_description %}
-                <div class="result-description">
-                    {{ result_description }}
-                </div>
-            {% endif %}
-            {% if confidence is not none and confidence > 0 %}
-                <div class="confidence-section">
-                    <div class="confidence-label">Detection Score: {{ "%.1f"|format(confidence * 100) }}%</div>
-                    <div class="confidence-meter">
-                        <div class="confidence-fill" style="width: {{ confidence * 100 }}%"></div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message flash-{{ category }}">
+                                {% if category == 'error' %}
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>
+                                    </svg>
+                                {% else %}
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/>
+                                    </svg>
+                                {% endif %}
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     </div>
-                    <div class="confidence-text">
-                        {% if confidence >= 0.75 %}
-                            High certainty in AI detection
-                        {% elif confidence >= 0.40 %}
-                            Moderate certainty - requires manual review
-                        {% else %}
-                            High certainty in human creation
-                        {% endif %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST" enctype="multipart/form-data" id="analysisForm">
+                <div class="upload-section" id="uploadSection">
+                    <span class="upload-icon">📁</span>
+                    <div class="upload-text">Drag & drop your file here</div>
+                    <div class="upload-subtext">or click to browse • Images, text files, and videos supported</div>
+                    <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt,.mp4,.mov,.avi" required>
+                    
+                    <div class="file-info" id="fileInfo">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                            <strong>Selected:</strong> <span id="fileName"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.875rem; opacity: 0.8;">
+                            <span><strong>Size:</strong> <span id="fileSize"></span></span>
+                            <span><strong>Type:</strong> <span id="fileType"></span></span>
+                        </div>
                     </div>
                 </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Analyze Content
+                </button>
+                
+                <div class="loading" id="loadingDiv">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Analyzing your content...</div>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                        Our AI models are working to provide accurate results
+                    </p>
+                </div>
+            </form>
+            
+            {% if result %}
+            <div class="result {{ result_class }}">
+                <div class="result-main">
+                    <span style="font-size: 2rem;">{{ result_icon }}</span>
+                    <span>{{ result }}</span>
+                </div>
+                {% if result_description %}
+                    <div class="result-description">
+                        {{ result_description }}
+                    </div>
+                {% endif %}
+                {% if confidence is not none and confidence > 0 %}
+                    <div class="confidence-section">
+                        <div class="confidence-label">Detection Confidence: {{ "%.1f"|format(confidence * 100) }}%</div>
+                        <div class="confidence-meter">
+                            <div class="confidence-fill" style="width: {{ confidence * 100 }}%"></div>
+                        </div>
+                        <div class="confidence-text">
+                            {% if confidence >= 0.75 %}
+                                High certainty in detection result
+                            {% elif confidence >= 0.40 %}
+                                Moderate certainty - manual review recommended
+                            {% else %}
+                                High certainty in human authorship
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
             {% endif %}
-        </div>
-        {% endif %}
-        
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">🖼️</div>
-                <div class="feature-title">Images</div>
-                <div class="feature-desc">Detect AI-generated photos</div>
+            
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">🖼️</span>
+                    <div class="feature-title">Images</div>
+                    <div class="feature-desc">Advanced detection for AI-generated photos and artwork</div>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📝</span>
+                    <div class="feature-title">Text</div>
+                    <div class="feature-desc">Identify AI-written content with ensemble models</div>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🎥</span>
+                    <div class="feature-title">Videos</div>
+                    <div class="feature-desc">Analyze video content for synthetic generation</div>
+                </div>
             </div>
-            <div class="feature">
-                <div class="feature-icon">📝</div>
-                <div class="feature-title">Text</div>
-                <div class="feature-desc">Identify AI-written content</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🎥</div>
-                <div class="feature-title">Videos</div>
-                <div class="feature-desc">Analyze video content</div>
+            
+            <div class="tips">
+                <h4>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Best Practices
+                </h4>
+                <ul>
+                    <li>Images: JPG, PNG, WebP formats work best (under 10MB)</li>
+                    <li>Text: Plain text files (.txt) under 1000 characters for optimal accuracy</li>
+                    <li>Ensure good file quality for more reliable detection results</li>
+                    <li>AI detection accuracy varies by content type and generation method</li>
+                </ul>
             </div>
         </div>
-        
-        <div class="tips">
-            <h4>💡 Tips for Better Results:</h4>
-            <ul>
-                <li>Images: JPG, PNG, WebP formats work best</li>
-                <li>Text: Plain text files (.txt) under 1000 characters</li>
-                <li>Keep file sizes reasonable for faster processing</li>
-                <li>AI detection accuracy varies by content type and quality</li>
-            </ul>
-        </div>
-    </div>
+    </section>
     
     <script>
+        function scrollToApp() {
+            document.getElementById('app').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
@@ -667,11 +820,24 @@
             
             // Show loading state
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '⏳ Processing...';
+            submitBtn.innerHTML = 'Processing...';
             loadingDiv.classList.add('show');
             
             // Scroll to loading div
             loadingDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Add some entrance animations
+        window.addEventListener('load', function() {
+            const heroContent = document.querySelector('.hero-content');
+            heroContent.style.opacity = '0';
+            heroContent.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                heroContent.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                heroContent.style.opacity = '1';
+                heroContent.style.transform = 'translateY(0)';
+            }, 200);
         });
     </script>
 </body>
