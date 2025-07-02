@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-07-02T12:44:10.473991",
+  "performance": {
+    "total_samples": 27,
+    "correct": 18,
+    "accuracy": 0.6666666666666666,
+    "false_positives": 2,
+    "false_negatives": 2,
+    "false_positive_rate": 0.07407407407407407,
+    "false_negative_rate": 0.07407407407407407
+  },
+  "adjustments": {}
+}
