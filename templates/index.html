@@ -783,10 +783,10 @@
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
-        /* 5-Tier Result Color Schemes */
+        /* 5-Tier Result Color Schemes with Improved Text Contrast */
         .confidence-tier-1 {
             background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            color: #166534;
+            color: #14532d;
             border-color: #86efac;
         }
 
@@ -794,9 +794,24 @@
             background: linear-gradient(135deg, #22c55e, #16a34a);
         }
 
+        .confidence-tier-1 .result-main {
+            color: #14532d;
+            text-shadow: 0 1px 2px rgba(20, 83, 45, 0.1);
+        }
+
+        .confidence-tier-1 .result-description {
+            color: #166534;
+        }
+
+        .confidence-tier-1 .confidence-label,
+        .confidence-tier-1 .confidence-text {
+            color: #14532d !important;
+            text-shadow: 0 1px 2px rgba(20, 83, 45, 0.1);
+        }
+
         .confidence-tier-2 {
             background: linear-gradient(135deg, #fefce8, #fef3c7);
-            color: #a16207;
+            color: #713f12;
             border-color: #fde047;
         }
 
@@ -804,9 +819,24 @@
             background: linear-gradient(135deg, #eab308, #ca8a04);
         }
 
+        .confidence-tier-2 .result-main {
+            color: #713f12;
+            text-shadow: 0 1px 2px rgba(113, 63, 18, 0.1);
+        }
+
+        .confidence-tier-2 .result-description {
+            color: #92400e;
+        }
+
+        .confidence-tier-2 .confidence-label,
+        .confidence-tier-2 .confidence-text {
+            color: #713f12 !important;
+            text-shadow: 0 1px 2px rgba(113, 63, 18, 0.1);
+        }
+
         .confidence-tier-3 {
             background: linear-gradient(135deg, #fff7ed, #fed7aa);
-            color: #c2410c;
+            color: #9a3412;
             border-color: #fdba74;
         }
 
@@ -814,9 +844,24 @@
             background: linear-gradient(135deg, #f97316, #ea580c);
         }
 
+        .confidence-tier-3 .result-main {
+            color: #9a3412;
+            text-shadow: 0 1px 2px rgba(154, 52, 18, 0.1);
+        }
+
+        .confidence-tier-3 .result-description {
+            color: #c2410c;
+        }
+
+        .confidence-tier-3 .confidence-label,
+        .confidence-tier-3 .confidence-text {
+            color: #9a3412 !important;
+            text-shadow: 0 1px 2px rgba(154, 52, 18, 0.1);
+        }
+
         .confidence-tier-4 {
             background: linear-gradient(135deg, #fef2f2, #fecaca);
-            color: #dc2626;
+            color: #991b1b;
             border-color: #fca5a5;
         }
 
@@ -824,14 +869,44 @@
             background: linear-gradient(135deg, #ef4444, #dc2626);
         }
 
+        .confidence-tier-4 .result-main {
+            color: #991b1b;
+            text-shadow: 0 1px 2px rgba(153, 27, 27, 0.1);
+        }
+
+        .confidence-tier-4 .result-description {
+            color: #dc2626;
+        }
+
+        .confidence-tier-4 .confidence-label,
+        .confidence-tier-4 .confidence-text {
+            color: #991b1b !important;
+            text-shadow: 0 1px 2px rgba(153, 27, 27, 0.1);
+        }
+
         .confidence-tier-5 {
-            background: linear-gradient(135deg, #fdf2f8, #fce7f3);
-            color: #be185d;
-            border-color: #f9a8d4;
+            background: linear-gradient(135deg, #4c1d95, #7c3aed);
+            color: #ffffff;
+            border-color: #a855f7;
         }
 
         .confidence-tier-5 .confidence-fill {
             background: linear-gradient(135deg, #ec4899, #db2777);
+        }
+
+        .confidence-tier-5 .result-main {
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .confidence-tier-5 .result-description {
+            color: #e9d5ff;
+        }
+
+        .confidence-tier-5 .confidence-label,
+        .confidence-tier-5 .confidence-text {
+            color: #ffffff !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         /* Features Grid */
