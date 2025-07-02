@@ -1495,12 +1495,217 @@
     </footer>
 
     <script>
-         function scrollToApp() {
+        function scrollToApp() {
             document.getElementById('app').scrollIntoView({ 
                 behavior: 'smooth',
-                block: 'start' // changed from 'center' to 'start'
+                block: 'start'
             });
         }
+
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const types = {
+                'jpg': 'Image', 'jpeg': 'Image', 'png': 'Image', 'gif': 'Image', 'webp': 'Image',
+                'txt': 'Text Document',
+                'mp4': 'Video', 'mov': 'Video', 'avi': 'Video', 'mkv': 'Video', 'webm': 'Video'
+            };
+            return types[ext] || 'Unknown';
+        }
+
+        // Drag and drop functionality
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInput = document.getElementById('file');
+
+        uploadSection.addEventListener('click', () => fileInput.click());
+
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+
+        uploadSection.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect(files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            const fileInfo = document.getElementById('fileInfo');
+            const uploadIcon = document.querySelector('.upload-icon');
+            const uploadText = document.querySelector('.upload-text');
+            const uploadSubtext = document.querySelector('.upload-subtext');
+
+            uploadIcon.textContent = '✅';
+            uploadText.textContent = 'File ready for analysis';
+            uploadSubtext.textContent = 'Click "Analyze Content" to begin';
+
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileType').textContent = getFileType(file.name);
+            fileInfo.classList.add('show');
+        }
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileSelect(file);
+            }
+        });
+
+        // Tab switching functionality
+        function switchTab(tabType) {
+            const fileTab = document.getElementById('fileTab');
+            const textTab = document.getElementById('textTab');
+            const uploadSection = document.getElementById('uploadSection');
+            const textInputSection = document.getElementById('textInputSection');
+            const fileInput = document.getElementById('file');
+            const textInput = document.getElementById('textContent');
+
+            if (tabType === 'file') {
+                fileTab.classList.add('active');
+                textTab.classList.remove('active');
+                uploadSection.style.display = 'block';
+                textInputSection.style.display = 'none';
+
+                textInput.value = '';
+                fileInput.required = true;
+                textInput.required = false;
+            } else {
+                textTab.classList.add('active');
+                fileTab.classList.remove('active');
+                uploadSection.style.display = 'none';
+                textInputSection.style.display = 'block';
+
+                fileInput.value = '';
+                fileInput.required = false;
+                textInput.required = true;
+                textInput.focus();
+            }
+        }
+
+        // Character counter for text input
+        document.getElementById('textContent').addEventListener('input', function(e) {
+            const charCount = e.target.value.length;
+            const charCountElement = document.getElementById('charCount');
+            charCountElement.textContent = charCount;
+        });
+
+        document.getElementById('analysisForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('file');
+            const textInput = document.getElementById('textContent');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingDiv = document.getElementById('loadingDiv');
+            const activeTab = document.querySelector('.tab-button.active').id;
+
+            if (activeTab === 'fileTab') {
+                if (!fileInput.files || !fileInput.files[0]) {
+                    alert('Please select a file to upload!');
+                    return;
+                }
+            } else {
+                const textValue = textInput.value.trim();
+                if (!textValue) {
+                    alert('Please enter some text to analyze!');
+                    return;
+                }
+                if (textValue.length < 10) {
+                    alert('Please enter at least 10 characters for better analysis!');
+                    return;
+                }
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Processing...';
+            loadingDiv.classList.add('show');
+
+            const existingResult = document.querySelector('.result');
+            const flashMessages = document.querySelector('.flash-messages');
+            if (existingResult) existingResult.remove();
+            if (flashMessages) flashMessages.innerHTML = '';
+
+            loadingDiv.scrollIntoView({ behavior: 'smooth' });
+
+            const formData = new FormData();
+            if (activeTab === 'fileTab') {
+                formData.append('file', fileInput.files[0]);
+            } else {
+                formData.append('text_content', textInput.value.trim());
+            }
+
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                loadingDiv.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Analyze Content';
+
+                const responseFlash = doc.querySelector('.flash-messages');
+                if (responseFlash && responseFlash.innerHTML.trim()) {
+                    const currentFlash = document.querySelector('.flash-messages');
+                    if (currentFlash) {
+                        currentFlash.innerHTML = responseFlash.innerHTML;
+                    }
+                    return;
+                }
+
+                const responseResult = doc.querySelector('.result');
+                if (responseResult) {
+                    const form = document.getElementById('analysisForm');
+                    form.insertAdjacentElement('afterend', responseResult);
+                    responseResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+
+                loadingDiv.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Analyze Content';
+
+                const flashDiv = document.querySelector('.flash-messages');
+                if (flashDiv) {
+                    flashDiv.innerHTML = `
+                        <div class="flash-message flash-error">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>
+                            </svg>
+                            An error occurred while analyzing your file. Please try again.
+                        </div>
+                    `;
+                }
+            });
+        });
 
         function toggleMobileMenu() {
             const navLinks = document.getElementById('navLinks');
@@ -1740,4 +1945,28 @@
                         btn.style.opacity = '1';
                         btn.style.cursor = 'pointer';
                     });
-                    alert('Error submitting feedback. PleaseThe requested changes have been applied to the HTML template.
+                    alert('Error submitting feedback. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                });
+                alert('Error submitting feedback. Please try again.');
+            });
+        }
+
+        // Tips toggle functionality
+        function toggleTips() {
+            const button = document.querySelector('.tips-toggle');
+            const content = document.getElementById('tipsContent');
+
+            button.classList.toggle('expanded');
+            content.classList.toggle('expanded');
+        }
+    </script>
+</body>
+</html>
