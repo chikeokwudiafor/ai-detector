@@ -1198,8 +1198,8 @@
                     </div>
                 {% endif %}
 
-                <!-- Feedback Section -->
-                {% if session_id %}
+                <!-- Feedback Section - Only show if actual analysis was performed -->
+                {% if session_id and session.get('last_analysis') %}
                 <div class="feedback-section">
                     <div class="feedback-header">
                         <h4>What is this content actually?</h4>
