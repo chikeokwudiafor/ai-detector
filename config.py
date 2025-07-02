@@ -19,22 +19,33 @@ TEXT_MODELS = [
 IMAGE_MODELS = [
     {
         "name": "Organika/sdxl-detector",
-        "weight": 4.0,  # Much higher weight - most accurate model
+        "weight": 2.0,  # Still strong but not dominating
+        "reliability": "high_ai_detection",  # Good at finding AI, bad at human
         "fallback": "umm-maybe/AI-image-detector"
     },
     {
-        "name": "umm-maybe/AI-image-detector",
-        "weight": 0.2,  # Further reduced weight 
+        "name": "umm-maybe/AI-image-detector", 
+        "weight": 1.5,  # Balanced general-purpose
+        "reliability": "balanced",
         "fallback": None
     },
     {
         "name": "saltacc/anime-ai-detect",
-        "weight": 0.3,  # Reduced weight
+        "weight": 1.0,  # Specialized but useful
+        "reliability": "specialized",
+        "fallback": "umm-maybe/AI-image-detector"
+    },
+    # Add new, better models
+    {
+        "name": "microsoft/DialoGPT-medium",  # Better human text detection
+        "weight": 1.3,
+        "reliability": "human_focused",
         "fallback": "umm-maybe/AI-image-detector"
     },
     {
-        "name": "Falconsai/nsfw_image_detection",
-        "weight": 0.1,  # Much lower weight
+        "name": "hustvl/yolos-tiny",  # Object detection can help identify AI artifacts
+        "weight": 0.8,
+        "reliability": "artifact_detection", 
         "fallback": "umm-maybe/AI-image-detector"
     }
 ]
@@ -74,10 +85,17 @@ HEURISTICS = {
         "ai_boost_factor": 2.2  # Confidence boost when AI keywords found
     },
     "ensemble": {
-        "disagreement_threshold": 0.5,  # Even higher threshold - less penalty
-        "max_disagreement_penalty": 0.04,  # Much lower penalty - trust Organika heavily
-        "high_confidence_threshold": 0.7,  # Lower threshold for trust boost
-        "organika_threshold": 0.85  # Threshold for Organika override
+        "disagreement_threshold": 0.3,
+        "max_disagreement_penalty": 0.25,
+        "high_confidence_threshold": 0.8,
+        # Dynamic weighting system
+        "dynamic_weighting": {
+            "enabled": True,
+            "organika_ai_boost": 1.4,      # Boost Organika when other models also say AI
+            "organika_human_penalty": 0.6,  # Reduce Organika when others say human
+            "consensus_threshold": 0.6,     # Agreement threshold for dynamic adjustment
+            "outlier_penalty": 0.7          # Penalty for models that disagree with consensus
+        }
     }
 }
 

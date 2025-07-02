@@ -181,6 +181,17 @@ class EnsembleVoter:
             'agreement': agreement,
             'model_count': len(predictions)
         }
+    
+    @staticmethod
+    def apply_dynamic_weighting(base_confidence, predictions_data):
+        """Adjust confidence based on dynamic weighting."""
+        # Example implementation: Increase confidence if models agree
+        agreement_count = sum(1 for pred in predictions_data if pred['confidence'] > 0.5)
+        if agreement_count > len(predictions_data) / 2:
+            base_confidence = min(1.0, base_confidence * 1.1)  # Increase by 10% if more than half agree
+            logger.info("Applied dynamic weighting boost due to model agreement.")
+        return base_confidence
+
 
     @staticmethod
     def apply_confidence_adjustments(base_confidence, metrics, content_features=None, predictions_data=None):
@@ -206,17 +217,17 @@ class EnsembleVoter:
         if predictions_data:
             organika_confidence = None
             organika_weight = 0
-            
+
             for pred_data in predictions_data:
                 if "Organika" in pred_data['model_name']:
                     organika_confidence = pred_data['confidence']
                     organika_weight = pred_data['weight']
                     break
-            
+
             if organika_confidence is not None and organika_weight > 2.0:
                 # If Organika is very confident (>85%), let it dominate
                 organika_threshold = HEURISTICS["ensemble"].get("organika_threshold", 0.85)
-                
+
                 if organika_confidence > organika_threshold:
                     # Override: Give Organika much more influence
                     override_boost = 1.5
@@ -298,6 +309,12 @@ class AIDetector:
                 ensemble_confidence, metrics, all_features, predictions_data
             )
 
+             # Apply dynamic weighting based on model consensus
+            if predictions_data and len(predictions_data) > 1:
+                final_confidence = EnsembleVoter.apply_dynamic_weighting(
+                    final_confidence, predictions_data
+                )
+
             # Classify result
             result_type = AIDetector._classify_confidence(final_confidence)
 
@@ -373,6 +390,12 @@ class AIDetector:
             final_confidence = EnsembleVoter.apply_confidence_adjustments(
                 ensemble_confidence, metrics, all_features, predictions_data
             )
+
+            # Apply dynamic weighting based on model consensus
+            if predictions_data and len(predictions_data) > 1:
+                final_confidence = EnsembleVoter.apply_dynamic_weighting(
+                    final_confidence, predictions_data
+                )
 
             # Classify result
             result_type = AIDetector._classify_confidence(final_confidence)
@@ -540,3 +563,29 @@ def get_result_classification(result_type):
     else:
         # Fallback
         return ("Unknown Result", "confidence-tier-3", "❓", "Unable to classify", "Analysis inconclusive")
+
+# Placeholder for AdaptiveWeights class
+class AdaptiveWeights:
+    """
+    Manages adaptive weights for AI detection models based on feedback.
+    """
+
+    def __init__(self):
+        # Initialize weights with default values
+        self.model_weights = {}
+
+    def update_weight(self, model_name, new_weight):
+        """
+        Updates the weight for a specific model.
+        """
+        self.model_weights[model_name] = new_weight
+        logger.info(f"Updated weight for {model_name} to {new_weight:.2f}")
+
+    def get_current_weights(self):
+        """
+        Returns the current model weights.
+        """
+        return self.model_weights
+
+# Initialize AdaptiveWeights instance
+adaptive_weights = AdaptiveWeights()
