@@ -196,6 +196,24 @@ class EnsembleVoter:
     @staticmethod
     def apply_confidence_adjustments(base_confidence, metrics, content_features=None, predictions_data=None):
         """Apply heuristic adjustments based on model agreement and content"""
+        
+        # FIRST: Check for Organika 100% override BEFORE any other processing
+        if predictions_data:
+            organika_confidence = None
+            organika_weight = 0
+
+            for pred_data in predictions_data:
+                if "Organika" in pred_data['model_name']:
+                    organika_confidence = pred_data['confidence']
+                    organika_weight = pred_data['weight']
+                    break
+
+            # OVERRIDE SYSTEM: If Organika is EXACTLY 100% confident, bypass everything
+            if organika_confidence is not None and organika_confidence >= 1.0:
+                logger.info(f"🎯 ORGANIKA OVERRIDE: {organika_confidence:.3f} (ABSOLUTE 100%) - BYPASSING ALL ADJUSTMENTS")
+                return organika_confidence
+
+        # NORMAL PROCESSING: Continue with regular adjustments for all other cases
         adjusted_confidence = base_confidence
 
         # Reduce confidence if models disagree significantly
@@ -213,7 +231,7 @@ class EnsembleVoter:
                 adjusted_confidence *= adjustment
                 logger.info(f"Applied {feature} adjustment: {adjustment:.3f}")
 
-        # Apply Organika override and trust boost
+        # Apply Organika trust boost for high confidence (but not 100%)
         if predictions_data:
             organika_confidence = None
             organika_weight = 0
@@ -225,14 +243,8 @@ class EnsembleVoter:
                     break
 
             if organika_confidence is not None and organika_weight > 1.0:
-                # OVERRIDE SYSTEM: If Organika is EXACTLY 100% confident, let it completely dominate
-                if organika_confidence >= 1.0:
-                    # COMPLETE OVERRIDE - Return immediately, bypass all other logic
-                    logger.info(f"🎯 ORGANIKA OVERRIDE: {organika_confidence:.3f} (ABSOLUTE 100% confidence) - COMPLETE BYPASS")
-                    return organika_confidence
-
-                # WEIGHTED SYSTEM: For everything else, use balanced approach
-                elif organika_confidence >= 0.85:
+                # WEIGHTED SYSTEM: For high confidence (but not 100%)
+                if organika_confidence >= 0.85 and organika_confidence < 1.0:
                     # Regular trust boost for high confidence
                     trust_boost = 1.3
                     adjusted_confidence *= trust_boost
