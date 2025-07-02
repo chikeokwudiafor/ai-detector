@@ -147,14 +147,15 @@ class ModelManager:
             logger.warning(f"✗ Failed to load {model_config['name']}: {e}")
             return None
 
-# Global instances - initialize immediately for deployment
-model_manager = ModelManager()
+# Global instances - use lazy loading for deployment
+model_manager = None
 model_logger = ModelLogger()
 
 def get_model_manager():
-    """Get model manager instance"""
+    """Get model manager instance with lazy loading"""
     global model_manager
     if model_manager is None:
+        logger.info("Lazy loading AI detection models...")
         model_manager = ModelManager()
     return model_manager
 
@@ -206,6 +207,11 @@ class EnsembleVoter:
 
 class AIDetector:
     """Main AI detection class with improved ensemble support"""
+    
+    @staticmethod
+    def _ensure_models_loaded():
+        """Ensure models are loaded - for pre-warming if needed"""
+        return get_model_manager()
     
     @staticmethod
     def detect_text(text_content, filename="unknown.txt"):
