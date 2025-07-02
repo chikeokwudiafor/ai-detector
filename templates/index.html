@@ -1486,6 +1486,235 @@
             }
         }
 
+        /* Use Cases Section */
+        .use-cases-section {
+            margin-top: 4rem;
+            padding: 3rem 0;
+            background: rgba(15, 15, 35, 0.3);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .use-cases-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(96, 165, 250, 0.5);
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            opacity: 0.9;
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .use-case-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 1.25rem;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--glow-blue);
+        }
+
+        .use-case-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #60a5fa, #a855f7, #22d3ee);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .use-case-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            animation: rotate 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .use-case-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .use-case-card:hover::after {
+            opacity: 1;
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(30, 41, 59, 0.95);
+            border-color: var(--primary-blue);
+            box-shadow: var(--glow-intense-blue);
+        }
+
+        .use-case-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.6));
+            transition: all 0.3s ease;
+        }
+
+        .use-case-card:hover .use-case-icon {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px rgba(96, 165, 250, 1));
+        }
+
+        .use-case-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .use-case-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-examples {
+            font-size: 0.875rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-style: italic;
+            opacity: 0.9;
+            border-left: 3px solid var(--primary-blue);
+            padding-left: 1rem;
+        }
+
+        .use-cases-cta {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .use-cases-cta p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .secondary-cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.125rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .secondary-cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .secondary-cta-button:hover::before {
+            left: 100%;
+        }
+
+        .secondary-cta-button:hover {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.3) 0%, rgba(168, 85, 247, 0.3) 100%);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--glow-intense-blue);
+            color: white;
+        }
+
+        /* Enhanced Mobile Responsiveness for Use Cases */
+        @media (max-width: 768px) {
+            .use-cases-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .use-case-card {
+                padding: 2rem;
+            }
+            
+            .section-header h3 {
+                font-size: 2rem;
+            }
+            
+            .use-cases-section {
+                margin-top: 2rem;
+                padding: 2rem 1rem;
+            }
+        }
+
         /* Smooth scroll behavior */
         html {
             scroll-behavior: smooth;
@@ -1751,6 +1980,68 @@
                         <span class="coming-soon-badge">Coming Soon</span>
                     </div>
                     <div class="feature-desc">Analyze video content for synthetic generation</div>
+                </div>
+            </div>
+
+            <!-- Use Cases Section -->
+            <div class="use-cases-section">
+                <div class="section-header">
+                    <h3>When is AIthentic Useful?</h3>
+                    <p>Discover scenarios where AI detection makes a real difference</p>
+                </div>
+                
+                <div class="use-cases-grid">
+                    <div class="use-case-card">
+                        <div class="use-case-icon">🎨</div>
+                        <div class="use-case-title">Art & Creative Work</div>
+                        <div class="use-case-desc">Verify authenticity of digital artwork, photography, and creative content before purchasing or sharing</div>
+                        <div class="use-case-examples">Popular for: NFT verification, art contests, portfolio authenticity</div>
+                    </div>
+                    
+                    <div class="use-case-card">
+                        <div class="use-case-icon">📰</div>
+                        <div class="use-case-title">Journalism & Media</div>
+                        <div class="use-case-desc">Ensure editorial integrity by detecting AI-generated articles, press releases, and news content</div>
+                        <div class="use-case-examples">Popular for: Fact-checking, editorial review, source verification</div>
+                    </div>
+                    
+                    <div class="use-case-card">
+                        <div class="use-case-icon">🎓</div>
+                        <div class="use-case-title">Education & Academia</div>
+                        <div class="use-case-desc">Maintain academic integrity by identifying AI-written essays, research papers, and assignments</div>
+                        <div class="use-case-examples">Popular for: Homework checking, thesis review, plagiarism detection</div>
+                    </div>
+                    
+                    <div class="use-case-card">
+                        <div class="use-case-icon">💼</div>
+                        <div class="use-case-title">Business & Marketing</div>
+                        <div class="use-case-desc">Validate content authenticity for marketing materials, product descriptions, and brand assets</div>
+                        <div class="use-case-examples">Popular for: Content auditing, brand protection, compliance</div>
+                    </div>
+                    
+                    <div class="use-case-card">
+                        <div class="use-case-icon">⚖️</div>
+                        <div class="use-case-title">Legal & Compliance</div>
+                        <div class="use-case-desc">Support legal proceedings with evidence verification and document authenticity analysis</div>
+                        <div class="use-case-examples">Popular for: Evidence review, document forensics, litigation support</div>
+                    </div>
+                    
+                    <div class="use-case-card">
+                        <div class="use-case-icon">🛡️</div>
+                        <div class="use-case-title">Security & Trust</div>
+                        <div class="use-case-desc">Protect against deepfakes, synthetic media, and AI-generated misinformation campaigns</div>
+                        <div class="use-case-examples">Popular for: Social media moderation, identity verification, fraud prevention</div>
+                    </div>
+                </div>
+                
+                <div class="use-cases-cta">
+                    <p>Ready to verify your content? Our advanced AI detection works in seconds.</p>
+                    <button class="secondary-cta-button" onclick="scrollToApp()">
+                        <span>Start Detection Analysis</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
