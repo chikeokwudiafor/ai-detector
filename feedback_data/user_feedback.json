@@ -88,5 +88,23 @@
     "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:19:45.740363",
+    "session_id": "4b9524a9-b05d-42b1-84cd-13f81ac0fc13",
+    "file_type": "image",
+    "filename": "$10 ENTRY.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:20:49.222096",
+    "session_id": "e91d8cd9-352d-44ed-8dab-306396c41b72",
+    "file_type": "image",
+    "filename": "brianna-23.jpg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
   }
 ]
