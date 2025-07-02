@@ -198,7 +198,7 @@ class EnsembleVoter:
         """Apply heuristic adjustments based on model agreement and content"""
         
         # FIRST: Check for Organika 100% override BEFORE any other processing
-        if predictions_data:
+        if predictions_data and HEURISTICS["ensemble"]["organika_override"]["enabled"]:
             organika_confidence = None
             organika_weight = 0
 
@@ -209,8 +209,13 @@ class EnsembleVoter:
                     break
 
             # OVERRIDE SYSTEM: If Organika is EXACTLY 100% confident, bypass everything
-            if organika_confidence is not None and organika_confidence >= 1.0:
-                logger.info(f"🎯 ORGANIKA OVERRIDE: {organika_confidence:.3f} (ABSOLUTE 100%) - BYPASSING ALL ADJUSTMENTS")
+            threshold = HEURISTICS["ensemble"]["organika_override"]["absolute_confidence_threshold"]
+            if (organika_confidence is not None and 
+                organika_confidence >= threshold and 
+                HEURISTICS["ensemble"]["organika_override"]["bypass_all_processing"]):
+                
+                override_msg = HEURISTICS["ensemble"]["organika_override"]["override_message"]
+                logger.info(f"{override_msg}: {organika_confidence:.3f} - COMPLETE BYPASS OF ALL PROCESSING")
                 return organika_confidence
 
         # NORMAL PROCESSING: Continue with regular adjustments for all other cases
