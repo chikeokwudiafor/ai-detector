@@ -1,6 +1,6 @@
 # AI Detector Performance Report
 
-Generated: 2025-07-02 14:11:18
+Generated: 2025-07-02 14:16:42
 
 ## Overview
 
@@ -13,9 +13,9 @@ Generated: 2025-07-02 14:11:18
 
 | Model | Accuracy | Samples | Strengths |
 |-------|----------|---------|----------|
-| sdxl-detector | 100.0% | 1 | AI detection, high confidence images |
-| AI-image-detector | 0.0% | 1 | Balanced detection, general images |
-| anime-ai-detect | 0.0% | 1 | Anime/artistic content detection |
+| sdxl-detector | 41.7% | 36 | AI detection, high confidence images |
+| AI-image-detector | 27.8% | 36 | Balanced detection, general images |
+| anime-ai-detect | 36.1% | 36 | Anime/artistic content detection |
 
 ## Recent Activity
 

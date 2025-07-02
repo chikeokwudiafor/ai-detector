@@ -1,7 +1,7 @@
 {
   "metadata": {
     "created": "2025-07-02T14:06:52.376727",
-    "last_updated": "2025-07-02T14:11:18.504494",
+    "last_updated": "2025-07-02T14:16:42.715327",
     "version": "1.0"
   },
   "model_performance": {
@@ -48,6 +48,25 @@
           "accuracy": 0.6666666666666666,
           "total_samples": 36,
           "correct_predictions": 24
+        }
+      }
+    },
+    "2025-07-02T14:16:42.715327": {
+      "model_performance": {
+        "Organika/sdxl-detector": {
+          "accuracy": 0.75,
+          "total_samples": 36,
+          "correct_predictions": 27
+        },
+        "umm-maybe/AI-image-detector": {
+          "accuracy": 0.8055555555555556,
+          "total_samples": 36,
+          "correct_predictions": 29
+        },
+        "saltacc/anime-ai-detect": {
+          "accuracy": 0.5833333333333334,
+          "total_samples": 36,
+          "correct_predictions": 21
         }
       }
     }
