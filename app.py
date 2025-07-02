@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, flash
 from PIL import Image
 import torch
@@ -50,36 +49,36 @@ def detect_ai_image(image_file):
     """
     if not image_classifier:
         return "Model not available", 0.0
-    
+
     try:
         image = Image.open(image_file)
         # Convert to RGB if necessary
         if image.mode != 'RGB':
             image = image.convert('RGB')
-        
+
         # Get prediction
         results = image_classifier(image)
-        
+
         # Parse results - look for AI-related labels
         ai_confidence = 0.0
         for result in results:
             label = result['label'].lower()
             score = result['score']
-            
+
             # Check if label indicates AI generation
             if any(keyword in label for keyword in ['ai', 'artificial', 'generated', 'fake', 'synthetic']):
                 ai_confidence = max(ai_confidence, score)
             elif any(keyword in label for keyword in ['real', 'human', 'natural', 'authentic']):
                 ai_confidence = max(ai_confidence, 1.0 - score)
-        
+
         # If no specific AI labels, use the highest confidence result
         if ai_confidence == 0.0 and results:
             # Assume first result is the primary classification
             ai_confidence = results[0]['score'] if 'ai' in results[0]['label'].lower() else 1.0 - results[0]['score']
-        
+
         is_ai = ai_confidence > 0.5
         return "AI-generated" if is_ai else "Human-made", ai_confidence
-        
+
     except Exception as e:
         print(f"Image detection error: {e}")
         return "Error processing image", 0.0
@@ -90,24 +89,24 @@ def detect_ai_text(text_content):
     """
     if not text_classifier:
         return "Model not available", 0.0
-    
+
     try:
         # Truncate text to manageable size (RoBERTa models typically handle ~512 tokens)
         # This prevents memory issues and speeds up processing
         if len(text_content) > 1000:  # Rough character limit
             text_content = text_content[:1000]
-        
+
         # Get prediction - no extra parameters needed
         results = text_classifier(text_content)
-        
+
         # Parse results
         ai_confidence = 0.0
-        
+
         if isinstance(results, list) and len(results) > 0:
             result = results[0]  # Take the first result
             label = result['label'].lower()
             score = result['score']
-            
+
             # Different models use different labels
             if any(keyword in label for keyword in ['fake', 'ai', 'generated', 'machine', 'label_1', '1']):
                 ai_confidence = score
@@ -126,10 +125,10 @@ def detect_ai_text(text_content):
                 ai_confidence = 1.0 - score
             else:
                 ai_confidence = score
-        
+
         is_ai = ai_confidence > 0.5
         return "AI-generated" if is_ai else "Human-made", ai_confidence
-        
+
     except Exception as e:
         print(f"Text detection error: {e}")
         return "Error processing text", 0.0
@@ -148,11 +147,11 @@ def get_result_classification(confidence):
     Returns: (message, css_class, icon)
     """
     if confidence >= 0.75:
-        return "AI-generated", "ai-high", "🤖"
+        return "AI-Generated", "ai-high", "🤖", "This looks like it came from an AI"
     elif confidence >= 0.40:
-        return "Possibly AI-generated", "ai-medium", "🧐"
+        return "Possibly AI-Generated", "ai-medium", "🧐", "Could be AI or human - it's hard to tell"
     else:
-        return "Likely Human-generated", "ai-low", "🧠"
+        return "Human-Created", "ai-low", "🧠", "This looks like it was made by a real person"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -160,42 +159,42 @@ def index():
     confidence = None
     result_class = None
     result_icon = None
-    
+
     if request.method == "POST":
         file = request.files.get("file")
-        
+
         if not file or file.filename == '':
             flash("⚠️ Please select a file to analyze.", "error")
             return render_template("index.html")
-        
+
         filename = file.filename.lower()
-        
+
         try:
             if filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp')):
                 # Image detection
                 result, confidence = detect_ai_image(file)
-                
+
             elif filename.endswith('.txt'):
                 # Text detection
                 text_content = file.read().decode('utf-8')
                 result, confidence = detect_ai_text(text_content)
-                
+
             elif filename.endswith(('.mp4', '.avi', '.mov', '.mkv', '.webm')):
                 # Video detection (placeholder)
                 result, confidence = detect_ai_video(file)
-                
+
             else:
                 flash("🚫 Unsupported file type. Please upload an image (.jpg, .png), text file (.txt), or video (.mp4, .mov, .avi).", "error")
                 return render_template("index.html")
-            
+
             # Get dynamic classification based on confidence
             if confidence is not None and confidence > 0:
                 result, result_class, result_icon = get_result_classification(confidence)
-                
+
         except Exception as e:
             flash(f"❌ Error processing file: {str(e)}", "error")
             return render_template("index.html")
-    
+
     return render_template("index.html", 
                          result=result, 
                          confidence=confidence, 
