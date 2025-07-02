@@ -1,5 +1,4 @@
 {
-  "timestamp": "2025-07-02T09:24:52.399670",
   "patterns": {
     "filename_analysis": {
       "ai_indicators": {
@@ -187,8 +186,5 @@
       "action": "Consider additional image detection models or fine-tuning"
     }
   ],
-  "metadata": {
-    "analysis_version": "1.0",
-    "total_patterns": 3
-  }
+  "total_samples": 12
 }
