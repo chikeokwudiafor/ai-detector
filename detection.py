@@ -196,18 +196,18 @@ class EnsembleVoter:
     @staticmethod
     def apply_confidence_adjustments(base_confidence, metrics, content_features=None, predictions_data=None):
         """Apply heuristic adjustments based on model agreement and content"""
-        
+
         # ABSOLUTE FIRST: Check for Organika 100% override BEFORE any other processing
         if predictions_data and HEURISTICS["ensemble"]["organika_override"]["enabled"]:
             for pred_data in predictions_data:
                 if "Organika" in pred_data['model_name']:
                     organika_confidence = pred_data['confidence']
                     threshold = HEURISTICS["ensemble"]["organika_override"]["absolute_confidence_threshold"]
-                    
+
                     # CRITICAL: Check for EXACT 1.0 confidence (100%) - BYPASS EVERYTHING
                     if (organika_confidence >= threshold and 
                         HEURISTICS["ensemble"]["organika_override"]["bypass_all_processing"]):
-                        
+
                         override_msg = HEURISTICS["ensemble"]["organika_override"]["override_message"]
                         logger.info(f"🎯 {override_msg}: {organika_confidence:.3f} - BYPASSING ALL ENSEMBLE PROCESSING")
                         return organika_confidence  # IMMEDIATE RETURN - NO OTHER PROCESSING
@@ -226,7 +226,7 @@ class EnsembleVoter:
             logger.info(f"Applied disagreement penalty: -{disagreement_penalty:.3f}")
 
         # Apply content-specific adjustments
-        if content_features:
+        if content_features:```python
             for feature, adjustment in content_features.items():
                 adjusted_confidence *= adjustment
                 logger.info(f"Applied {feature} adjustment: {adjustment:.3f}")
@@ -391,26 +391,26 @@ class AIDetector:
             if not predictions:
                 return "processing_error", 0.0, []
 
-            # CRITICAL: Check for Organika 100% override BEFORE ensemble processing
-            for pred_data in predictions_data:
-                if ("Organika" in pred_data['model_name'] and 
-                    pred_data['confidence'] >= 1.0 and 
-                    HEURISTICS["ensemble"]["organika_override"]["enabled"]):
-                    
-                    logger.info(f"🎯 ORGANIKA ABSOLUTE OVERRIDE: {pred_data['confidence']:.3f} - BYPASSING ENSEMBLE")
-                    final_confidence = pred_data['confidence']
-                    result_type = AIDetector._classify_confidence(final_confidence)
-                    
-                    # Log and return immediately
-                    processing_time = (datetime.now() - start_time).total_seconds() * 1000
-                    ensemble_result = {
-                        'result_type': result_type,
-                        'confidence': final_confidence,
-                        'metrics': {'agreement': 1.0, 'std_dev': 0.0, 'model_count': len(predictions)}
-                    }
-                    model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
-                    logger.info(f"Override result: {result_type} ({final_confidence:.3f})")
-                    return result_type, final_confidence, predictions
+            # 🎯 ABSOLUTE OVERRIDE CHECK: If Organika is 100% confident, skip ALL processing
+            if HEURISTICS["ensemble"]["organika_override"]["enabled"]:
+                for pred_data in predictions_data:
+                    if ("Organika" in pred_data['model_name'] and 
+                        pred_data['confidence'] >= HEURISTICS["ensemble"]["organika_override"]["absolute_confidence_threshold"]):
+
+                        logger.info(f"🎯 ORGANIKA ABSOLUTE OVERRIDE: {pred_data['confidence']:.3f} - SKIPPING ALL ENSEMBLE PROCESSING")
+                        final_confidence = pred_data['confidence']
+                        result_type = AIDetector._classify_confidence(final_confidence)
+
+                        # Log and return immediately
+                        processing_time = (datetime.now() - start_time).total_seconds() * 1000
+                        ensemble_result = {
+                            'result_type': result_type,
+                            'confidence': final_confidence,
+                            'metrics': {'agreement': 1.0, 'std_dev': 0.0, 'model_count': len(predictions)}
+                        }
+                        model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
+                        logger.info(f"🎯 OVERRIDE RESULT: {result_type} ({final_confidence:.3f})")
+                        return result_type, final_confidence, predictions
 
             # Calculate weighted ensemble score
             ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
