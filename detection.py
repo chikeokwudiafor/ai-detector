@@ -12,6 +12,7 @@ import torch
 from transformers import pipeline
 import numpy as np
 from config import *
+from results_manager import results_manager
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -81,6 +82,12 @@ class ModelLogger:
 
         with open(self.json_file, 'w') as f:
             json.dump(data, f, indent=2)
+        
+        # Also log to unified results manager
+        try:
+            results_manager.add_new_result("prediction", log_entry, "model_logger")
+        except Exception as e:
+            logger.warning(f"Failed to log to results manager: {e}")
 
 class ModelManager:
     """Manages loading and caching of AI detection models"""
