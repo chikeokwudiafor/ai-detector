@@ -7,5 +7,23 @@
     "model_prediction": "AI-Generated",
     "user_feedback": "accurate",
     "feedback_type": "accuracy_rating"
+  },
+  {
+    "timestamp": "2025-07-02T08:35:39.353624",
+    "session_id": "d363446e-0b5c-42b9-a9b9-d88baf88cef2",
+    "file_type": "image",
+    "filename": "afrocaribbean2_-34.jpg",
+    "model_prediction": "Likely Human-Created",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T08:36:08.942898",
+    "session_id": "ea34890b-8da5-4bfa-afcd-b1cca40e325b",
+    "file_type": "image",
+    "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+    "model_prediction": "Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
