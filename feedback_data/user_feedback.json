@@ -250,5 +250,14 @@
     "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:20:52.903785",
+    "session_id": "6f62419a-3dbe-4bff-b43f-fa6143fe523e",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
