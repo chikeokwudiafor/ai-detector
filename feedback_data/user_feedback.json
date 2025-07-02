@@ -268,5 +268,23 @@
     "model_prediction": "\ud83e\udd16 Likely AI-Generated",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:47:16.840152",
+    "session_id": "b0355f72-c8fe-4b64-b250-14835609dbfe",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:48:17.201900",
+    "session_id": "fdc760b5-fdc8-4105-a82f-5ba4a315fcf0",
+    "file_type": "image",
+    "filename": "2025-06-17 20.48.08.jpg",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
