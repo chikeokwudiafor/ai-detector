@@ -258,7 +258,7 @@ def submit_feedback():
 @app.route("/health")
 def health_check():
     """Health check endpoint"""
-    return {"status": "healthy"}
+    return jsonify({"status": "healthy"}), 200
 
 @app.route("/analytics")
 def analytics_dashboard():
