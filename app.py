@@ -26,21 +26,21 @@ def validate_file(file):
     else:
         return False, None, ERROR_MESSAGES["unsupported_format"]
 
-def process_file(file, file_type):
+def process_file(file, file_type, filename="unknown"):
     """
     Process file based on its type
     Returns: (result_type, confidence, error_message)
     """
     try:
         if file_type == "image":
-            result_type, confidence, raw_scores = AIDetector.detect_image(file)
+            result_type, confidence, raw_scores = AIDetector.detect_image(file, filename)
         elif file_type == "text":
             text_content = file.read().decode('utf-8')
             if len(text_content.strip()) == 0:
                 return None, 0.0, "Text file is empty."
-            result_type, confidence, raw_scores = AIDetector.detect_text(text_content)
+            result_type, confidence, raw_scores = AIDetector.detect_text(text_content, filename)
         elif file_type == "video":
-            result_type, confidence, raw_scores = AIDetector.detect_video(file)
+            result_type, confidence, raw_scores = AIDetector.detect_video(file, filename)
         else:
             return None, 0.0, ERROR_MESSAGES["unsupported_format"]
 
@@ -76,7 +76,7 @@ def index():
             return render_template("index.html")
 
         # Process file
-        result_type, confidence, error_msg = process_file(file, file_type)
+        result_type, confidence, error_msg = process_file(file, file_type, file.filename)
         if error_msg:
             flash(error_msg, "error")
             return render_template("index.html")

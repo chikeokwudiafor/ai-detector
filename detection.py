@@ -1,18 +1,87 @@
 
 """
-AI Detection Module with ensemble support
+AI Detection Module with ensemble support and logging
 """
 
+import os
+import csv
+import json
+import logging
+from datetime import datetime
 from PIL import Image
 import torch
 from transformers import pipeline
 import numpy as np
 from config import *
-import logging
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+class ModelLogger:
+    """Handles logging of model predictions to CSV and JSON"""
+    
+    def __init__(self, log_dir="logs"):
+        self.log_dir = log_dir
+        self.csv_file = os.path.join(log_dir, "model_predictions.csv")
+        self.json_file = os.path.join(log_dir, "detailed_predictions.json")
+        self._ensure_log_dir()
+        self._init_csv()
+    
+    def _ensure_log_dir(self):
+        """Create logs directory if it doesn't exist"""
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
+    
+    def _init_csv(self):
+        """Initialize CSV file with headers if it doesn't exist"""
+        if not os.path.exists(self.csv_file):
+            with open(self.csv_file, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([
+                    'timestamp', 'file_type', 'filename', 'model_name', 
+                    'individual_confidence', 'ensemble_confidence', 'final_result',
+                    'processing_time_ms'
+                ])
+    
+    def log_prediction(self, file_type, filename, predictions_data, ensemble_result, processing_time):
+        """Log prediction to both CSV and JSON"""
+        timestamp = datetime.now().isoformat()
+        
+        # Log to CSV (one row per model)
+        with open(self.csv_file, 'a', newline='') as f:
+            writer = csv.writer(f)
+            for pred in predictions_data:
+                writer.writerow([
+                    timestamp, file_type, filename, pred['model_name'],
+                    pred['confidence'], ensemble_result['confidence'], 
+                    ensemble_result['result_type'], processing_time
+                ])
+        
+        # Log detailed info to JSON
+        log_entry = {
+            'timestamp': timestamp,
+            'file_type': file_type,
+            'filename': filename,
+            'individual_predictions': predictions_data,
+            'ensemble_result': ensemble_result,
+            'processing_time_ms': processing_time
+        }
+        
+        # Append to JSON file
+        if os.path.exists(self.json_file):
+            with open(self.json_file, 'r') as f:
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    data = []
+        else:
+            data = []
+        
+        data.append(log_entry)
+        
+        with open(self.json_file, 'w') as f:
+            json.dump(data, f, indent=2)
 
 class ModelManager:
     """Manages loading and caching of AI detection models"""
@@ -78,18 +147,64 @@ class ModelManager:
             logger.warning(f"✗ Failed to load {model_config['name']}: {e}")
             return None
 
-# Global model manager instance
+# Global instances
 model_manager = ModelManager()
+model_logger = ModelLogger()
 
-class AIDetector:
-    """Main AI detection class with ensemble support"""
+class EnsembleVoter:
+    """Handles weighted voting and confidence calculations"""
     
     @staticmethod
-    def detect_text(text_content):
+    def weighted_vote(predictions, weights):
+        """Calculate weighted ensemble score with confidence metrics"""
+        if not predictions or not weights:
+            return 0.0, {'std_dev': 0.0, 'agreement': 0.0}
+        
+        # Calculate weighted average
+        ensemble_score = np.average(predictions, weights=weights)
+        
+        # Calculate agreement metrics
+        std_dev = np.std(predictions) if len(predictions) > 1 else 0.0
+        
+        # Agreement score: higher when models agree (lower std dev)
+        agreement = max(0.0, 1.0 - (std_dev / 0.5))  # Normalize to 0-1
+        
+        return ensemble_score, {
+            'std_dev': std_dev,
+            'agreement': agreement,
+            'model_count': len(predictions)
+        }
+    
+    @staticmethod
+    def apply_confidence_adjustments(base_confidence, metrics, content_features=None):
+        """Apply heuristic adjustments based on model agreement and content"""
+        adjusted_confidence = base_confidence
+        
+        # Reduce confidence if models disagree significantly
+        if metrics['std_dev'] > 0.3:
+            disagreement_penalty = min(0.3, metrics['std_dev'] / 2)
+            adjusted_confidence *= (1.0 - disagreement_penalty)
+            logger.info(f"Applied disagreement penalty: -{disagreement_penalty:.3f}")
+        
+        # Apply content-specific adjustments
+        if content_features:
+            for feature, adjustment in content_features.items():
+                adjusted_confidence *= adjustment
+                logger.info(f"Applied {feature} adjustment: {adjustment:.3f}")
+        
+        return min(adjusted_confidence, 1.0)
+
+class AIDetector:
+    """Main AI detection class with improved ensemble support"""
+    
+    @staticmethod
+    def detect_text(text_content, filename="unknown.txt"):
         """
-        Detect AI-generated text using ensemble of models
+        Detect AI-generated text using weighted ensemble
         Returns: (result_type, confidence, raw_scores)
         """
+        start_time = datetime.now()
+        
         if not model_manager.text_models:
             return "model_unavailable", 0.0, []
         
@@ -101,6 +216,7 @@ class AIDetector:
             # Get predictions from all models
             predictions = []
             weights = []
+            predictions_data = []
             
             for model_info in model_manager.text_models:
                 try:
@@ -108,7 +224,15 @@ class AIDetector:
                     confidence = AIDetector._parse_text_result(result)
                     predictions.append(confidence)
                     weights.append(model_info['weight'])
-                    logger.info(f"Model {model_info['name']}: {confidence:.3f}")
+                    
+                    predictions_data.append({
+                        'model_name': model_info['name'],
+                        'confidence': confidence,
+                        'weight': model_info['weight'],
+                        'raw_result': result
+                    })
+                    
+                    logger.info(f"Model {model_info['name']}: {confidence:.3f} (weight: {model_info['weight']})")
                 except Exception as e:
                     logger.warning(f"Model {model_info['name']} failed: {e}")
                     continue
@@ -117,27 +241,42 @@ class AIDetector:
                 return "processing_error", 0.0, []
             
             # Calculate weighted ensemble score
-            ensemble_confidence = np.average(predictions, weights=weights)
+            ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
             
-            # Apply heuristic adjustments
-            ensemble_confidence = AIDetector._apply_text_heuristics(
-                text_content, ensemble_confidence, predictions
+            # Apply content-based adjustments
+            content_features = AIDetector._analyze_text_features(text_content)
+            final_confidence = EnsembleVoter.apply_confidence_adjustments(
+                ensemble_confidence, metrics, content_features
             )
             
-            result_type = AIDetector._classify_confidence(ensemble_confidence)
+            # Classify result
+            result_type = AIDetector._classify_confidence(final_confidence)
             
-            return result_type, ensemble_confidence, predictions
+            # Log prediction
+            processing_time = (datetime.now() - start_time).total_seconds() * 1000
+            ensemble_result = {
+                'result_type': result_type,
+                'confidence': final_confidence,
+                'metrics': metrics
+            }
+            model_logger.log_prediction("text", filename, predictions_data, ensemble_result, processing_time)
+            
+            logger.info(f"Ensemble result: {result_type} ({final_confidence:.3f}) - Agreement: {metrics['agreement']:.3f}")
+            
+            return result_type, final_confidence, predictions
             
         except Exception as e:
             logger.error(f"Text detection error: {e}")
             return "processing_error", 0.0, []
     
     @staticmethod
-    def detect_image(image_file):
+    def detect_image(image_file, filename="unknown.jpg"):
         """
-        Detect AI-generated images using ensemble of models
+        Detect AI-generated images using weighted ensemble
         Returns: (result_type, confidence, raw_scores)
         """
+        start_time = datetime.now()
+        
         if not model_manager.image_models:
             return "model_unavailable", 0.0, []
         
@@ -150,6 +289,7 @@ class AIDetector:
             # Get predictions from all models
             predictions = []
             weights = []
+            predictions_data = []
             
             for model_info in model_manager.image_models:
                 try:
@@ -157,7 +297,15 @@ class AIDetector:
                     confidence = AIDetector._parse_image_result(results)
                     predictions.append(confidence)
                     weights.append(model_info['weight'])
-                    logger.info(f"Model {model_info['name']}: {confidence:.3f}")
+                    
+                    predictions_data.append({
+                        'model_name': model_info['name'],
+                        'confidence': confidence,
+                        'weight': model_info['weight'],
+                        'raw_result': results
+                    })
+                    
+                    logger.info(f"Model {model_info['name']}: {confidence:.3f} (weight: {model_info['weight']})")
                 except Exception as e:
                     logger.warning(f"Model {model_info['name']} failed: {e}")
                     continue
@@ -166,23 +314,36 @@ class AIDetector:
                 return "processing_error", 0.0, []
             
             # Calculate weighted ensemble score
-            ensemble_confidence = np.average(predictions, weights=weights)
+            ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
             
-            # Apply heuristic adjustments
-            ensemble_confidence = AIDetector._apply_image_heuristics(
-                image, ensemble_confidence, predictions
+            # Apply image-based adjustments
+            content_features = AIDetector._analyze_image_features(image)
+            final_confidence = EnsembleVoter.apply_confidence_adjustments(
+                ensemble_confidence, metrics, content_features
             )
             
-            result_type = AIDetector._classify_confidence(ensemble_confidence)
+            # Classify result
+            result_type = AIDetector._classify_confidence(final_confidence)
             
-            return result_type, ensemble_confidence, predictions
+            # Log prediction
+            processing_time = (datetime.now() - start_time).total_seconds() * 1000
+            ensemble_result = {
+                'result_type': result_type,
+                'confidence': final_confidence,
+                'metrics': metrics
+            }
+            model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
+            
+            logger.info(f"Ensemble result: {result_type} ({final_confidence:.3f}) - Agreement: {metrics['agreement']:.3f}")
+            
+            return result_type, final_confidence, predictions
             
         except Exception as e:
             logger.error(f"Image detection error: {e}")
             return "processing_error", 0.0, []
     
     @staticmethod
-    def detect_video(video_file):
+    def detect_video(video_file, filename="unknown.mp4"):
         """
         Placeholder for video detection
         Returns: (result_type, confidence, raw_scores)
@@ -230,50 +391,41 @@ class AIDetector:
         return ai_confidence
     
     @staticmethod
-    def _apply_text_heuristics(text_content, confidence, predictions):
-        """Apply heuristic adjustments for text"""
-        # If models disagree significantly, reduce confidence
-        if len(predictions) > 1:
-            std_dev = np.std(predictions)
-            if std_dev > 0.3:  # High disagreement
-                confidence *= 0.8
+    def _analyze_text_features(text_content):
+        """Analyze text features for confidence adjustments"""
+        features = {}
         
-        # Very short text is harder to classify
+        # Very short text is harder to classify reliably
         if len(text_content) < 50:
-            confidence *= 0.9
+            features['short_text'] = 0.85
         
-        # Perfect grammar/no typos might indicate AI
-        if len(text_content) > 100:
-            # Simple heuristic: check for variation in sentence length
-            sentences = text_content.split('.')
-            if len(sentences) > 3:
-                lengths = [len(s.strip()) for s in sentences if s.strip()]
-                if lengths and np.std(lengths) < 10:  # Very uniform sentence lengths
-                    confidence *= 1.1
+        # Check sentence length variation (AI often has uniform patterns)
+        sentences = [s.strip() for s in text_content.split('.') if s.strip()]
+        if len(sentences) > 3:
+            lengths = [len(s) for s in sentences]
+            if np.std(lengths) < 10:  # Very uniform sentence lengths
+                features['uniform_sentences'] = 1.15
         
-        return min(confidence, 1.0)
+        return features
     
     @staticmethod
-    def _apply_image_heuristics(image, confidence, predictions):
-        """Apply heuristic adjustments for images"""
-        # If models disagree, reduce confidence
-        if len(predictions) > 1:
-            std_dev = np.std(predictions)
-            if std_dev > 0.3:
-                confidence *= 0.8
+    def _analyze_image_features(image):
+        """Analyze image features for confidence adjustments"""
+        features = {}
         
         # Very small images are harder to classify
         width, height = image.size
         if width < 256 or height < 256:
-            confidence *= 0.9
+            features['small_image'] = 0.85
         
-        return min(confidence, 1.0)
+        return features
     
     @staticmethod
     def _classify_confidence(confidence):
-        """Classify confidence into result categories"""
+        """Classify confidence into result categories with improved thresholds"""
         # Check if confidence meets minimum threshold
-        if confidence < CONFIDENCE_THRESHOLD and confidence > (1.0 - CONFIDENCE_THRESHOLD):
+        if (confidence > (1.0 - CONFIDENCE_THRESHOLD) and 
+            confidence < CONFIDENCE_THRESHOLD):
             return "insufficient"
         
         # Classify based on thresholds

@@ -52,28 +52,28 @@ RESULT_MESSAGES = {
         "description": "Strong indicators of artificial intelligence"
     },
     "medium": {
-        "message": "Uncertain Origin",
+        "message": "Needs Manual Review",
         "class": "ai-medium",
         "icon": "🧐",
-        "description": "Mixed signals - requires manual review"
+        "description": "Mixed signals - unable to determine with high certainty"
     },
     "low_human": {
-        "message": "Likely Human-Created",
+        "message": "Possibly Human-Created",
         "class": "ai-low", 
         "icon": "🧠",
-        "description": "Strong indicators of human authorship"
+        "description": "Some indicators of human authorship - review recommended"
     },
     "very_low_human": {
-        "message": "Human-Created",
+        "message": "Likely Human-Created",
         "class": "ai-low",
         "icon": "🧠", 
-        "description": "Very high confidence - almost certainly human-made"
+        "description": "Strong confidence in human authorship"
     },
     "insufficient": {
-        "message": "Insufficient Data",
+        "message": "Undetermined",
         "class": "ai-medium",
         "icon": "❓",
-        "description": "Unable to determine with sufficient confidence"
+        "description": "Unable to determine with sufficient confidence - more data needed"
     }
 }
 
