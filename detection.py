@@ -232,10 +232,19 @@ class EnsembleVoter:
                     adjusted_confidence *= trust_boost
                     logger.info(f"Applied Organika trust boost: {trust_boost:.3f}")
                 elif organika_confidence < 0.6:
-                    # Only apply human confidence boost when Organika is truly confident it's human (< 60%)
-                    human_boost = 0.7
-                    adjusted_confidence *= human_boost
-                    logger.info(f"Applied Organika human confidence boost: {human_boost:.3f} (Organika: {organika_confidence:.3f})")
+                    # Check if there are strong AI semantic indicators in filename that should override Organika human confidence
+                    has_strong_ai_indicator = False
+                    if content_features:
+                        # Don't apply human boost if filename has strong AI indicators like "ChatGPT"
+                        has_strong_ai_indicator = 'ai_filename_indicator' in content_features
+                    
+                    if not has_strong_ai_indicator:
+                        # Only apply human confidence boost when Organika is confident it's human AND no conflicting filename evidence
+                        human_boost = 0.7
+                        adjusted_confidence *= human_boost
+                        logger.info(f"Applied Organika human confidence boost: {human_boost:.3f} (Organika: {organika_confidence:.3f})")
+                    else:
+                        logger.info(f"Skipped Organika human boost due to conflicting AI filename indicator (Organika: {organika_confidence:.3f})")
                 # For 0.6-0.999 range, don't apply any Organika-specific adjustments
                 # Let the ensemble process handle it normally
 
