@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         :root {
             --primary-blue: #1e40af;
             --primary-blue-light: #3b82f6;
@@ -27,7 +26,7 @@
             --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             line-height: 1.6;
@@ -35,7 +34,7 @@
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
         }
-        
+
         /* Navigation */
         .navbar {
             background: rgba(255, 255, 255, 0.95);
@@ -48,7 +47,7 @@
             z-index: 1000;
             padding: 1rem 2rem;
         }
-        
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -56,7 +55,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .nav-brand {
             font-size: 1.5rem;
             font-weight: 700;
@@ -66,18 +65,18 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .nav-brand::before {
             content: "🔍";
             font-size: 1.25rem;
         }
-        
+
         .nav-links {
             display: flex;
             gap: 2rem;
             list-style: none;
         }
-        
+
         .nav-links a {
             text-decoration: none;
             color: var(--text-secondary);
@@ -86,17 +85,17 @@
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
         }
-        
+
         .nav-links a:hover {
             color: var(--primary-blue);
             background: rgba(59, 130, 246, 0.1);
         }
-        
+
         .nav-links a.active {
             color: var(--primary-blue);
             background: rgba(59, 130, 246, 0.1);
         }
-        
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -109,12 +108,12 @@
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
             margin-top: 80px;
         }
-        
+
         .hero-content {
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .hero h1 {
             font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 700;
@@ -123,7 +122,7 @@
             letter-spacing: -0.025em;
             line-height: 1.1;
         }
-        
+
         .hero-subtitle {
             font-size: clamp(1.125rem, 2.5vw, 1.5rem);
             color: var(--text-secondary);
@@ -134,7 +133,7 @@
             margin-right: auto;
             line-height: 1.5;
         }
-        
+
         .cta-button {
             display: inline-flex;
             align-items: center;
@@ -151,13 +150,13 @@
             border: none;
             cursor: pointer;
         }
-        
+
         .cta-button:hover {
             background: var(--primary-blue-light);
             transform: translateY(-2px);
             box-shadow: var(--shadow-large);
         }
-        
+
         .scroll-indicator {
             position: absolute;
             bottom: 2rem;
@@ -171,11 +170,11 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .scroll-indicator:hover {
             color: var(--primary-blue);
         }
-        
+
         .scroll-arrow {
             width: 24px;
             height: 24px;
@@ -185,13 +184,13 @@
             transform: rotate(45deg);
             animation: bounce 2s infinite;
         }
-        
+
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: rotate(45deg) translateY(0); }
             40% { transform: rotate(45deg) translateY(-10px); }
             60% { transform: rotate(45deg) translateY(-5px); }
         }
-        
+
         /* Main App Section */
         .app-section {
             min-height: 100vh;
@@ -200,7 +199,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .app-container {
             max-width: 900px;
             width: 100%;
@@ -210,29 +209,29 @@
             padding: 3rem;
             border: 1px solid var(--border-light);
         }
-        
+
         .app-header {
             text-align: center;
             margin-bottom: 3rem;
         }
-        
+
         .app-header h2 {
             font-size: 2.25rem;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 1rem;
         }
-        
+
         .app-header p {
             font-size: 1.125rem;
             color: var(--text-secondary);
         }
-        
+
         /* Flash Messages */
         .flash-messages {
             margin-bottom: 2rem;
         }
-        
+
         .flash-message {
             padding: 1rem 1.5rem;
             border-radius: 0.75rem;
@@ -243,19 +242,19 @@
             align-items: center;
             gap: 0.75rem;
         }
-        
+
         .flash-error {
             background: #fef2f2;
             color: #dc2626;
             border-color: #fecaca;
         }
-        
+
         .flash-success {
             background: #f0fdf4;
             color: #166534;
             border-color: #bbf7d0;
         }
-        
+
         /* Input Tabs */
         .input-tabs {
             display: flex;
@@ -266,7 +265,7 @@
             padding: 0.5rem;
             border: 1px solid var(--border-light);
         }
-        
+
         .tab-button {
             flex: 1;
             background: none;
@@ -283,18 +282,18 @@
             gap: 0.5rem;
             font-size: 0.95rem;
         }
-        
+
         .tab-button:hover {
             color: var(--primary-blue);
             background: rgba(59, 130, 246, 0.1);
         }
-        
+
         .tab-button.active {
             background: white;
             color: var(--primary-blue);
             box-shadow: var(--shadow-soft);
         }
-        
+
         /* Upload Section */
         .upload-section {
             background: var(--secondary-gray);
@@ -308,7 +307,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         /* Text Input Section */
         .text-input-section {
             background: var(--secondary-gray);
@@ -318,12 +317,12 @@
             margin: 2rem 0;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .text-input-header {
             text-align: center;
             margin-bottom: 1.5rem;
         }
-        
+
         .text-input-area {
             width: 100%;
             min-height: 200px;
@@ -339,18 +338,18 @@
             transition: all 0.3s ease;
             box-shadow: var(--shadow-soft);
         }
-        
+
         .text-input-area:focus {
             outline: none;
             border-color: var(--primary-blue);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-        
+
         .text-input-area::placeholder {
             color: var(--text-secondary);
             opacity: 0.7;
         }
-        
+
         .text-input-info {
             display: flex;
             justify-content: space-between;
@@ -358,25 +357,25 @@
             margin-top: 1rem;
             font-size: 0.875rem;
         }
-        
+
         .char-counter {
             color: var(--text-secondary);
             font-weight: 500;
         }
-        
+
         .char-counter.warning {
             color: var(--warning-amber);
         }
-        
+
         .char-counter.danger {
             color: var(--danger-red);
         }
-        
+
         .text-input-tips {
             color: var(--text-secondary);
             font-style: italic;
         }
-        
+
         .upload-section::before {
             content: '';
             position: absolute;
@@ -387,49 +386,49 @@
             background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
             transition: left 0.5s;
         }
-        
+
         .upload-section.dragover {
             border-color: var(--primary-blue);
             background: rgba(59, 130, 246, 0.05);
             transform: scale(1.02);
         }
-        
+
         .upload-section.dragover::before {
             left: 100%;
         }
-        
+
         .upload-section:hover {
             border-color: var(--primary-blue-light);
             background: rgba(59, 130, 246, 0.02);
         }
-        
+
         .upload-icon {
             font-size: 3rem;
             margin-bottom: 1.5rem;
             display: block;
             transition: all 0.3s ease;
         }
-        
+
         .upload-section:hover .upload-icon {
             transform: scale(1.1);
         }
-        
+
         .upload-text {
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 0.5rem;
         }
-        
+
         .upload-subtext {
             color: var(--text-secondary);
             font-size: 1rem;
         }
-        
+
         .file-input {
             display: none;
         }
-        
+
         .file-info {
             margin-top: 1.5rem;
             padding: 1rem 1.5rem;
@@ -440,17 +439,17 @@
             display: none;
             text-align: left;
         }
-        
+
         .file-info.show {
             display: block;
             animation: slideUp 0.3s ease-out;
         }
-        
+
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .submit-btn {
             background: var(--primary-blue);
             color: white;
@@ -467,20 +466,20 @@
             margin: 2rem auto 0;
             display: block;
         }
-        
+
         .submit-btn:hover {
             background: var(--primary-blue-light);
             transform: translateY(-2px);
             box-shadow: var(--shadow-large);
         }
-        
+
         .submit-btn:disabled {
             background: #9ca3af;
             cursor: not-allowed;
             transform: none;
             box-shadow: var(--shadow-soft);
         }
-        
+
         /* Loading State */
         .loading {
             display: none;
@@ -490,17 +489,17 @@
             border-radius: 1rem;
             text-align: center;
         }
-        
+
         .loading.show {
             display: block;
             animation: fadeIn 0.3s ease-out;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
+
         .spinner {
             border: 3px solid #f3f4f6;
             border-top: 3px solid var(--primary-blue);
@@ -510,19 +509,19 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 1rem;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .loading-text {
             color: var(--primary-blue);
             font-weight: 600;
             font-size: 1.125rem;
             margin-bottom: 0.5rem;
         }
-        
+
         /* Results Section */
         .result {
             margin-top: 3rem;
@@ -532,12 +531,12 @@
             text-align: center;
             animation: resultSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         @keyframes resultSlideIn {
             from { opacity: 0; transform: translateY(20px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        
+
         .result-main {
             font-size: 1.5rem;
             font-weight: 700;
@@ -547,26 +546,26 @@
             justify-content: center;
             gap: 0.75rem;
         }
-        
+
         .result-description {
             font-size: 1rem;
             margin-bottom: 2rem;
             opacity: 0.9;
             font-weight: 500;
         }
-        
+
         /* Confidence Meter */
         .confidence-section {
             margin-top: 2rem;
         }
-        
+
         .confidence-label {
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 1rem;
             color: var(--text-primary);
         }
-        
+
         .confidence-meter {
             width: 100%;
             height: 8px;
@@ -576,51 +575,51 @@
             margin-bottom: 1rem;
             position: relative;
         }
-        
+
         .confidence-fill {
             height: 100%;
             border-radius: 4px;
             transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
-        
+
         .confidence-text {
             font-size: 0.875rem;
             opacity: 0.8;
             font-weight: 500;
         }
-        
+
         /* Result Color Schemes */
         .ai-high {
             background: linear-gradient(135deg, #fef2f2, #fee2e2);
             color: var(--danger-red);
             border-color: #fca5a5;
         }
-        
+
         .ai-high .confidence-fill {
             background: linear-gradient(135deg, var(--danger-red), #f87171);
         }
-        
+
         .ai-medium {
             background: linear-gradient(135deg, #fffbeb, #fef3c7);
             color: var(--warning-amber);
             border-color: #fcd34d;
         }
-        
+
         .ai-medium .confidence-fill {
             background: linear-gradient(135deg, var(--warning-amber), #fbbf24);
         }
-        
+
         .ai-low {
             background: linear-gradient(135deg, #f0fdf4, #dcfce7);
             color: var(--success-green);
             border-color: #86efac;
         }
-        
+
         .ai-low .confidence-fill {
             background: linear-gradient(135deg, var(--success-green), #34d399);
         }
-        
+
         /* Features Grid */
         .features {
             display: grid;
@@ -628,7 +627,7 @@
             gap: 2rem;
             margin-top: 3rem;
         }
-        
+
         .feature {
             background: var(--secondary-gray);
             padding: 2rem;
@@ -637,31 +636,31 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid var(--border-light);
         }
-        
+
         .feature:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-medium);
             background: white;
         }
-        
+
         .feature-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             display: block;
         }
-        
+
         .feature-title {
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 0.5rem;
             font-size: 1.125rem;
         }
-        
+
         .feature-desc {
             font-size: 0.875rem;
             color: var(--text-secondary);
         }
-        
+
         /* Tips Section */
         .tips {
             background: linear-gradient(135deg, #fffbeb, #fef3c7);
@@ -670,7 +669,7 @@
             padding: 2rem;
             margin-top: 3rem;
         }
-        
+
         .tips h4 {
             color: #92400e;
             margin-bottom: 1rem;
@@ -680,17 +679,17 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .tips ul {
             color: #92400e;
             font-size: 0.875rem;
             margin-left: 1.5rem;
         }
-        
+
         .tips li {
             margin-bottom: 0.5rem;
         }
-        
+
         /* Footer */
         .footer {
             background: var(--text-primary);
@@ -699,12 +698,12 @@
             padding: 2rem;
             margin-top: 4rem;
         }
-        
+
         .footer p {
             opacity: 0.8;
             font-size: 0.875rem;
         }
-        
+
         /* Mobile Navigation */
         .mobile-menu-toggle {
             display: none;
@@ -714,13 +713,13 @@
             color: var(--text-primary);
             cursor: pointer;
         }
-        
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .navbar {
                 padding: 1rem;
             }
-            
+
             .nav-links {
                 display: none;
                 position: absolute;
@@ -734,66 +733,147 @@
                 border-top: 1px solid var(--border-light);
                 gap: 0;
             }
-            
+
             .nav-links.show {
                 display: flex;
             }
-            
+
             .mobile-menu-toggle {
                 display: block;
             }
-            
+
             .hero {
                 padding: 1rem;
                 min-height: 90vh;
                 margin-top: 70px;
             }
-            
+
             .app-section {
                 padding: 2rem 1rem;
             }
-            
+
             .app-container {
                 padding: 2rem 1.5rem;
             }
-            
+
             .upload-section {
                 padding: 2rem 1rem;
             }
-            
+
             .result-main {
                 flex-direction: column;
                 gap: 0.5rem;
             }
-            
+
             .features {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
         }
-        
+
         @media (max-width: 480px) {
             .hero h1 {
                 font-size: 2rem;
             }
-            
+
             .hero-subtitle {
                 font-size: 1rem;
             }
-            
+
             .app-container {
                 padding: 1.5rem 1rem;
                 margin: 0 0.5rem;
             }
-            
+
             .upload-section {
                 padding: 1.5rem 1rem;
             }
         }
-        
+
         /* Smooth scroll behavior */
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Feedback Styles */
+        .feedback-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feedback-question {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #e0e6ed;
+            text-align: center;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .feedback-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .feedback-correct {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .feedback-correct:hover:not(:disabled) {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+        }
+
+        .feedback-incorrect {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .feedback-incorrect:hover:not(:disabled) {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+        }
+
+        .feedback-message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .feedback-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .feedback-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .flash-message svg {
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -827,7 +907,7 @@
                 </svg>
             </button>
         </div>
-        
+
         <div class="scroll-indicator" onclick="scrollToApp()">
             <span style="font-size: 0.875rem; font-weight: 500;">Scroll to analyze</span>
             <div class="scroll-arrow"></div>
@@ -841,7 +921,7 @@
                 <h2>Analyze Your Content</h2>
                 <p>Upload files to detect if they're AI-generated with high precision</p>
             </div>
-            
+
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     <div class="flash-messages">
@@ -862,7 +942,7 @@
                     </div>
                 {% endif %}
             {% endwith %}
-            
+
             <form method="POST" enctype="multipart/form-data" id="analysisForm">
                 <!-- Input Method Tabs -->
                 <div class="input-tabs">
@@ -873,14 +953,14 @@
                         📝 Paste Text
                     </button>
                 </div>
-                
+
                 <!-- File Upload Section -->
                 <div class="upload-section" id="uploadSection">
                     <span class="upload-icon">📁</span>
                     <div class="upload-text">Drag & drop your file here</div>
                     <div class="upload-subtext">or click to browse • Images, text files, and videos supported</div>
                     <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt,.mp4,.mov,.avi">
-                    
+
                     <div class="file-info" id="fileInfo">
                         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -894,7 +974,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Text Input Section -->
                 <div class="text-input-section" id="textInputSection" style="display: none;">
                     <div class="text-input-header">
@@ -902,7 +982,7 @@
                         <div class="upload-text">Enter or paste your text</div>
                         <div class="upload-subtext">Type or paste text content for AI detection analysis</div>
                     </div>
-                    
+
                     <textarea 
                         id="textContent" 
                         name="text_content" 
@@ -910,7 +990,7 @@
                         placeholder="Paste your text here to analyze if it was generated by AI..."
                         maxlength="1000"
                     ></textarea>
-                    
+
                     <div class="text-input-info">
                         <div class="char-counter">
                             <span id="charCount">0</span>/1000 characters
@@ -920,11 +1000,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <button type="submit" class="submit-btn" id="submitBtn">
                     Analyze Content
                 </button>
-                
+
                 <div class="loading" id="loadingDiv">
                     <div class="spinner"></div>
                     <div class="loading-text">Analyzing your content...</div>
@@ -933,7 +1013,7 @@
                     </p>
                 </div>
             </form>
-            
+
             {% if result %}
             <div class="result {{ result_class }}">
                 <div class="result-main">
@@ -960,11 +1040,24 @@
                                 High certainty in human authorship
                             {% endif %}
                         </div>
+
+                        <!-- Feedback Section -->
+                        <div class="feedback-section">
+                            <div class="feedback-question">Was this result correct?</div>
+                            <div class="feedback-buttons">
+                                <button class="feedback-btn feedback-correct" onclick="submitFeedback('correct')">
+                                    ✅ Yes, correct
+                                </button>
+                                <button class="feedback-btn feedback-incorrect" onclick="submitFeedback('incorrect')">
+                                    ❌ No, incorrect
+                                </button>
+                            </div>
+                            <div id="feedbackMessage" class="feedback-message"></div>
+                        </div>
                     </div>
-                {% endif %}
-            </div>
+                </div>
             {% endif %}
-            
+
             <div class="features">
                 <div class="feature">
                     <span class="feature-icon">🖼️</span>
@@ -982,7 +1075,7 @@
                     <div class="feature-desc">Analyze video content for synthetic generation</div>
                 </div>
             </div>
-            
+
             <div class="tips">
                 <h4>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -999,12 +1092,12 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Footer -->
     <footer class="footer">
         <p>© 2025 AIthentic. All rights reserved.</p>
     </footer>
-    
+
     <script>
         function scrollToApp() {
             document.getElementById('app').scrollIntoView({ 
@@ -1012,12 +1105,12 @@
                 block: 'start'
             });
         }
-        
+
         function toggleMobileMenu() {
             const navLinks = document.getElementById('navLinks');
             navLinks.classList.toggle('show');
         }
-        
+
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
@@ -1025,7 +1118,7 @@
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
-        
+
         function getFileType(filename) {
             const ext = filename.split('.').pop().toLowerCase();
             const types = {
@@ -1035,59 +1128,59 @@
             };
             return types[ext] || 'Unknown';
         }
-        
+
         // Drag and drop functionality
         const uploadSection = document.getElementById('uploadSection');
         const fileInput = document.getElementById('file');
-        
+
         uploadSection.addEventListener('click', () => fileInput.click());
-        
+
         uploadSection.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadSection.classList.add('dragover');
         });
-        
+
         uploadSection.addEventListener('dragleave', (e) => {
             e.preventDefault();
             uploadSection.classList.remove('dragover');
         });
-        
+
         uploadSection.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadSection.classList.remove('dragover');
-            
+
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 fileInput.files = files;
                 handleFileSelect(files[0]);
             }
         });
-        
+
         function handleFileSelect(file) {
             const fileInfo = document.getElementById('fileInfo');
             const uploadIcon = document.querySelector('.upload-icon');
             const uploadText = document.querySelector('.upload-text');
             const uploadSubtext = document.querySelector('.upload-subtext');
-            
+
             // Update UI
             uploadIcon.textContent = '✅';
             uploadText.textContent = 'File ready for analysis';
             uploadSubtext.textContent = 'Click "Analyze Content" to begin';
-            
+
             // Show file info
             document.getElementById('fileName').textContent = file.name;
             document.getElementById('fileSize').textContent = formatFileSize(file.size);
             document.getElementById('fileType').textContent = getFileType(file.name);
             fileInfo.classList.add('show');
         }
-        
+
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 handleFileSelect(file);
             }
         });
-        
+
         // Tab switching functionality
         function switchTab(tabType) {
             const fileTab = document.getElementById('fileTab');
@@ -1096,13 +1189,13 @@
             const textInputSection = document.getElementById('textInputSection');
             const fileInput = document.getElementById('file');
             const textInput = document.getElementById('textContent');
-            
+
             if (tabType === 'file') {
                 fileTab.classList.add('active');
                 textTab.classList.remove('active');
                 uploadSection.style.display = 'block';
                 textInputSection.style.display = 'none';
-                
+
                 // Clear text input and make file input required
                 textInput.value = '';
                 fileInput.required = true;
@@ -1112,7 +1205,7 @@
                 fileTab.classList.remove('active');
                 uploadSection.style.display = 'none';
                 textInputSection.style.display = 'block';
-                
+
                 // Clear file input and make text input required
                 fileInput.value = '';
                 fileInput.required = false;
@@ -1120,13 +1213,13 @@
                 textInput.focus();
             }
         }
-        
+
         // Character counter for text input
         document.getElementById('textContent').addEventListener('input', function(e) {
             const charCount = e.target.value.length;
             const charCountElement = document.getElementById('charCount');
             charCountElement.textContent = charCount;
-            
+
             // Update color based on character count
             charCountElement.classList.remove('warning', 'danger');
             if (charCount > 800) {
@@ -1135,16 +1228,16 @@
                 charCountElement.classList.add('warning');
             }
         });
-        
+
         document.getElementById('analysisForm').addEventListener('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
-            
+
             const fileInput = document.getElementById('file');
             const textInput = document.getElementById('textContent');
             const submitBtn = document.getElementById('submitBtn');
             const loadingDiv = document.getElementById('loadingDiv');
             const activeTab = document.querySelector('.tab-button.active').id;
-            
+
             // Validation based on active tab
             if (activeTab === 'fileTab') {
                 if (!fileInput.files[0]) {
@@ -1161,21 +1254,21 @@
                     return;
                 }
             }
-            
+
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Processing...';
             loadingDiv.classList.add('show');
-            
+
             // Clear any existing results or flash messages
             const existingResult = document.querySelector('.result');
             const flashMessages = document.querySelector('.flash-messages');
             if (existingResult) existingResult.remove();
             if (flashMessages) flashMessages.innerHTML = '';
-            
+
             // Scroll to loading div
             loadingDiv.scrollIntoView({ behavior: 'smooth' });
-            
+
             // Create FormData and submit via AJAX
             const formData = new FormData();
             if (activeTab === 'fileTab') {
@@ -1183,7 +1276,7 @@
             } else {
                 formData.append('text_content', textInput.value.trim());
             }
-            
+
             fetch('/', {
                 method: 'POST',
                 body: formData
@@ -1193,12 +1286,12 @@
                 // Parse the response HTML
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                
+
                 // Hide loading state
                 loadingDiv.classList.remove('show');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Analyze Content';
-                
+
                 // Check for flash messages in response
                 const responseFlash = doc.querySelector('.flash-messages');
                 if (responseFlash && responseFlash.innerHTML.trim()) {
@@ -1208,26 +1301,26 @@
                     }
                     return; // Don't process result if there's an error
                 }
-                
+
                 // Check for result in response
                 const responseResult = doc.querySelector('.result');
                 if (responseResult) {
                     // Insert the result after the form
                     const form = document.getElementById('analysisForm');
                     form.insertAdjacentElement('afterend', responseResult);
-                    
+
                     // Scroll to result
                     responseResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                
+
                 // Hide loading state
                 loadingDiv.classList.remove('show');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Analyze Content';
-                
+
                 // Show error message
                 const flashDiv = document.querySelector('.flash-messages');
                 if (flashDiv) {
@@ -1242,13 +1335,58 @@
                 }
             });
         });
-        
+
+        // Feedback system
+        function submitFeedback(feedbackType) {
+            const feedbackData = {
+                feedback: feedbackType,
+                result_type: '{{ result }}',
+                confidence: {{ confidence or 0 }},
+                content_type: document.getElementById('file').files[0] ? 
+                    (document.getElementById('file').files[0].type.startsWith('image') ? 'image' : 'text') : 
+                    'text'
+            };
+
+            fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(feedbackData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.getElementById('feedbackMessage');
+                if (data.success) {
+                    messageDiv.innerHTML = '✅ Thank you for your feedback! This helps improve our detection accuracy.';
+                    messageDiv.className = 'feedback-message success';
+
+                    // Disable buttons after feedback
+                    document.querySelectorAll('.feedback-btn').forEach(btn => {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.5';
+                    });
+                } else {
+                    messageDiv.innerHTML = '❌ Error saving feedback. Please try again.';
+                    messageDiv.className = 'feedback-message error';
+                }
+                messageDiv.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const messageDiv = document.getElementById('feedbackMessage');
+                messageDiv.innerHTML = '❌ Error saving feedback. Please try again.';
+                messageDiv.className = 'feedback-message error';
+                messageDiv.style.display = 'block';
+            });
+        }
+
         // Add some entrance animations
         window.addEventListener('load', function() {
             const heroContent = document.querySelector('.hero-content');
             heroContent.style.opacity = '0';
             heroContent.style.transform = 'translateY(30px)';
-            
+
             setTimeout(() => {
                 heroContent.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
                 heroContent.style.opacity = '1';

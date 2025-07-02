@@ -1,10 +1,14 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, jsonify
 import os
 from detection import AIDetector, get_result_classification
+from feedback import FeedbackCollector
 from config import *
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
+
+# Initialize feedback collector
+feedback_collector = FeedbackCollector()
 
 def validate_file(file):
     """
@@ -145,6 +149,56 @@ def roadmap():
 def license_page():
     """License page"""
     return render_template("license.html")
+
+@app.route("/feedback", methods=["POST"])
+def submit_feedback():
+    """Handle user feedback submission"""
+    try:
+        data = request.get_json()
+        
+        # Extract feedback data
+        feedback_type = data.get('feedback')  # 'correct' or 'incorrect'
+        result_type = data.get('result_type')
+        confidence = data.get('confidence')
+        content_type = data.get('content_type')
+        
+        # Convert feedback to user correction
+        if feedback_type == 'correct':
+            user_correction = result_type
+        else:
+            # If user says it's incorrect, assume opposite
+            if 'ai' in result_type.lower():
+                user_correction = 'human'
+            else:
+                user_correction = 'ai'
+        
+        # Save feedback (using placeholder content since we don't store actual content)
+        feedback_collector.save_feedback(
+            content=f"User feedback session {datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            content_type=content_type,
+            model_prediction=result_type,
+            user_correction=user_correction,
+            confidence=confidence
+        )
+        
+        # Log feedback
+        app.logger.info(f"Feedback received: {feedback_type} for {result_type} ({confidence:.3f})")
+        
+        return jsonify({"success": True, "message": "Feedback saved successfully"})
+        
+    except Exception as e:
+        app.logger.error(f"Error saving feedback: {str(e)}")
+        return jsonify({"success": False, "message": "Error saving feedback"}), 500
+
+@app.route("/feedback/stats")
+def feedback_stats():
+    """Get feedback statistics"""
+    try:
+        stats = feedback_collector.get_feedback_stats()
+        return jsonify(stats)
+    except Exception as e:
+        app.logger.error(f"Error getting feedback stats: {str(e)}")
+        return jsonify({"error": "Unable to get feedback stats"}), 500
 
 @app.route("/health")
 def health_check():
