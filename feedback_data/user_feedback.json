@@ -151,5 +151,23 @@
     "model_prediction": "\u2705 Almost Certainly Human",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T11:12:10.240948",
+    "session_id": "b951ece1-60bf-47db-9dc7-6fc3e7b8cb69",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T11:14:09.480495",
+    "session_id": "1a82e016-3ab5-40eb-98fa-d0bb9f8f1a7d",
+    "file_type": "image",
+    "filename": "6cd8e9c9-a552-497f-b205-ad909d28e08d.png",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
