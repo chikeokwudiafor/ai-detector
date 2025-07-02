@@ -19,33 +19,22 @@ TEXT_MODELS = [
 IMAGE_MODELS = [
     {
         "name": "Organika/sdxl-detector",
-        "weight": 2.0,  # Still strong but not dominating
-        "reliability": "high_ai_detection",  # Good at finding AI, bad at human
+        "weight": 2.0,  # Most accurate for AI detection
         "fallback": "umm-maybe/AI-image-detector"
     },
     {
-        "name": "umm-maybe/AI-image-detector", 
-        "weight": 1.5,  # Balanced general-purpose
-        "reliability": "balanced",
+        "name": "microsoft/resnet-50",
+        "weight": 1.8,  # Strong general classifier - better human detection
+        "fallback": "umm-maybe/AI-image-detector"
+    },
+    {
+        "name": "umm-maybe/AI-image-detector",
+        "weight": 1.2,  # Baseline model
         "fallback": None
     },
     {
         "name": "saltacc/anime-ai-detect",
-        "weight": 1.0,  # Specialized but useful
-        "reliability": "specialized",
-        "fallback": "umm-maybe/AI-image-detector"
-    },
-    # Add new, better models
-    {
-        "name": "microsoft/DialoGPT-medium",  # Better human text detection
-        "weight": 1.3,
-        "reliability": "human_focused",
-        "fallback": "umm-maybe/AI-image-detector"
-    },
-    {
-        "name": "hustvl/yolos-tiny",  # Object detection can help identify AI artifacts
-        "weight": 0.8,
-        "reliability": "artifact_detection", 
+        "weight": 1.0,  # Specialized for anime/art
         "fallback": "umm-maybe/AI-image-detector"
     }
 ]

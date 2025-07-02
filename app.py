@@ -6,6 +6,7 @@ from datetime import datetime
 from detection import AIDetector, get_result_classification
 from feedback import feedback_manager
 from config import *
+from auto_feedback_updater import auto_updater
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
@@ -170,7 +171,7 @@ def index():
             # Store analysis data in session for feedback (except for video not implemented)
             filename = file.filename if file else "direct_text_input"
             file_type_name = file_type if 'file_type' in locals() else "text"
-            
+
             # Don't store session data for video not implemented (no actual analysis occurred)
             if result_type != "video_not_implemented":
                 session['last_analysis'] = {
@@ -286,8 +287,8 @@ def analytics_dashboard():
 if __name__ == "__main__":
     import os
     port = int(os.environ.get('PORT', 5000))
-    
+
     # Skip model pre-loading for faster startup in production
     app.logger.info("Starting Flask app...")
-    
+
     app.run(debug=False, host="0.0.0.0", port=port, threaded=True)
