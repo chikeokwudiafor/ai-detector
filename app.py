@@ -26,6 +26,28 @@ def validate_file(file):
     else:
         return False, None, ERROR_MESSAGES["unsupported_format"]
 
+def process_text_content(text_content, filename="direct_input.txt"):
+    """
+    Process text content directly
+    Returns: (result_type, confidence, error_message)
+    """
+    try:
+        if len(text_content.strip()) == 0:
+            return None, 0.0, "Text content is empty."
+        
+        result_type, confidence, raw_scores = AIDetector.detect_text(text_content, filename)
+        
+        # Handle model errors
+        if result_type in ["model_unavailable", "processing_error"]:
+            error_msg = ERROR_MESSAGES.get(result_type, ERROR_MESSAGES["processing_error"])
+            return None, 0.0, error_msg
+
+        return result_type, confidence, None
+
+    except Exception as e:
+        app.logger.error(f"Text processing error: {str(e)}")
+        return None, 0.0, ERROR_MESSAGES["processing_error"]
+
 def process_file(file, file_type, filename="unknown"):
     """
     Process file based on its type
@@ -68,18 +90,32 @@ def index():
 
     if request.method == "POST":
         file = request.files.get("file")
+        text_content = request.form.get("text_content")
 
-        # Validate file
-        is_valid, file_type, error_msg = validate_file(file)
-        if not is_valid:
-            flash(error_msg, "error")
-            return render_template("index.html")
+        # Handle direct text input
+        if text_content and text_content.strip():
+            if len(text_content.strip()) < 10:
+                flash("Please enter at least 10 characters for better analysis.", "error")
+                return render_template("index.html")
+            
+            # Process text directly
+            result_type, confidence, error_msg = process_text_content(text_content.strip())
+            if error_msg:
+                flash(error_msg, "error")
+                return render_template("index.html")
+        else:
+            # Handle file upload
+            # Validate file
+            is_valid, file_type, error_msg = validate_file(file)
+            if not is_valid:
+                flash(error_msg, "error")
+                return render_template("index.html")
 
-        # Process file
-        result_type, confidence, error_msg = process_file(file, file_type, file.filename)
-        if error_msg:
-            flash(error_msg, "error")
-            return render_template("index.html")
+            # Process file
+            result_type, confidence, error_msg = process_file(file, file_type, file.filename)
+            if error_msg:
+                flash(error_msg, "error")
+                return render_template("index.html")
 
         # Get result classification
         if result_type and confidence is not None:

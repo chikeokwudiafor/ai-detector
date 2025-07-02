@@ -256,6 +256,45 @@
             border-color: #bbf7d0;
         }
         
+        /* Input Tabs */
+        .input-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: var(--secondary-gray);
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            border: 1px solid var(--border-light);
+        }
+        
+        .tab-button {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .tab-button:hover {
+            color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: var(--primary-blue);
+            box-shadow: var(--shadow-soft);
+        }
+        
         /* Upload Section */
         .upload-section {
             background: var(--secondary-gray);
@@ -268,6 +307,74 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+        }
+        
+        /* Text Input Section */
+        .text-input-section {
+            background: var(--secondary-gray);
+            border: 2px solid var(--border-light);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .text-input-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .text-input-area {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+            border-radius: 0.75rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: white;
+            resize: vertical;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .text-input-area:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .text-input-area::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+        
+        .text-input-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .char-counter {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .char-counter.warning {
+            color: var(--warning-amber);
+        }
+        
+        .char-counter.danger {
+            color: var(--danger-red);
+        }
+        
+        .text-input-tips {
+            color: var(--text-secondary);
+            font-style: italic;
         }
         
         .upload-section::before {
@@ -757,11 +864,22 @@
             {% endwith %}
             
             <form method="POST" enctype="multipart/form-data" id="analysisForm">
+                <!-- Input Method Tabs -->
+                <div class="input-tabs">
+                    <button type="button" class="tab-button active" id="fileTab" onclick="switchTab('file')">
+                        📁 Upload File
+                    </button>
+                    <button type="button" class="tab-button" id="textTab" onclick="switchTab('text')">
+                        📝 Paste Text
+                    </button>
+                </div>
+                
+                <!-- File Upload Section -->
                 <div class="upload-section" id="uploadSection">
                     <span class="upload-icon">📁</span>
                     <div class="upload-text">Drag & drop your file here</div>
                     <div class="upload-subtext">or click to browse • Images, text files, and videos supported</div>
-                    <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt,.mp4,.mov,.avi" required>
+                    <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt,.mp4,.mov,.avi">
                     
                     <div class="file-info" id="fileInfo">
                         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
@@ -773,6 +891,32 @@
                         <div style="display: flex; justify-content: space-between; font-size: 0.875rem; opacity: 0.8;">
                             <span><strong>Size:</strong> <span id="fileSize"></span></span>
                             <span><strong>Type:</strong> <span id="fileType"></span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Text Input Section -->
+                <div class="text-input-section" id="textInputSection" style="display: none;">
+                    <div class="text-input-header">
+                        <span class="upload-icon">📝</span>
+                        <div class="upload-text">Enter or paste your text</div>
+                        <div class="upload-subtext">Type or paste text content for AI detection analysis</div>
+                    </div>
+                    
+                    <textarea 
+                        id="textContent" 
+                        name="text_content" 
+                        class="text-input-area" 
+                        placeholder="Paste your text here to analyze if it was generated by AI..."
+                        maxlength="1000"
+                    ></textarea>
+                    
+                    <div class="text-input-info">
+                        <div class="char-counter">
+                            <span id="charCount">0</span>/1000 characters
+                        </div>
+                        <div class="text-input-tips">
+                            💡 Longer texts (100+ characters) provide more accurate results
                         </div>
                     </div>
                 </div>
@@ -944,16 +1088,78 @@
             }
         });
         
+        // Tab switching functionality
+        function switchTab(tabType) {
+            const fileTab = document.getElementById('fileTab');
+            const textTab = document.getElementById('textTab');
+            const uploadSection = document.getElementById('uploadSection');
+            const textInputSection = document.getElementById('textInputSection');
+            const fileInput = document.getElementById('file');
+            const textInput = document.getElementById('textContent');
+            
+            if (tabType === 'file') {
+                fileTab.classList.add('active');
+                textTab.classList.remove('active');
+                uploadSection.style.display = 'block';
+                textInputSection.style.display = 'none';
+                
+                // Clear text input and make file input required
+                textInput.value = '';
+                fileInput.required = true;
+                textInput.required = false;
+            } else {
+                textTab.classList.add('active');
+                fileTab.classList.remove('active');
+                uploadSection.style.display = 'none';
+                textInputSection.style.display = 'block';
+                
+                // Clear file input and make text input required
+                fileInput.value = '';
+                fileInput.required = false;
+                textInput.required = true;
+                textInput.focus();
+            }
+        }
+        
+        // Character counter for text input
+        document.getElementById('textContent').addEventListener('input', function(e) {
+            const charCount = e.target.value.length;
+            const charCountElement = document.getElementById('charCount');
+            charCountElement.textContent = charCount;
+            
+            // Update color based on character count
+            charCountElement.classList.remove('warning', 'danger');
+            if (charCount > 800) {
+                charCountElement.classList.add('danger');
+            } else if (charCount > 600) {
+                charCountElement.classList.add('warning');
+            }
+        });
+        
         document.getElementById('analysisForm').addEventListener('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
             
             const fileInput = document.getElementById('file');
+            const textInput = document.getElementById('textContent');
             const submitBtn = document.getElementById('submitBtn');
             const loadingDiv = document.getElementById('loadingDiv');
+            const activeTab = document.querySelector('.tab-button.active').id;
             
-            if (!fileInput.files[0]) {
-                alert('Please select a file first!');
-                return;
+            // Validation based on active tab
+            if (activeTab === 'fileTab') {
+                if (!fileInput.files[0]) {
+                    alert('Please select a file first!');
+                    return;
+                }
+            } else {
+                if (!textInput.value.trim()) {
+                    alert('Please enter some text to analyze!');
+                    return;
+                }
+                if (textInput.value.trim().length < 10) {
+                    alert('Please enter at least 10 characters for better analysis!');
+                    return;
+                }
             }
             
             // Show loading state
@@ -972,7 +1178,11 @@
             
             // Create FormData and submit via AJAX
             const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
+            if (activeTab === 'fileTab') {
+                formData.append('file', fileInput.files[0]);
+            } else {
+                formData.append('text_content', textInput.value.trim());
+            }
             
             fetch('/', {
                 method: 'POST',
