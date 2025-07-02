@@ -422,28 +422,28 @@ class AIDetector:
     
     @staticmethod
     def _classify_confidence(confidence):
-        """Classify confidence into result categories with improved thresholds"""
+        """Classify confidence into 5-tier result categories"""
         # Check if confidence meets minimum threshold
         if (confidence > (1.0 - CONFIDENCE_THRESHOLD) and 
             confidence < CONFIDENCE_THRESHOLD):
             return "insufficient"
         
-        # Classify based on thresholds
-        if confidence >= HIGH_CONFIDENCE_THRESHOLD:
-            return "very_high_ai"
-        elif confidence >= MEDIUM_CONFIDENCE_THRESHOLD:
-            return "high_ai"
-        elif confidence >= LOW_CONFIDENCE_THRESHOLD:
-            return "medium"
-        elif confidence >= (1.0 - LOW_CONFIDENCE_THRESHOLD):
-            return "low_human"
-        else:
-            return "very_low_human"
+        # 5-tier classification based on confidence percentage
+        if confidence >= 0.85:  # 85%-100%
+            return "likely_ai"
+        elif confidence >= 0.65:  # 65%-84%
+            return "possibly_ai"
+        elif confidence >= 0.45:  # 45%-64%
+            return "unsure"
+        elif confidence >= 0.21:  # 21%-44%
+            return "likely_human"
+        else:  # 0%-20%
+            return "almost_certainly_human"
 
 def get_result_classification(result_type):
     """
     Get display information for a result type
-    Returns: (message, css_class, icon, description)
+    Returns: (message, css_class, icon, description, footer)
     """
     if result_type in RESULT_MESSAGES:
         msg_info = RESULT_MESSAGES[result_type]
@@ -451,8 +451,9 @@ def get_result_classification(result_type):
             msg_info["message"],
             msg_info["class"], 
             msg_info["icon"],
-            msg_info["description"]
+            msg_info["description"],
+            msg_info["footer"]
         )
     else:
         # Fallback
-        return ("Unknown Result", "ai-medium", "❓", "Unable to classify")
+        return ("Unknown Result", "confidence-tier-3", "❓", "Unable to classify", "Analysis inconclusive")

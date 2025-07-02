@@ -122,7 +122,7 @@ def index():
 
         # Get result classification
         if result_type and confidence is not None:
-            result, result_class, result_icon, result_description = get_result_classification(result_type)
+            result, result_class, result_icon, result_description, result_footer = get_result_classification(result_type)
             
             # Generate session ID for feedback
             session_id = str(uuid.uuid4())
@@ -150,6 +150,7 @@ def index():
                          result_class=result_class,
                          result_icon=result_icon,
                          result_description=result_description,
+                         result_footer=result_footer if 'result_footer' in locals() else None,
                          session_id=session_id)
 
 @app.route("/about")

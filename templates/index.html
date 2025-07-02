@@ -589,35 +589,55 @@
             font-weight: 500;
         }
 
-        /* Result Color Schemes */
-        .ai-high {
-            background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            color: var(--danger-red);
-            border-color: #fca5a5;
-        }
-
-        .ai-high .confidence-fill {
-            background: linear-gradient(135deg, var(--danger-red), #f87171);
-        }
-
-        .ai-medium {
-            background: linear-gradient(135deg, #fffbeb, #fef3c7);
-            color: var(--warning-amber);
-            border-color: #fcd34d;
-        }
-
-        .ai-medium .confidence-fill {
-            background: linear-gradient(135deg, var(--warning-amber), #fbbf24);
-        }
-
-        .ai-low {
+        /* 5-Tier Result Color Schemes */
+        .confidence-tier-1 {
             background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            color: var(--success-green);
+            color: #166534;
             border-color: #86efac;
         }
 
-        .ai-low .confidence-fill {
-            background: linear-gradient(135deg, var(--success-green), #34d399);
+        .confidence-tier-1 .confidence-fill {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .confidence-tier-2 {
+            background: linear-gradient(135deg, #fefce8, #fef3c7);
+            color: #a16207;
+            border-color: #fde047;
+        }
+
+        .confidence-tier-2 .confidence-fill {
+            background: linear-gradient(135deg, #eab308, #ca8a04);
+        }
+
+        .confidence-tier-3 {
+            background: linear-gradient(135deg, #fff7ed, #fed7aa);
+            color: #c2410c;
+            border-color: #fdba74;
+        }
+
+        .confidence-tier-3 .confidence-fill {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+        }
+
+        .confidence-tier-4 {
+            background: linear-gradient(135deg, #fef2f2, #fecaca);
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+
+        .confidence-tier-4 .confidence-fill {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .confidence-tier-5 {
+            background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+            color: #be185d;
+            border-color: #f9a8d4;
+        }
+
+        .confidence-tier-5 .confidence-fill {
+            background: linear-gradient(135deg, #ec4899, #db2777);
         }
 
         /* Features Grid */
@@ -1034,6 +1054,11 @@
                         {{ result_description }}
                     </div>
                 {% endif %}
+                {% if result_footer %}
+                    <div class="result-footer" style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.8; font-style: italic;">
+                        {{ result_footer }}
+                    </div>
+                {% endif %}
                 {% if confidence is not none and confidence > 0 %}
                     <div class="confidence-section">
                         <div class="confidence-label">Detection Confidence: {{ "%.1f"|format(confidence * 100) }}%</div>
@@ -1041,12 +1066,16 @@
                             <div class="confidence-fill" style="width: {{ confidence * 100 }}%"></div>
                         </div>
                         <div class="confidence-text">
-                            {% if confidence >= 0.75 %}
-                                High certainty in detection result
-                            {% elif confidence >= 0.40 %}
-                                Moderate certainty - manual review recommended
+                            {% if confidence >= 0.85 %}
+                                Very high confidence in AI detection
+                            {% elif confidence >= 0.65 %}
+                                Strong indicators pointing to AI
+                            {% elif confidence >= 0.45 %}
+                                Mixed signals - requires closer examination
+                            {% elif confidence >= 0.21 %}
+                                Strong indicators of human creation
                             {% else %}
-                                High certainty in human authorship
+                                Very high confidence in human creation
                             {% endif %}
                         </div>
                     </div>

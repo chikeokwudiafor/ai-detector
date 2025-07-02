@@ -25,11 +25,8 @@ IMAGE_MODELS = [
     }
 ]
 
-# Detection thresholds
+# Detection thresholds for 5-tier system
 CONFIDENCE_THRESHOLD = 0.15  # Minimum confidence to show results
-HIGH_CONFIDENCE_THRESHOLD = 0.85
-MEDIUM_CONFIDENCE_THRESHOLD = 0.45
-LOW_CONFIDENCE_THRESHOLD = 0.25
 
 # File processing
 MAX_TEXT_LENGTH = 1000
@@ -37,52 +34,62 @@ SUPPORTED_IMAGE_FORMATS = ('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp')
 SUPPORTED_TEXT_FORMATS = ('.txt',)
 SUPPORTED_VIDEO_FORMATS = ('.mp4', '.avi', '.mov', '.mkv', '.webm')
 
-# UI Messages
-RESULT_MESSAGES = {
-    "very_high_ai": {
-        "message": "AI-Generated",
-        "class": "ai-high", 
-        "icon": "🤖",
-        "description": "Very high confidence - almost certainly AI-created"
-    },
-    "high_ai": {
-        "message": "Likely AI-Generated", 
-        "class": "ai-high",
-        "icon": "🤖", 
-        "description": "Strong indicators of artificial intelligence"
-    },
-    "medium": {
-        "message": "Needs Manual Review",
-        "class": "ai-medium",
-        "icon": "🧐",
-        "description": "Mixed signals - unable to determine with high certainty"
-    },
-    "low_human": {
-        "message": "Possibly Human-Created",
-        "class": "ai-low", 
-        "icon": "🧠",
-        "description": "Some indicators of human authorship - review recommended"
-    },
-    "very_low_human": {
-        "message": "Likely Human-Created",
-        "class": "ai-low",
-        "icon": "🧠", 
-        "description": "Strong confidence in human authorship"
-    },
-    "insufficient": {
-        "message": "Undetermined",
-        "class": "ai-medium",
-        "icon": "❓",
-        "description": "Unable to determine with sufficient confidence - more data needed"
-    }
-}
-
 # Error messages
 ERROR_MESSAGES = {
-    "no_file": "⚠️ Please select a file to analyze.",
-    "unsupported_format": "🚫 Unsupported file type. Please upload an image, text file, or video.",
-    "model_unavailable": "🔧 Detection model is currently unavailable. Please try again later.",
-    "processing_error": "❌ Error processing file. Please check the file format and try again.",
-    "file_too_large": "📏 File is too large. Please use a smaller file.",
-    "corrupted_file": "💾 File appears to be corrupted or unreadable."
+    "no_file": "Please select a file to analyze.",
+    "unsupported_format": "Unsupported file type. Please upload an image (.jpg, .png), text file (.txt), or video (.mp4, .mov, .avi).",
+    "processing_error": "An error occurred while processing your file. Please try again.",
+    "model_unavailable": "AI detection models are currently unavailable. Please try again later."
+}
+
+# UI Messages - New 5-tier system
+RESULT_MESSAGES = {
+    "almost_certainly_human": {
+        "message": "✅ Almost Certainly Human",
+        "class": "confidence-tier-1", 
+        "icon": "✅",
+        "description": "This looks and feels naturally made with little to no signs of AI.",
+        "footer": "Very low chance it was AI-generated.",
+        "color": "🟩"
+    },
+    "likely_human": {
+        "message": "🧠 Likely Human",
+        "class": "confidence-tier-2",
+        "icon": "🧠", 
+        "description": "Some things raised flags, but it mostly seems human-created.",
+        "footer": "Small chance of AI involvement.",
+        "color": "🟨"
+    },
+    "unsure": {
+        "message": "🤔 Unsure – Needs a Closer Look",
+        "class": "confidence-tier-3",
+        "icon": "🤔",
+        "description": "Hard to tell — it shares traits with both AI and human-made content.",
+        "footer": "Too close to call confidently.",
+        "color": "🟧"
+    },
+    "possibly_ai": {
+        "message": "⚠️ Possibly AI-Generated",
+        "class": "confidence-tier-4", 
+        "icon": "⚠️",
+        "description": "There's a noticeable pattern that matches how AI typically creates content.",
+        "footer": "Leaning AI, but not 100% sure.",
+        "color": "🟥"
+    },
+    "likely_ai": {
+        "message": "🤖 Likely AI-Generated",
+        "class": "confidence-tier-5",
+        "icon": "🤖", 
+        "description": "Strong signals that this was created by AI tools or models.",
+        "footer": "High chance of being AI-made.",
+        "color": "🔴"
+    },
+    "insufficient": {
+        "message": "❓ Undetermined",
+        "class": "confidence-tier-3",
+        "icon": "❓",
+        "description": "Unable to determine with sufficient confidence - more data needed.",
+        "footer": "Analysis inconclusive.",
+        "color": "🟧"
+    }
 }
