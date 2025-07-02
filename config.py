@@ -19,22 +19,22 @@ TEXT_MODELS = [
 IMAGE_MODELS = [
     {
         "name": "Organika/sdxl-detector",
-        "weight": 1.5,  # Increased weight - most accurate model
+        "weight": 2.5,  # Increased weight - most accurate model
         "fallback": "umm-maybe/AI-image-detector"
     },
     {
         "name": "umm-maybe/AI-image-detector",
-        "weight": 0.8,  # Reduced weight 
+        "weight": 0.4,  # Reduced weight 
         "fallback": None
     },
     {
         "name": "saltacc/anime-ai-detect",
-        "weight": 0.9,  # Increased for anime/art detection
+        "weight": 0.6,  # Increased for anime/art detection
         "fallback": "umm-maybe/AI-image-detector"
     },
     {
         "name": "Falconsai/nsfw_image_detection",
-        "weight": 0.6,  # Additional model for coverage
+        "weight": 0.3,  # Additional model for coverage
         "fallback": "umm-maybe/AI-image-detector"
     }
 ]
@@ -75,9 +75,8 @@ HEURISTICS = {
     },
     "ensemble": {
         "disagreement_threshold": 0.4,  # Higher threshold - less penalty
-        "max_disagreement_penalty": 0.15,  # Reduced penalty - trust Organika more
-        "organika_trust_boost": 1.2,  # Extra confidence when Organika detects AI
-        "high_confidence_threshold": 0.8  # When to apply trust boost
+        "max_disagreement_penalty": 0.08,  # Reduced penalty - trust Organika more
+        "high_confidence_threshold": 0.75  # When to apply trust boost
     }
 }
 

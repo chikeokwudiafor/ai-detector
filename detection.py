@@ -202,6 +202,18 @@ class EnsembleVoter:
                 adjusted_confidence *= adjustment
                 logger.info(f"Applied {feature} adjustment: {adjustment:.3f}")
 
+        # Apply high-performer trust boost
+        if predictions_data:
+            for pred_data in predictions_data:
+                # If Organika is very confident and weighted highly, boost ensemble
+                if ("Organika" in pred_data['model_name'] and 
+                    pred_data['confidence'] > HEURISTICS["ensemble"]["high_confidence_threshold"] and
+                    pred_data['weight'] > 1.0):
+                    trust_boost = 1.2
+                    adjusted_confidence *= trust_boost
+                    logger.info(f"Applied Organika trust boost: {trust_boost:.3f}")
+                    break
+
         return min(adjusted_confidence, 1.0)
 
 class AIDetector:
