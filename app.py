@@ -147,11 +147,11 @@ def get_result_classification(confidence):
     Returns: (message, css_class, icon)
     """
     if confidence >= 0.75:
-        return "AI-Generated", "ai-high", "🤖", "This looks like it came from an AI"
+        return "AI-Generated", "ai-high", "🤖", "Definitely made by artificial intelligence"
     elif confidence >= 0.40:
-        return "Possibly AI-Generated", "ai-medium", "🧐", "Could be AI or human - it's hard to tell"
+        return "Possibly AI-Generated", "ai-medium", "🧐", "Hard to tell - could go either way"
     else:
-        return "Human-Created", "ai-low", "🧠", "This looks like it was made by a real person"
+        return "Human-Created", "ai-low", "🧠", "Made by a real human being"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
