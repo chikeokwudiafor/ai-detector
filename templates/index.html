@@ -691,6 +691,87 @@
             margin-bottom: 0.5rem;
         }
         
+        /* Feedback Section */
+        .feedback-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+        
+        .feedback-header h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .feedback-header p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feedback-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .feedback-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid;
+            border-radius: 0.5rem;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            min-width: 120px;
+            justify-content: center;
+        }
+        
+        .feedback-accurate {
+            color: var(--success-green);
+            border-color: var(--success-green);
+        }
+        
+        .feedback-accurate:hover {
+            background: var(--success-green);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .feedback-inaccurate {
+            color: var(--danger-red);
+            border-color: var(--danger-red);
+        }
+        
+        .feedback-inaccurate:hover {
+            background: var(--danger-red);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .feedback-thanks {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--success-green);
+            font-weight: 600;
+            font-size: 1rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
         /* Footer */
         .footer {
             background: var(--text-primary);
@@ -788,6 +869,16 @@
             
             .upload-section {
                 padding: 1.5rem 1rem;
+            }
+            
+            .feedback-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feedback-btn {
+                width: 100%;
+                max-width: 200px;
             }
         }
         
@@ -961,6 +1052,38 @@
                             {% endif %}
                         </div>
                     </div>
+                {% endif %}
+                
+                <!-- Feedback Section -->
+                {% if session_id %}
+                <div class="feedback-section">
+                    <div class="feedback-header">
+                        <h4>Was this analysis accurate?</h4>
+                        <p>Your feedback helps improve our AI detection models</p>
+                    </div>
+                    
+                    <div class="feedback-buttons" id="feedbackButtons">
+                        <button class="feedback-btn feedback-accurate" onclick="submitFeedback('accurate', '{{ session_id }}')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/>
+                            </svg>
+                            Accurate
+                        </button>
+                        <button class="feedback-btn feedback-inaccurate" onclick="submitFeedback('inaccurate', '{{ session_id }}')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>
+                            </svg>
+                            Inaccurate
+                        </button>
+                    </div>
+                    
+                    <div class="feedback-thanks" id="feedbackThanks" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/>
+                        </svg>
+                        Thank you for your feedback!
+                    </div>
+                </div>
                 {% endif %}
             </div>
             {% endif %}
@@ -1242,6 +1365,58 @@
                 }
             });
         });
+        
+        // Feedback submission function
+        function submitFeedback(feedbackType, sessionId) {
+            const feedbackButtons = document.getElementById('feedbackButtons');
+            const feedbackThanks = document.getElementById('feedbackThanks');
+            
+            // Disable buttons immediately
+            const buttons = feedbackButtons.querySelectorAll('.feedback-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.style.cursor = 'not-allowed';
+            });
+            
+            // Submit feedback
+            fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    feedback: feedbackType,
+                    session_id: sessionId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    // Hide buttons and show thank you message
+                    feedbackButtons.style.display = 'none';
+                    feedbackThanks.style.display = 'flex';
+                } else {
+                    // Re-enable buttons on error
+                    buttons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.style.cursor = 'pointer';
+                    });
+                    alert('Error submitting feedback. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Re-enable buttons on error
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                });
+                alert('Error submitting feedback. Please try again.');
+            });
+        }
         
         // Add some entrance animations
         window.addEventListener('load', function() {

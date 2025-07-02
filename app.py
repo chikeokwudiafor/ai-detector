@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, session, jsonify
 import os
+import uuid
 from detection import AIDetector, get_result_classification
+from feedback import feedback_manager
 from config import *
 
 app = Flask(__name__)
@@ -87,6 +89,7 @@ def index():
     result_class = None
     result_icon = None
     result_description = None
+    session_id = None
 
     if request.method == "POST":
         file = request.files.get("file")
@@ -120,16 +123,34 @@ def index():
         # Get result classification
         if result_type and confidence is not None:
             result, result_class, result_icon, result_description = get_result_classification(result_type)
+            
+            # Generate session ID for feedback
+            session_id = str(uuid.uuid4())
+            
+            # Store analysis data in session for feedback
+            filename = file.filename if file else "direct_text_input"
+            file_type_name = file_type if 'file_type' in locals() else "text"
+            
+            session['last_analysis'] = {
+                'session_id': session_id,
+                'filename': filename,
+                'file_type': file_type_name,
+                'result': result,
+                'result_type': result_type,
+                'confidence': confidence
+            }
 
             # Log successful analysis
-            app.logger.info(f"Analysis complete: {file.filename} -> {result_type} ({confidence:.3f})")
+            log_filename = file.filename if file else "direct_text_input"
+            app.logger.info(f"Analysis complete: {log_filename} -> {result_type} ({confidence:.3f})")
 
     return render_template("index.html", 
                          result=result, 
                          confidence=confidence, 
                          result_class=result_class,
                          result_icon=result_icon,
-                         result_description=result_description)
+                         result_description=result_description,
+                         session_id=session_id)
 
 @app.route("/about")
 def about():
@@ -145,6 +166,39 @@ def roadmap():
 def license_page():
     """License page"""
     return render_template("license.html")
+
+@app.route("/feedback", methods=["POST"])
+def submit_feedback():
+    """Handle user feedback on model accuracy"""
+    try:
+        data = request.get_json()
+        session_id = data.get('session_id')
+        feedback_type = data.get('feedback')  # 'accurate' or 'inaccurate'
+        
+        if not session_id or not feedback_type:
+            return jsonify({"error": "Missing required data"}), 400
+        
+        # Get session data
+        session_data = session.get('last_analysis')
+        if not session_data:
+            return jsonify({"error": "No recent analysis found"}), 400
+        
+        # Save feedback
+        success = feedback_manager.save_feedback(
+            session_id=session_id,
+            file_type=session_data['file_type'],
+            filename=session_data['filename'],
+            model_result=session_data['result'],
+            user_feedback=feedback_type
+        )
+        
+        if success:
+            return jsonify({"message": "Thank you for your feedback!"})
+        else:
+            return jsonify({"error": "Failed to save feedback"}), 500
+            
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/health")
 def health_check():
