@@ -27,7 +27,7 @@ class FeedbackManager:
             with open(self.feedback_file, 'w') as f:
                 json.dump([], f)
     
-    def save_feedback(self, session_id, file_type, filename, model_result, user_feedback):
+    def save_feedback(self, session_id, file_type, filename, model_result, true_label):
         """
         Save user feedback on model prediction
         
@@ -36,7 +36,7 @@ class FeedbackManager:
             file_type: Type of content (image, text, video)
             filename: Name of analyzed file
             model_result: The model's prediction result
-            user_feedback: User's rating (accurate/inaccurate)
+            true_label: User's indication of actual content source (ai_generated/human_created)
         """
         try:
             # Load existing feedback
@@ -50,8 +50,8 @@ class FeedbackManager:
                 'file_type': file_type,
                 'filename': filename,
                 'model_prediction': model_result,
-                'user_feedback': user_feedback,
-                'feedback_type': 'accuracy_rating'
+                'true_label': true_label,
+                'feedback_type': 'true_label_verification'
             }
             
             # Add to data
@@ -77,13 +77,25 @@ class FeedbackManager:
                 return None
             
             total_feedback = len(feedback_data)
-            accurate_count = sum(1 for entry in feedback_data if entry['user_feedback'] == 'accurate')
+            correct_predictions = 0
+            
+            for entry in feedback_data:
+                model_pred = entry.get('model_prediction', '').lower()
+                true_label = entry.get('true_label', '')
+                
+                # Check if model prediction matches true label
+                if true_label == 'ai_generated' and 'ai' in model_pred:
+                    correct_predictions += 1
+                elif true_label == 'human_created' and 'human' in model_pred:
+                    correct_predictions += 1
             
             stats = {
                 'total_feedback': total_feedback,
-                'accurate_count': accurate_count,
-                'inaccurate_count': total_feedback - accurate_count,
-                'accuracy_rate': (accurate_count / total_feedback) * 100 if total_feedback > 0 else 0
+                'correct_predictions': correct_predictions,
+                'incorrect_predictions': total_feedback - correct_predictions,
+                'accuracy_rate': (correct_predictions / total_feedback) * 100 if total_feedback > 0 else 0,
+                'ai_labeled_count': sum(1 for entry in feedback_data if entry.get('true_label') == 'ai_generated'),
+                'human_labeled_count': sum(1 for entry in feedback_data if entry.get('true_label') == 'human_created')
             }
             
             return stats

@@ -737,25 +737,25 @@
             justify-content: center;
         }
         
-        .feedback-accurate {
-            color: var(--success-green);
-            border-color: var(--success-green);
+        .feedback-ai {
+            color: var(--danger-red);
+            border-color: var(--danger-red);
         }
         
-        .feedback-accurate:hover {
-            background: var(--success-green);
+        .feedback-ai:hover {
+            background: var(--danger-red);
             color: white;
             transform: translateY(-2px);
             box-shadow: var(--shadow-medium);
         }
         
-        .feedback-inaccurate {
-            color: var(--danger-red);
-            border-color: var(--danger-red);
+        .feedback-human {
+            color: var(--success-green);
+            border-color: var(--success-green);
         }
         
-        .feedback-inaccurate:hover {
-            background: var(--danger-red);
+        .feedback-human:hover {
+            background: var(--success-green);
             color: white;
             transform: translateY(-2px);
             box-shadow: var(--shadow-medium);
@@ -1058,22 +1058,22 @@
                 {% if session_id %}
                 <div class="feedback-section">
                     <div class="feedback-header">
-                        <h4>Was this analysis accurate?</h4>
-                        <p>Your feedback helps improve our AI detection models</p>
+                        <h4>What is this content actually?</h4>
+                        <p>Help us improve by telling us the true source of this content</p>
                     </div>
                     
                     <div class="feedback-buttons" id="feedbackButtons">
-                        <button class="feedback-btn feedback-accurate" onclick="submitFeedback('accurate', '{{ session_id }}')">
+                        <button class="feedback-btn feedback-ai" onclick="submitFeedback('ai_generated', '{{ session_id }}')">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/>
+                                <path d="M12 2L2 7v10c0 5.55 3.84 10 9 11 1.16-.21 2.31-.48 3.38-.84"/><path d="M22 12c0 1.66-.35 3.22-.97 4.63"/>
                             </svg>
-                            Accurate
+                            AI-Generated
                         </button>
-                        <button class="feedback-btn feedback-inaccurate" onclick="submitFeedback('inaccurate', '{{ session_id }}')">
+                        <button class="feedback-btn feedback-human" onclick="submitFeedback('human_created', '{{ session_id }}')">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                             </svg>
-                            Inaccurate
+                            Human-Created
                         </button>
                     </div>
                     

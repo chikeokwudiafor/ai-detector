@@ -173,10 +173,14 @@ def submit_feedback():
     try:
         data = request.get_json()
         session_id = data.get('session_id')
-        feedback_type = data.get('feedback')  # 'accurate' or 'inaccurate'
+        true_label = data.get('feedback')  # 'ai_generated' or 'human_created'
         
-        if not session_id or not feedback_type:
+        if not session_id or not true_label:
             return jsonify({"error": "Missing required data"}), 400
+        
+        # Validate true_label values
+        if true_label not in ['ai_generated', 'human_created']:
+            return jsonify({"error": "Invalid feedback value"}), 400
         
         # Get session data
         session_data = session.get('last_analysis')
@@ -189,7 +193,7 @@ def submit_feedback():
             file_type=session_data['file_type'],
             filename=session_data['filename'],
             model_result=session_data['result'],
-            user_feedback=feedback_type
+            true_label=true_label
         )
         
         if success:
