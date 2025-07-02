@@ -142,10 +142,24 @@ def detect_ai_video(video_file):
     # For now, return a placeholder message
     return "Video detection coming soon", 0.0
 
+def get_result_classification(confidence):
+    """
+    Classify result based on confidence score
+    Returns: (message, css_class, icon)
+    """
+    if confidence >= 0.75:
+        return "AI-generated", "ai-high", "🤖"
+    elif confidence >= 0.40:
+        return "Possibly AI-generated", "ai-medium", "🧐"
+    else:
+        return "Likely Human-generated", "ai-low", "🧠"
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     result = None
     confidence = None
+    result_class = None
+    result_icon = None
     
     if request.method == "POST":
         file = request.files.get("file")
@@ -173,12 +187,20 @@ def index():
             else:
                 flash("🚫 Unsupported file type. Please upload an image (.jpg, .png), text file (.txt), or video (.mp4, .mov, .avi).", "error")
                 return render_template("index.html")
+            
+            # Get dynamic classification based on confidence
+            if confidence is not None and confidence > 0:
+                result, result_class, result_icon = get_result_classification(confidence)
                 
         except Exception as e:
             flash(f"❌ Error processing file: {str(e)}", "error")
             return render_template("index.html")
     
-    return render_template("index.html", result=result, confidence=confidence)
+    return render_template("index.html", 
+                         result=result, 
+                         confidence=confidence, 
+                         result_class=result_class,
+                         result_icon=result_icon)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

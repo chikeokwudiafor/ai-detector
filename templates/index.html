@@ -104,18 +104,35 @@
             border-radius: 15px;
             font-size: 1.2rem;
             font-weight: 600;
+            border: 2px solid;
+            position: relative;
+            animation: fadeIn 0.5s ease-in;
         }
         
-        .ai-generated {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .ai-high {
             background: #ffe6e6;
             color: #d73502;
-            border: 2px solid #ffb3b3;
+            border-color: #ff6b6b;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
         }
         
-        .human-made {
+        .ai-medium {
+            background: #fff4e6;
+            color: #e67e22;
+            border-color: #f39c12;
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+        }
+        
+        .ai-low {
             background: #e6ffe6;
-            color: #2d5016;
-            border: 2px solid #b3ffb3;
+            color: #27ae60;
+            border-color: #2ecc71;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
         }
         
         .confidence {
@@ -309,15 +326,18 @@
         </form>
         
         {% if result %}
-        <div class="result {% if result == 'AI-generated' %}ai-generated{% else %}human-made{% endif %}">
-            {% if result == 'AI-generated' %}
-                🤖 This content appears to be AI-generated
-            {% else %}
-                👤 This content appears to be human-made
-            {% endif %}
+        <div class="result {{ result_class }}">
+            {{ result_icon }} This content appears to be {{ result|lower }}
             {% if confidence is not none and confidence > 0 %}
                 <div class="confidence">
                     Confidence: {{ "%.1f"|format(confidence * 100) }}%
+                    {% if confidence >= 0.75 %}
+                        <br><small>High confidence - Strong AI signature detected</small>
+                    {% elif confidence >= 0.40 %}
+                        <br><small>Medium confidence - Mixed signals detected</small>
+                    {% else %}
+                        <br><small>Low confidence - Appears to be human-created</small>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>
