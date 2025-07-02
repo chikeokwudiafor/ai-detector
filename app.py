@@ -1,12 +1,36 @@
 from flask import Flask, render_template, request, flash, session, jsonify
 import os
 import uuid
+import json
+from datetime import datetime
 from detection import AIDetector, get_result_classification
 from feedback import feedback_manager
 from config import *
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
+
+def track_user_activity(event_type, data=None):
+    """Track user activities for analytics"""
+    try:
+        analytics_data = {
+            'timestamp': datetime.now().isoformat(),
+            'event_type': event_type,
+            'ip_address': request.remote_addr,
+            'user_agent': request.headers.get('User-Agent', ''),
+            'referrer': request.headers.get('Referer', ''),
+            'data': data or {}
+        }
+        
+        # Ensure analytics directory exists
+        os.makedirs('analytics', exist_ok=True)
+        
+        # Append to analytics log
+        with open('analytics/user_activity.json', 'a') as f:
+            f.write(json.dumps(analytics_data) + '\n')
+            
+    except Exception as e:
+        app.logger.error(f"Analytics tracking error: {str(e)}")
 
 def validate_file(file):
     """
@@ -91,6 +115,10 @@ def index():
     result_description = None
     session_id = None
 
+    # Track page visits
+    if request.method == "GET":
+        track_user_activity('page_visit', {'page': 'home'})
+
     if request.method == "POST":
         file = request.files.get("file")
         text_content = request.form.get("text_content")
@@ -143,6 +171,14 @@ def index():
             # Log successful analysis
             log_filename = file.filename if file else "direct_text_input"
             app.logger.info(f"Analysis complete: {log_filename} -> {result_type} ({confidence:.3f})")
+            
+            # Track analysis event
+            track_user_activity('analysis_completed', {
+                'filename': log_filename,
+                'file_type': file_type_name,
+                'result_type': result_type,
+                'confidence': confidence
+            })
 
     return render_template("index.html", 
                          result=result, 
@@ -209,6 +245,29 @@ def submit_feedback():
 def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "models_loaded": True}
+
+@app.route("/analytics")
+def analytics_dashboard():
+    """Simple analytics dashboard (basic auth recommended for production)"""
+    try:
+        analytics = []
+        if os.path.exists('analytics/user_activity.json'):
+            with open('analytics/user_activity.json', 'r') as f:
+                for line in f:
+                    if line.strip():
+                        analytics.append(json.loads(line))
+        
+        # Basic stats
+        total_visits = len([a for a in analytics if a['event_type'] == 'page_visit'])
+        total_analyses = len([a for a in analytics if a['event_type'] == 'analysis_completed'])
+        
+        return jsonify({
+            'total_page_visits': total_visits,
+            'total_analyses': total_analyses,
+            'recent_activity': analytics[-10:] if analytics else []
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
