@@ -142,5 +142,14 @@
     "model_prediction": "\u2705 Almost Certainly Human",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T10:47:47.269515",
+    "session_id": "d8bf9f90-f9ef-44fc-b880-bfc55a8b8b7a",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
