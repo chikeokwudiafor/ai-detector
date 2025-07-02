@@ -115,5 +115,32 @@
     "model_prediction": "\u2705 Almost Certainly Human",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T10:28:43.186830",
+    "session_id": "41cd3d77-e70a-40b3-afc9-328c5f7c55ca",
+    "file_type": "image",
+    "filename": "1000116377.jpg",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T10:38:15.292560",
+    "session_id": "c8fc8def-7b01-4a04-9b9f-e863dbe696da",
+    "file_type": "image",
+    "filename": "$10 ENTRY.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T10:38:39.248094",
+    "session_id": "285ca6e6-8c5b-4b12-bccf-6d78954fffe5",
+    "file_type": "image",
+    "filename": "2025-05-28 17.03.52.jpg",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]

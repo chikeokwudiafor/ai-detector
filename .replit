@@ -4,6 +4,7 @@ channel = "stable-24_05"
 
 [deployment]
 run = ["sh", "-c", "python app.py"]
+deploymentTarget = "cloudrun"
 
 [workflows]
 runButton = "Run"
