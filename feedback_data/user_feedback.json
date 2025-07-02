@@ -61,5 +61,32 @@
     "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:06:55.836963",
+    "session_id": "c951cce3-9f37-4879-b992-f6f226619322",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:07:08.419147",
+    "session_id": "aa293df0-d244-483b-b409-74305cefdaa8",
+    "file_type": "image",
+    "filename": "6d8d7a3a-0f90-4e42-ad39-3774d54c27bd.png",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:07:25.195731",
+    "session_id": "d5beb98b-3c50-4835-a0e1-8a23fcef946a",
+    "file_type": "image",
+    "filename": "2025-06-07 21.46.20.jpg",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
