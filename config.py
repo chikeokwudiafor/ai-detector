@@ -2,12 +2,17 @@
 Configuration settings for AI Detector
 """
 
-# Model configurations - Using lighter models for deployment
+# Model configurations - Multiple models for better ensemble accuracy
 TEXT_MODELS = [
     {
         "name": "Hello-SimpleAI/chatgpt-detector-roberta", 
         "weight": 1.0,
         "fallback": None
+    },
+    {
+        "name": "roberta-base-openai-detector",
+        "weight": 0.8,
+        "fallback": "Hello-SimpleAI/chatgpt-detector-roberta"
     }
 ]
 
@@ -16,6 +21,16 @@ IMAGE_MODELS = [
         "name": "umm-maybe/AI-image-detector",
         "weight": 1.0,
         "fallback": None
+    },
+    {
+        "name": "Organika/sdxl-detector",
+        "weight": 0.9,
+        "fallback": "umm-maybe/AI-image-detector"
+    },
+    {
+        "name": "saltacc/anime-ai-detect",
+        "weight": 0.7,
+        "fallback": "umm-maybe/AI-image-detector"
     }
 ]
 
@@ -46,9 +61,12 @@ HEURISTICS = {
             'deepfake', 'gan', 'diffusion', 'neural', 'model',
             'openai', 'anthropic', 'claude', 'bard', 'gemini',
             'leonardo', 'firefly', 'kandinsky', 'playground',
-            'aiart', 'ai_art', 'machinelearning', 'ml_generated'
+            'aiart', 'ai_art', 'machinelearning', 'ml_generated',
+            'copilot', 'runway', 'pika', 'suno', 'luma', 'kling',
+            'flux', 'imagen', 'sd', 'comfyui', 'automatic1111',
+            'civitai', 'huggingface', 'replicate'
         ],
-        "ai_boost_factor": 1.8  # Confidence boost when AI keywords found
+        "ai_boost_factor": 2.2  # Confidence boost when AI keywords found
     },
     "ensemble": {
         "disagreement_threshold": 0.3,  # Std dev threshold for model disagreement
