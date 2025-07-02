@@ -146,16 +146,13 @@ class ModelManager:
             logger.warning(f"✗ Failed to load {model_config['name']}: {e}")
             return None
 
-# Global instances - use lazy loading for deployment
-model_manager = None
+# Global instances - initialize immediately for better performance
+logger.info("Initializing AI detection models at startup...")
+model_manager = ModelManager()
 model_logger = ModelLogger()
 
 def get_model_manager():
-    """Get model manager instance with lazy loading"""
-    global model_manager
-    if model_manager is None:
-        logger.info("Lazy loading AI detection models...")
-        model_manager = ModelManager()
+    """Get model manager instance (already initialized)"""
     return model_manager
 
 class EnsembleVoter:
@@ -380,7 +377,7 @@ class AIDetector:
             if HEURISTICS["ensemble"]["organika_override"]["enabled"]:
                 for pred_data in predictions_data:
                     if ("Organika" in pred_data['model_name'] and 
-                        pred_data['confidence'] >= HEURISTICS["ensemble"]["organika_override"]["absolute_confidence_threshold"]):
+                        pred_data['confidence'] == 1.0):  # Exact 100% match
 
                         logger.info(f"🎯 ORGANIKA ABSOLUTE OVERRIDE: {pred_data['confidence']:.3f} - SKIPPING ALL ENSEMBLE PROCESSING")
                         final_confidence = pred_data['confidence']
