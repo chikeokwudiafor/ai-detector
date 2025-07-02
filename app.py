@@ -189,7 +189,7 @@ def index():
 
             # Get dynamic classification based on confidence
             if confidence is not None and confidence > 0:
-                result, result_class, result_icon = get_result_classification(confidence)
+                result, result_class, result_icon, result_description = get_result_classification(confidence)
 
         except Exception as e:
             flash(f"❌ Error processing file: {str(e)}", "error")
@@ -199,7 +199,8 @@ def index():
                          result=result, 
                          confidence=confidence, 
                          result_class=result_class,
-                         result_icon=result_icon)
+                         result_icon=result_icon,
+                         result_description=locals().get('result_description', ''))
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
