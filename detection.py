@@ -227,9 +227,9 @@ class EnsembleVoter:
             if organika_confidence is not None and organika_weight > 1.0:
                 # OVERRIDE SYSTEM: If Organika is EXACTLY 100% confident, let it completely dominate
                 if organika_confidence >= 1.0:
-                    # Full override - Organika takes complete control
-                    adjusted_confidence = organika_confidence
-                    logger.info(f"🎯 ORGANIKA OVERRIDE: {organika_confidence:.3f} (ABSOLUTE 100% confidence) - bypassing ensemble")
+                    # COMPLETE OVERRIDE - Return immediately, bypass all other logic
+                    logger.info(f"🎯 ORGANIKA OVERRIDE: {organika_confidence:.3f} (ABSOLUTE 100% confidence) - COMPLETE BYPASS")
+                    return organika_confidence
 
                 # WEIGHTED SYSTEM: For everything else, use balanced approach
                 elif organika_confidence >= 0.85:
