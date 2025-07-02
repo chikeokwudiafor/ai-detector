@@ -52,7 +52,8 @@ def validate_file(file):
     elif filename.endswith(SUPPORTED_TEXT_FORMATS):
         return True, "text", None
     elif filename.endswith(SUPPORTED_VIDEO_FORMATS):
-        return True, "video", None
+        # Block video files with specific message
+        return False, None, "🎬 Video Detection Coming Soon\n\nVideo analysis is in development. We're working on this feature!\n\nTry images or text for now."
     else:
         return False, None, ERROR_MESSAGES["unsupported_format"]
 
