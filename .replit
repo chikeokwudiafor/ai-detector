@@ -6,12 +6,16 @@ channel = "stable-24_05"
 run = ["sh", "-c", "python app.py"]
 
 [workflows]
-runButton = "Test App"
+runButton = "Run"
 
 [[workflows.workflow]]
 name = "Run"
 author = 44510387
 mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pkill -f \"python app.py\" || true"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
