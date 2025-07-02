@@ -1029,17 +1029,64 @@
             text-align: center;
         }
 
-        .feedback-header h4 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
         .feedback-header p {
             font-size: 0.875rem;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
+        }
+
+        /* Override feedback header text for each tier - stronger selectors */
+        .result.confidence-tier-1 .feedback-section .feedback-header h4 {
+            color: #14532d !important;
+            font-weight: 700 !important;
+        }
+
+        .result.confidence-tier-2 .feedback-section .feedback-header h4 {
+            color: #713f12 !important;
+            font-weight: 700 !important;
+        }
+
+        .result.confidence-tier-3 .feedback-section .feedback-header h4 {
+            color: #9a3412 !important;
+            font-weight: 700 !important;
+        }
+
+        .result.confidence-tier-4 .feedback-section .feedback-header h4 {
+            color: #991b1b !important;
+            font-weight: 700 !important;
+        }
+
+        .result.confidence-tier-5 .feedback-section .feedback-header h4 {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        /* Override feedback paragraph text for each tier - stronger selectors */
+        .result.confidence-tier-1 .feedback-section .feedback-header p {
+            color: #166534 !important;
+            font-weight: 500 !important;
+        }
+
+        .result.confidence-tier-2 .feedback-section .feedback-header p {
+            color: #92400e !important;
+            font-weight: 500 !important;
+        }
+
+        .result.confidence-tier-3 .feedback-section .feedback-header p {
+            color: #c2410c !important;
+            font-weight: 500 !important;
+        }
+
+        .result.confidence-tier-4 .feedback-section .feedback-header p {
+            color: #dc2626 !important;
+            font-weight: 500 !important;
+        }
+
+        .result.confidence-tier-5 .feedback-section .feedback-header p {
+            color: #e9d5ff !important;
+            font-weight: 500 !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
         }
 
         .feedback-buttons {
@@ -1680,7 +1727,7 @@
                 const doc = parser.parseFromString(html, 'text/html');
 
                 // Hide loading state
-                loadingDiv.classList.remove('show');
+loadingDiv.classList.remove('show');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Analyze Content';
 
