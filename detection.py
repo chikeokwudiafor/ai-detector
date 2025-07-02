@@ -377,7 +377,7 @@ class AIDetector:
             if HEURISTICS["ensemble"]["organika_override"]["enabled"]:
                 for pred_data in predictions_data:
                     if ("Organika" in pred_data['model_name'] and 
-                        pred_data['confidence'] == 1.0):  # Exact 100% match
+                        pred_data['confidence'] >= 0.999):  # 99.9% or higher (handles floating point precision)
 
                         logger.info(f"🎯 ORGANIKA ABSOLUTE OVERRIDE: {pred_data['confidence']:.3f} - SKIPPING ALL ENSEMBLE PROCESSING")
                         final_confidence = pred_data['confidence']
