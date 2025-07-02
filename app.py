@@ -151,7 +151,7 @@ def index():
         file = request.files.get("file")
         
         if not file or file.filename == '':
-            flash("Please select a file to analyze.", "error")
+            flash("⚠️ Please select a file to analyze.", "error")
             return render_template("index.html")
         
         filename = file.filename.lower()
@@ -171,11 +171,11 @@ def index():
                 result, confidence = detect_ai_video(file)
                 
             else:
-                flash("Unsupported file type. Please upload an image, text file, or video.", "error")
+                flash("🚫 Unsupported file type. Please upload an image (.jpg, .png), text file (.txt), or video (.mp4, .mov, .avi).", "error")
                 return render_template("index.html")
                 
         except Exception as e:
-            flash(f"Error processing file: {str(e)}", "error")
+            flash(f"❌ Error processing file: {str(e)}", "error")
             return render_template("index.html")
     
     return render_template("index.html", result=result, confidence=confidence)

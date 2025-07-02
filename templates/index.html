@@ -153,6 +153,111 @@
             font-size: 0.9rem;
             color: #666;
         }
+        
+        .loading {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .submit-btn:disabled:hover {
+            transform: none;
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e7f3ff;
+            border-radius: 10px;
+            color: #0066cc;
+            display: none;
+        }
+        
+        .file-info.show {
+            display: block;
+        }
+        
+        .tips {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .tips h4 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .tips ul {
+            color: #856404;
+            font-size: 0.9rem;
+            margin-left: 20px;
+        }
+        
+        .tips li {
+            margin-bottom: 5px;
+        }
+        
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+        
+        .flash-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .flash-error {
+            background: #ffe6e6;
+            color: #d73502;
+            border: 2px solid #ffb3b3;
+        }
+        
+        .flash-success {
+            background: #e6ffe6;
+            color: #2d5016;
+            border: 2px solid #b3ffb3;
+        }
     </style>
 </head>
 <body>
@@ -162,20 +267,45 @@
             <p>Upload content to detect if it's AI-generated</p>
         </div>
         
-        <form method="POST" enctype="multipart/form-data">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" enctype="multipart/form-data" id="analysisForm">
             <div class="upload-section">
                 <label for="file" class="file-label">
                     📁 Choose File
                 </label>
-                <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt,.mp4,.mov,.avi">
+                <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt,.mp4,.mov,.avi" required>
                 <p style="margin-top: 15px; color: #666;">
                     Supports images, text files, and videos
                 </p>
+                <div class="file-info" id="fileInfo">
+                    <strong>Selected:</strong> <span id="fileName"></span><br>
+                    <strong>Size:</strong> <span id="fileSize"></span><br>
+                    <strong>Type:</strong> <span id="fileType"></span>
+                </div>
             </div>
             
-            <button type="submit" class="submit-btn">
+            <button type="submit" class="submit-btn" id="submitBtn">
                 🔍 Analyze Content
             </button>
+            
+            <div class="loading" id="loadingDiv">
+                <div class="spinner"></div>
+                <div class="loading-text">🧠 Analyzing your content...</div>
+                <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">
+                    This may take a few seconds depending on file size
+                </p>
+            </div>
         </form>
         
         {% if result %}
@@ -210,15 +340,72 @@
                 <div class="feature-desc">Analyze video content</div>
             </div>
         </div>
+        
+        <div class="tips">
+            <h4>💡 Tips for Better Results:</h4>
+            <ul>
+                <li>Images: JPG, PNG, WebP formats work best</li>
+                <li>Text: Plain text files (.txt) under 1000 characters</li>
+                <li>Keep file sizes reasonable for faster processing</li>
+                <li>AI detection accuracy varies by content type and quality</li>
+            </ul>
+        </div>
     </div>
     
     <script>
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const types = {
+                'jpg': 'Image', 'jpeg': 'Image', 'png': 'Image', 'gif': 'Image', 'webp': 'Image',
+                'txt': 'Text Document',
+                'mp4': 'Video', 'mov': 'Video', 'avi': 'Video', 'mkv': 'Video', 'webm': 'Video'
+            };
+            return types[ext] || 'Unknown';
+        }
+        
         document.getElementById('file').addEventListener('change', function(e) {
-            const fileName = e.target.files[0]?.name;
-            if (fileName) {
+            const file = e.target.files[0];
+            if (file) {
                 const label = document.querySelector('.file-label');
-                label.innerHTML = `📁 ${fileName}`;
+                const fileInfo = document.getElementById('fileInfo');
+                
+                // Update label
+                label.innerHTML = `📁 ${file.name}`;
+                
+                // Show file info
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = formatFileSize(file.size);
+                document.getElementById('fileType').textContent = getFileType(file.name);
+                fileInfo.classList.add('show');
             }
+        });
+        
+        document.getElementById('analysisForm').addEventListener('submit', function(e) {
+            const fileInput = document.getElementById('file');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingDiv = document.getElementById('loadingDiv');
+            
+            if (!fileInput.files[0]) {
+                e.preventDefault();
+                alert('Please select a file first!');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Processing...';
+            loadingDiv.classList.add('show');
+            
+            // Scroll to loading div
+            loadingDiv.scrollIntoView({ behavior: 'smooth' });
         });
     </script>
 </body>
