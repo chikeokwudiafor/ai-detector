@@ -367,5 +367,14 @@
     "model_prediction": "\ud83e\udd16 Likely AI-Generated",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:45:06.081681",
+    "session_id": "09529189-113a-42b6-8d02-25d75d8618ea",
+    "file_type": "image",
+    "filename": "0D101506-F970-4283-BE89-1606C5F3EB51.png",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
