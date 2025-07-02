@@ -1,6 +1,6 @@
 # AI Detector Performance Report
 
-Generated: 2025-07-02 14:26:12
+Generated: 2025-07-02 14:27:52
 
 ## Overview
 
@@ -13,10 +13,10 @@ Generated: 2025-07-02 14:26:12
 
 | Model | Accuracy | Samples | Strengths | Weaknesses |
 |-------|----------|---------|-----------|------------|
-| sdxl-detector | 100.0% | 1 | AI detection, high confidence images | Struggles with artistic images |
-| AI-image-detector | 0.0% | 1 | Balanced detection, general images | Lower accuracy than specialized models |
-| anime-ai-detect | 0.0% | 1 | Anime/artistic content detection | Poor performance on real-world images |
-| resnet-50 | 100.0% | 1 | General image recognition | Not specifically trained for AI detection |
+| sdxl-detector | 50.0% | 36 | AI detection, high confidence images | May struggle with edge cases |
+| AI-image-detector | 30.6% | 36 | Balanced detection, general images | Moderate performance across all types |
+| anime-ai-detect | 33.3% | 36 | Anime/artistic content detection | Poor performance on photorealistic images |
+| resnet-50 | 38.9% | 36 | General image classification | Not AI-detection specific |
 
 ## Recent Activity
 
