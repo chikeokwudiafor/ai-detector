@@ -3,17 +3,10 @@ import os
 import uuid
 import json
 from datetime import datetime
-try:
-    from detection import AIDetector, get_result_classification
-    from feedback import feedback_manager
-    from config import *
-    from auto_feedback_updater import auto_updater
-    MODEL_LOADING_ERROR = None
-except Exception as e:
-    MODEL_LOADING_ERROR = str(e)
-    print(f"⚠️  Model loading error: {e}")
-    # Fallback imports
-    from config import *
+from detection import AIDetector, get_result_classification
+from feedback import feedback_manager
+from config import *
+from auto_feedback_updater import auto_updater
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
@@ -74,9 +67,6 @@ def process_text_content(text_content, filename="direct_input.txt"):
         if len(text_content.strip()) == 0:
             return None, 0.0, "Text content is empty."
 
-        if MODEL_LOADING_ERROR:
-            return None, 0.0, f"AI models unavailable: {MODEL_LOADING_ERROR}"
-
         result_type, confidence, raw_scores = AIDetector.detect_text(text_content, filename)
 
         # Handle model errors
@@ -96,9 +86,6 @@ def process_file(file, file_type, filename="unknown"):
     Returns: (result_type, confidence, error_message)
     """
     try:
-        if MODEL_LOADING_ERROR:
-            return None, 0.0, f"AI models unavailable: {MODEL_LOADING_ERROR}"
-            
         if file_type == "image":
             result_type, confidence, raw_scores = AIDetector.detect_image(file, filename)
         elif file_type == "text":
@@ -146,11 +133,6 @@ def index():
         track_user_activity('page_visit', {'page': 'home'})
 
     if request.method == "POST":
-        # Check if models are available
-        if MODEL_LOADING_ERROR:
-            flash(f"AI models are currently unavailable: {MODEL_LOADING_ERROR}", "error")
-            return render_template("index.html")
-            
         file = request.files.get("file")
         text_content = request.form.get("text_content")
 
@@ -181,15 +163,7 @@ def index():
 
         # Get result classification
         if result_type and confidence is not None:
-            try:
-                result, result_class, result_icon, result_description, result_footer = get_result_classification(result_type)
-            except Exception as e:
-                # Fallback classification
-                result = "System Error"
-                result_class = "confidence-tier-3"
-                result_icon = "⚠️"
-                result_description = f"Error processing result: {str(e)}"
-                result_footer = "Please try again"
+            result, result_class, result_icon, result_description, result_footer = get_result_classification(result_type)
 
             # Generate session ID for feedback
             session_id = str(uuid.uuid4())
@@ -314,17 +288,5 @@ if __name__ == "__main__":
     import os
     port = int(os.environ.get('PORT', 5000))
 
-    # Log startup status
-    if MODEL_LOADING_ERROR:
-        print(f"⚠️  Warning: Starting with limited functionality due to model loading error")
-    else:
-        print("✅ All models loaded successfully")
-    
     app.logger.info("Starting Flask app...")
-    print(f"🚀 Starting Flask app on port {port}")
-    
-    try:
-        app.run(debug=False, host="0.0.0.0", port=port, threaded=True)
-    except Exception as e:
-        print(f"❌ Failed to start Flask app: {e}")
-        raise
+    app.run(debug=False, host="0.0.0.0", port=port, threaded=True)
