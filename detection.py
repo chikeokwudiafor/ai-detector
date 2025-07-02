@@ -435,7 +435,7 @@ class AIDetector:
         
         features = {}
         for keyword in ai_keywords:
-            if keyword in name_without_ext:
+            if keyword.lower() in name_without_ext:
                 # Strong semantic indicator of AI generation
                 features['ai_filename_indicator'] = boost_factor
                 logger.info(f"AI semantic keyword '{keyword}' found in filename: {filename}")
