@@ -43,5 +43,14 @@
     "model_prediction": "Needs Manual Review",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T08:53:09.832858",
+    "session_id": "2a163808-18e3-4362-8f3b-fd48cbd25d36",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
