@@ -19,8 +19,9 @@ TEXT_MODELS = [
 IMAGE_MODELS = [
     {
         "name": "Organika/sdxl-detector",
-        "weight": 2.0,  # Most accurate for AI detection
-        "fallback": "umm-maybe/AI-image-detector"
+        "weight": 2.0,  # Most accurate for AI detection - 100% CONFIDENCE = ABSOLUTE OVERRIDE
+        "fallback": "umm-maybe/AI-image-detector",
+        "absolute_override": True  # When this model hits 1.0, bypass everything
     },
     {
         "name": "microsoft/resnet-50",
@@ -77,6 +78,13 @@ HEURISTICS = {
         "disagreement_threshold": 0.3,
         "max_disagreement_penalty": 0.25,
         "high_confidence_threshold": 0.8,
+        # Organika 100% Override System
+        "organika_override": {
+            "enabled": True,
+            "absolute_confidence_threshold": 1.0,  # ONLY 100% exactly - not 99.99%
+            "bypass_all_processing": True,  # Skip ensemble, adjustments, everything
+            "override_message": "🎯 ORGANIKA ABSOLUTE OVERRIDE"
+        },
         # Dynamic weighting system
         "dynamic_weighting": {
             "enabled": True,
