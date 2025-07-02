@@ -106,5 +106,14 @@
     "model_prediction": "\ud83e\udde0 Likely Human",
     "true_label": "human_created",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:32:31.016051",
+    "session_id": "687930c3-d4bf-4e23-a1a5-3ed2b8c33e7e",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 8, 2025, 10_41_37 PM.png",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
