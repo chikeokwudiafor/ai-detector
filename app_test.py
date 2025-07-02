@@ -11,6 +11,32 @@ from config import *
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-test-2025-secure-key')
 
+def track_user_activity(event_type, data=None):
+    """Track user activities for analytics"""
+    try:
+        # Skip tracking for development/admin IP
+        if request.remote_addr == "172.31.128.93":
+            return
+
+        analytics_data = {
+            'timestamp': datetime.now().isoformat(),
+            'event_type': event_type,
+            'ip_address': request.remote_addr,
+            'user_agent': request.headers.get('User-Agent', ''),
+            'referrer': request.headers.get('Referer', ''),
+            'data': data or {}
+        }
+
+        # Ensure analytics directory exists
+        os.makedirs('analytics', exist_ok=True)
+
+        # Append to analytics log
+        with open('analytics/user_activity_test.json', 'a') as f:
+            f.write(json.dumps(analytics_data) + '\n')
+
+    except Exception as e:
+        app.logger.error(f"Analytics tracking error: {str(e)}")
+
 def validate_file(file):
     """
     Validate uploaded file
@@ -27,7 +53,8 @@ def validate_file(file):
     elif filename.endswith(SUPPORTED_TEXT_FORMATS):
         return True, "text", None
     elif filename.endswith(SUPPORTED_VIDEO_FORMATS):
-        return True, "video", None
+        # Block video files with specific message
+        return False, None, "🎬 Video Detection Coming Soon\n\nVideo analysis is in development. We're working on this feature!\n\nTry images or text for now."
     else:
         return False, None, ERROR_MESSAGES["unsupported_format"]
 
@@ -67,14 +94,21 @@ def process_file(file, file_type, filename="unknown"):
                 return None, 0.0, "Text file is empty."
             result_type, confidence, raw_scores = AIDetectorTest.detect_text(text_content, filename)
         elif file_type == "video":
-            result_type, confidence, raw_scores = AIDetectorTest.detect_video(file, filename)
+            # Even if you're not doing video detection yet, log it:
+            app.logger.warning("Video detection not implemented yet. Coming soon.")
+            result_type = "video_not_implemented"
+            confidence = 0.0
+            # result_type, confidence, raw_scores = AIDetectorTest.detect_video(file, filename) #Commented out until video is implemented
         else:
             return None, 0.0, ERROR_MESSAGES["unsupported_format"]
 
-        # Handle model errors
+        # Handle model errors and special cases
         if result_type in ["model_unavailable", "processing_error"]:
             error_msg = ERROR_MESSAGES.get(result_type, ERROR_MESSAGES["processing_error"])
             return None, 0.0, error_msg
+        elif result_type == "video_not_implemented":
+            # For video not implemented, show as a result rather than an error
+            return result_type, 0.0, None
 
         return result_type, confidence, None
 
@@ -93,6 +127,10 @@ def index():
     result_icon = None
     result_description = None
     session_id = None
+
+    # Track page visits
+    if request.method == "GET":
+        track_user_activity('page_visit', {'page': 'home'})
 
     if request.method == "POST":
         file = request.files.get("file")
@@ -130,22 +168,32 @@ def index():
             # Generate session ID for feedback
             session_id = str(uuid.uuid4())
             
-            # Store analysis data in session for feedback
+            # Store analysis data in session for feedback (except for video not implemented)
             filename = file.filename if file else "direct_text_input"
             file_type_name = file_type if 'file_type' in locals() else "text"
             
-            session['last_analysis'] = {
-                'session_id': session_id,
-                'filename': filename,
-                'file_type': file_type_name,
-                'result': result,
-                'result_type': result_type,
-                'confidence': confidence
-            }
+            # Don't store session data for video not implemented (no actual analysis occurred)
+            if result_type != "video_not_implemented":
+                session['last_analysis'] = {
+                    'session_id': session_id,
+                    'filename': filename,
+                    'file_type': file_type_name,
+                    'result': result,
+                    'result_type': result_type,
+                    'confidence': confidence
+                }
 
             # Log successful analysis
             log_filename = file.filename if file else "direct_text_input"
             app.logger.info(f"[TEST] Analysis complete: {log_filename} -> {result_type} ({confidence:.3f})")
+
+            # Track analysis event
+            track_user_activity('analysis_completed', {
+                'filename': log_filename,
+                'file_type': file_type_name,
+                'result_type': result_type,
+                'confidence': confidence
+            })
 
     return render_template("index.html", 
                          result=result, 
@@ -194,10 +242,49 @@ def submit_feedback():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/about")
+def about():
+    """About page"""
+    return render_template("about.html")
+
+@app.route("/roadmap")
+def roadmap():
+    """Roadmap page"""
+    return render_template("roadmap.html")
+
+@app.route("/license")
+def license_page():
+    """License page"""
+    return render_template("license.html")
+
 @app.route("/health")
 def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "models_loaded": True, "test_mode": True}
+
+@app.route("/analytics")
+def analytics_dashboard():
+    """Simple analytics dashboard (test mode)"""
+    try:
+        analytics = []
+        if os.path.exists('analytics/user_activity_test.json'):
+            with open('analytics/user_activity_test.json', 'r') as f:
+                for line in f:
+                    if line.strip():
+                        analytics.append(json.loads(line))
+
+        # Basic stats
+        total_visits = len([a for a in analytics if a['event_type'] == 'page_visit'])
+        total_analyses = len([a for a in analytics if a['event_type'] == 'analysis_completed'])
+
+        return jsonify({
+            'test_mode': True,
+            'total_page_visits': total_visits,
+            'total_analyses': total_analyses,
+            'recent_activity': analytics[-10:] if analytics else []
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
