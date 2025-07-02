@@ -83,7 +83,7 @@ HEURISTICS = {
             "enabled": True,
             "absolute_confidence_threshold": 1.0,  # ONLY 100% exactly - not 99.99%
             "bypass_all_processing": True,  # Skip ensemble, adjustments, everything
-            "override_message": "🎯 ORGANIKA ABSOLUTE OVERRIDE"
+            "override_message": "ORGANIKA ABSOLUTE OVERRIDE"
         },
         # Dynamic weighting system
         "dynamic_weighting": {

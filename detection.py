@@ -197,26 +197,21 @@ class EnsembleVoter:
     def apply_confidence_adjustments(base_confidence, metrics, content_features=None, predictions_data=None):
         """Apply heuristic adjustments based on model agreement and content"""
         
-        # FIRST: Check for Organika 100% override BEFORE any other processing
+        # ABSOLUTE FIRST: Check for Organika 100% override BEFORE any other processing
         if predictions_data and HEURISTICS["ensemble"]["organika_override"]["enabled"]:
-            organika_confidence = None
-            organika_weight = 0
-
             for pred_data in predictions_data:
                 if "Organika" in pred_data['model_name']:
                     organika_confidence = pred_data['confidence']
-                    organika_weight = pred_data['weight']
+                    threshold = HEURISTICS["ensemble"]["organika_override"]["absolute_confidence_threshold"]
+                    
+                    # CRITICAL: Check for EXACT 1.0 confidence (100%) - BYPASS EVERYTHING
+                    if (organika_confidence >= threshold and 
+                        HEURISTICS["ensemble"]["organika_override"]["bypass_all_processing"]):
+                        
+                        override_msg = HEURISTICS["ensemble"]["organika_override"]["override_message"]
+                        logger.info(f"🎯 {override_msg}: {organika_confidence:.3f} - BYPASSING ALL ENSEMBLE PROCESSING")
+                        return organika_confidence  # IMMEDIATE RETURN - NO OTHER PROCESSING
                     break
-
-            # OVERRIDE SYSTEM: If Organika is EXACTLY 100% confident, bypass everything
-            threshold = HEURISTICS["ensemble"]["organika_override"]["absolute_confidence_threshold"]
-            if (organika_confidence is not None and 
-                organika_confidence >= threshold and 
-                HEURISTICS["ensemble"]["organika_override"]["bypass_all_processing"]):
-                
-                override_msg = HEURISTICS["ensemble"]["organika_override"]["override_message"]
-                logger.info(f"{override_msg}: {organika_confidence:.3f} - COMPLETE BYPASS OF ALL PROCESSING")
-                return organika_confidence
 
         # NORMAL PROCESSING: Continue with regular adjustments for all other cases
         adjusted_confidence = base_confidence
@@ -395,6 +390,27 @@ class AIDetector:
 
             if not predictions:
                 return "processing_error", 0.0, []
+
+            # CRITICAL: Check for Organika 100% override BEFORE ensemble processing
+            for pred_data in predictions_data:
+                if ("Organika" in pred_data['model_name'] and 
+                    pred_data['confidence'] >= 1.0 and 
+                    HEURISTICS["ensemble"]["organika_override"]["enabled"]):
+                    
+                    logger.info(f"🎯 ORGANIKA ABSOLUTE OVERRIDE: {pred_data['confidence']:.3f} - BYPASSING ENSEMBLE")
+                    final_confidence = pred_data['confidence']
+                    result_type = AIDetector._classify_confidence(final_confidence)
+                    
+                    # Log and return immediately
+                    processing_time = (datetime.now() - start_time).total_seconds() * 1000
+                    ensemble_result = {
+                        'result_type': result_type,
+                        'confidence': final_confidence,
+                        'metrics': {'agreement': 1.0, 'std_dev': 0.0, 'model_count': len(predictions)}
+                    }
+                    model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
+                    logger.info(f"Override result: {result_type} ({final_confidence:.3f})")
+                    return result_type, final_confidence, predictions
 
             # Calculate weighted ensemble score
             ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
