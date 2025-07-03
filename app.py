@@ -5,6 +5,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, flash, session, jsonify, make_response
 from config import *
 from detection import AIDetector, get_result_classification
+from database import init_database, log_analytics_db, save_feedback_db, get_analytics_summary
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
@@ -16,6 +17,16 @@ def track_user_activity(event_type, data=None):
         if request.remote_addr == "172.31.128.93":
             return
 
+        # Log to database
+        log_analytics_db(
+            event_type=event_type,
+            ip_address=request.remote_addr,
+            user_agent=request.headers.get('User-Agent', ''),
+            referrer=request.headers.get('Referer', ''),
+            data=data
+        )
+
+        # Also log to file as backup
         analytics_data = {
             'timestamp': datetime.now().isoformat(),
             'event_type': event_type,
@@ -25,10 +36,7 @@ def track_user_activity(event_type, data=None):
             'data': data or {}
         }
 
-        # Ensure analytics directory exists
         os.makedirs('analytics', exist_ok=True)
-
-        # Append to analytics log
         with open('analytics/user_activity.json', 'a') as f:
             f.write(json.dumps(analytics_data) + '\n')
 
@@ -296,27 +304,17 @@ def health_check():
 def analytics_dashboard():
     """Simple analytics dashboard (basic auth recommended for production)"""
     try:
-        analytics = []
-        if os.path.exists('analytics/user_activity.json'):
-            with open('analytics/user_activity.json', 'r') as f:
-                for line in f:
-                    if line.strip():
-                        analytics.append(json.loads(line))
-
-        # Basic stats
-        total_visits = len([a for a in analytics if a['event_type'] == 'page_visit'])
-        total_analyses = len([a for a in analytics if a['event_type'] == 'analysis_completed'])
-
-        return jsonify({
-            'total_page_visits': total_visits,
-            'total_analyses': total_analyses,
-            'recent_activity': analytics[-10:] if analytics else []
-        })
+        summary = get_analytics_summary()
+        return jsonify(summary)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     import os
+    
+    # Initialize database
+    init_database()
+    
     # Replit deployments use PORT environment variable
     port = int(os.environ.get('PORT', 5000))
 
