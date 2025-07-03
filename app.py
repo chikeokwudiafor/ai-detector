@@ -4,11 +4,37 @@ import json
 from datetime import datetime
 from flask import Flask, render_template, request, flash, session, jsonify, make_response
 from config import *
-from detection import AIDetector, get_result_classification
 from database import init_database, log_analytics_db, save_feedback_db, get_analytics_summary
+
+# Global variables for lazy loading
+_models_loaded = False
+AIDetector = None
+get_result_classification = None
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
+
+def ensure_models_loaded():
+    """Load AI detection models on first request"""
+    global _models_loaded, AIDetector, get_result_classification
+    
+    if not _models_loaded:
+        print("🚀 Loading AI detection models on-demand...")
+        try:
+            # Initialize database first
+            init_database()
+            print("✅ Database initialized")
+            
+            # Import and load detection models
+            from detection import AIDetector as _AIDetector, get_result_classification as _get_result_classification
+            AIDetector = _AIDetector
+            get_result_classification = _get_result_classification
+            
+            print("✅ AI detection models loaded successfully")
+            _models_loaded = True
+        except Exception as e:
+            print(f"❌ Failed to load models: {e}")
+            raise e
 
 def track_user_activity(event_type, data=None):
     """Track user activities for analytics"""
@@ -139,6 +165,9 @@ def index():
         track_user_activity('page_visit', {'page': 'home'})
 
     if request.method == "POST":
+        # Ensure models are loaded before processing
+        ensure_models_loaded()
+        
         file = request.files.get("file")
         text_content = request.form.get("text_content")
 
@@ -295,10 +324,19 @@ def submit_feedback():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/ping")
+def ping():
+    """Quick health check endpoint"""
+    return "pong", 200
+
 @app.route("/health")
 def health_check():
-    """Health check endpoint"""
-    return "OK", 200
+    """Detailed health check endpoint"""
+    return jsonify({
+        "status": "healthy",
+        "models_loaded": _models_loaded,
+        "timestamp": datetime.now().isoformat()
+    }), 200
 
 @app.route("/analytics")
 def analytics_dashboard():
@@ -310,7 +348,8 @@ def analytics_dashboard():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    # Initialize database
-    init_database()
+    print("⚡ Lazy startup mode: skipping model loading at boot")
     print("🔥 Flask is starting on 0.0.0.0:5000")
+    
+    # Delay DB and model init until first request
     app.run(host='0.0.0.0', port=5000)
