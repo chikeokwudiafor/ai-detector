@@ -7,24 +7,33 @@ import threading
 
 DB_PATH = 'aithentic.db'
 
-# Thread-local storage for SQLite connections
-_thread_local = threading.local()
+# Simple connection with WAL mode for better concurrent performance
+_db_connection = None
+_db_lock = threading.Lock()
 
-def _get_thread_connection():
-    """Get a thread-local SQLite connection"""
-    if not hasattr(_thread_local, 'connection'):
-        _thread_local.connection = sqlite3.connect(DB_PATH, check_same_thread=False)
-        _thread_local.connection.row_factory = sqlite3.Row
-    return _thread_local.connection
+def _get_connection():
+    """Get optimized SQLite connection"""
+    global _db_connection
+    if _db_connection is None:
+        with _db_lock:
+            if _db_connection is None:
+                _db_connection = sqlite3.connect(DB_PATH, check_same_thread=False)
+                _db_connection.row_factory = sqlite3.Row
+                # Enable WAL mode for better concurrent performance
+                _db_connection.execute("PRAGMA journal_mode=WAL")
+                _db_connection.execute("PRAGMA synchronous=NORMAL")
+                _db_connection.execute("PRAGMA cache_size=10000")
+                _db_connection.execute("PRAGMA temp_store=memory")
+    return _db_connection
 
 @contextmanager
 def get_db_connection():
-    """Context manager for database connections using thread-local storage"""
-    conn = _get_thread_connection()
+    """Context manager for database connections"""
+    conn = _get_connection()
     try:
         yield conn
     finally:
-        # Don't close the connection, keep it for the thread
+        # Connection stays open for reuse
         pass
 
 def init_database():

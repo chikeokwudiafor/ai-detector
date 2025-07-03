@@ -11,9 +11,9 @@ _models_loaded = False
 AIDetector = None
 get_result_classification = None
 
-# Response cache for identical content (in-memory for now)
+# Simple response cache
 _response_cache = {}
-_cache_ttl = 3600  # 1 hour TTL
+_cache_ttl = 600  # 10 minutes TTL for faster updates
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
@@ -23,21 +23,21 @@ def ensure_models_loaded():
     global _models_loaded, AIDetector, get_result_classification
 
     if not _models_loaded:
-        print("🚀 Loading AI detection models on-demand...")
+        print("🚀 Loading AI detection modules...")
         try:
             # Initialize database first
             init_database()
             print("✅ Database initialized")
 
-            # Import and load detection models
+            # Import detection modules (models load lazily)
             from detection import AIDetector as _AIDetector, get_result_classification as _get_result_classification
             AIDetector = _AIDetector
             get_result_classification = _get_result_classification
 
-            print("✅ AI detection models loaded successfully")
+            print("✅ Detection modules loaded")
             _models_loaded = True
         except Exception as e:
-            print(f"❌ Failed to load models: {e}")
+            print(f"❌ Failed to load modules: {e}")
             raise e
 
 def track_user_activity(event_type, data=None):
@@ -175,17 +175,7 @@ def index():
         file = request.files.get("file")
         text_content = request.form.get("text_content")
 
-        # Create a cache key based on the input content
-        cache_key = hash((file.read() if file else '', text_content))  # Reset file pointer after reading
-        if file:
-            file.seek(0) # Reset file pointer to beginning
-
-        # Check if the result is already cached
-        if cache_key in _response_cache and (datetime.now() - _response_cache[cache_key]['timestamp']).total_seconds() < _cache_ttl:
-            cached_response = _response_cache[cache_key]['response']
-            print("🔥 Returning cached response")
-            track_user_activity('cache_hit')
-            return cached_response
+        # Simple processing without complex caching
 
         # Handle direct text input
         if text_content and text_content.strip():
@@ -262,8 +252,6 @@ def index():
         resp.headers['Cache-Control'] = 'public, max-age=300'  # 5 minutes
         return resp
 
-    # Cache the response
-    _response_cache[cache_key] = {'response': response, 'timestamp': datetime.now()}
     return response
 
 @app.route("/about")

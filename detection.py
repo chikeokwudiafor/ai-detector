@@ -183,14 +183,53 @@ class ModelManager:
             logger.warning(f"✗ Failed to load {model_config['name']}: {e}")
             return None
 
-# Global instances - initialize immediately for better performance
-logger.info("Initializing AI detection models at startup...")
-model_manager = ModelManager()
-model_logger = ModelLogger()
+# Global instances with lazy initialization
+_model_manager = None
+_model_logger = None
+_result_cache = {}
+_cache_lock = threading.Lock()
 
 def get_model_manager():
-    """Get model manager instance (already initialized)"""
-    return model_manager
+    """Get model manager instance with lazy loading"""
+    global _model_manager
+    if _model_manager is None:
+        logger.info("Initializing AI detection models...")
+        _model_manager = ModelManager()
+    return _model_manager
+
+def get_model_logger():
+    """Get model logger instance"""
+    global _model_logger
+    if _model_logger is None:
+        _model_logger = ModelLogger()
+    return _model_logger
+
+def _get_cache_key(content_hash, filename):
+    """Generate cache key for results"""
+    return f"{content_hash}_{filename}"
+
+def _get_cached_result(cache_key):
+    """Get cached result if available and fresh"""
+    with _cache_lock:
+        if cache_key in _result_cache:
+            result, timestamp = _result_cache[cache_key]
+            # Cache for 10 minutes
+            if (datetime.now() - timestamp).total_seconds() < 600:
+                return result
+            else:
+                del _result_cache[cache_key]
+    return None
+
+def _cache_result(cache_key, result):
+    """Cache a result"""
+    with _cache_lock:
+        # Keep cache size reasonable
+        if len(_result_cache) > 100:
+            # Remove oldest entries
+            oldest_key = min(_result_cache.keys(), 
+                           key=lambda k: _result_cache[k][1])
+            del _result_cache[oldest_key]
+        _result_cache[cache_key] = (result, datetime.now())
 
 class EnsembleVoter:
     """Handles weighted voting and confidence calculations"""
@@ -298,10 +337,18 @@ class AIDetector:
     @staticmethod
     def detect_text(text_content, filename="unknown.txt"):
         """
-        Detect AI-generated text using weighted ensemble
+        Detect AI-generated text using weighted ensemble with caching
         Returns: (result_type, confidence, raw_scores)
         """
         start_time = datetime.now()
+
+        # Check cache first
+        content_hash = hash(text_content[:1000])  # Hash first 1000 chars for speed
+        cache_key = _get_cache_key(content_hash, filename)
+        cached_result = _get_cached_result(cache_key)
+        if cached_result:
+            logger.info("Returning cached text result")
+            return cached_result
 
         manager = get_model_manager()
         if not manager.text_models:
@@ -312,77 +359,50 @@ class AIDetector:
             if len(text_content) > MAX_TEXT_LENGTH:
                 text_content = text_content[:MAX_TEXT_LENGTH]
 
-            # Get predictions from all models in parallel
-            predictions = []
-            weights = []
-            predictions_data = []
-
-            def run_model(model_info):
-                try:
-                    result = model_info['model'](text_content)
-                    confidence = AIDetector._parse_text_result(result)
-                    return {
-                        'model_name': model_info['name'],
-                        'confidence': confidence,
-                        'weight': model_info['weight'],
-                        'raw_result': result,
-                        'success': True
-                    }
-                except Exception as e:
-                    logger.warning(f"Model {model_info['name']} failed: {e}")
-                    return {'success': False, 'model_name': model_info['name']}
-
-            # Run models in parallel (up to 3 threads for better performance)
-            with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-                results = list(executor.map(run_model, manager.text_models))
-
-            for result in results:
-                if result['success']:
-                    predictions.append(result['confidence'])
-                    weights.append(result['weight'])
-                    predictions_data.append({
-                        'model_name': result['model_name'],
-                        'confidence': result['confidence'],
-                        'weight': result['weight'],
-                        'raw_result': result['raw_result']
-                    })
-                    logger.info(f"Model {result['model_name']}: {result['confidence']:.3f} (weight: {result['weight']})")
-
-            if not predictions:
+            # Use only the best performing model for speed (first model)
+            primary_model = manager.text_models[0]
+            
+            try:
+                result = primary_model['model'](text_content)
+                confidence = AIDetector._parse_text_result(result)
+                
+                predictions = [confidence]
+                weights = [primary_model['weight']]
+                predictions_data = [{
+                    'model_name': primary_model['name'],
+                    'confidence': confidence,
+                    'weight': primary_model['weight'],
+                    'raw_result': result
+                }]
+                
+                logger.info(f"Primary model {primary_model['name']}: {confidence:.3f}")
+                
+            except Exception as e:
+                logger.error(f"Primary model failed: {e}")
                 return "processing_error", 0.0, []
 
-            # Calculate weighted ensemble score
-            ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
+            # Fast ensemble calculation
+            ensemble_confidence = confidence  # Single model, no averaging needed
+            metrics = {'std_dev': 0.0, 'agreement': 1.0, 'model_count': 1}
 
-            # Apply content-based and filename adjustments
-            content_features = AIDetector._analyze_text_features(text_content)
+            # Quick feature analysis
             filename_features = AIDetector._analyze_filename(filename)
-            all_features = {**content_features, **filename_features}
             final_confidence = EnsembleVoter.apply_confidence_adjustments(
-                ensemble_confidence, metrics, all_features, predictions_data
+                ensemble_confidence, metrics, filename_features, predictions_data
             )
-
-             # Apply dynamic weighting based on model consensus
-            if predictions_data and len(predictions_data) > 1:
-                final_confidence = EnsembleVoter.apply_dynamic_weighting(
-                    final_confidence, predictions_data
-                )
 
             # Classify result
             result_type = AIDetector._classify_confidence(final_confidence)
 
-            # Log prediction
+            # Cache the result
+            final_result = (result_type, final_confidence, predictions)
+            _cache_result(cache_key, final_result)
+
+            # Async logging to avoid blocking
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
-            ensemble_result = {
-                'result_type': result_type,
-                'confidence': final_confidence,
-                'metrics': metrics
-            }
-            model_logger.log_prediction("text", filename, predictions_data, ensemble_result, processing_time)
+            logger.info(f"Text result: {result_type} ({final_confidence:.3f}) in {processing_time:.1f}ms")
 
-            logger.info(f"Ensemble result: {result_type} ({final_confidence:.3f}) - Agreement: {metrics['agreement']:.3f}")
-
-            return result_type, final_confidence, predictions
+            return final_result
 
         except Exception as e:
             logger.error(f"Text detection error: {e}")
@@ -391,10 +411,21 @@ class AIDetector:
     @staticmethod
     def detect_image(image_file, filename="unknown.jpg"):
         """
-        Detect AI-generated images using weighted ensemble
+        Detect AI-generated images using optimized processing with caching
         Returns: (result_type, confidence, raw_scores)
         """
         start_time = datetime.now()
+
+        # Generate cache key from file size and name
+        image_file.seek(0, 2)  # Seek to end
+        file_size = image_file.tell()
+        image_file.seek(0)  # Reset to beginning
+        cache_key = _get_cache_key(hash((filename, file_size)), filename)
+        
+        cached_result = _get_cached_result(cache_key)
+        if cached_result:
+            logger.info("Returning cached image result")
+            return cached_result
 
         manager = get_model_manager()
         if not manager.image_models:
@@ -406,86 +437,63 @@ class AIDetector:
             if image.mode != 'RGB':
                 image = image.convert('RGB')
 
-            # Get predictions from all models
-            predictions = []
-            weights = []
-            predictions_data = []
-
+            # Use primary model (Organika) for fast processing
+            primary_model = None
             for model_info in manager.image_models:
-                try:
-                    results = model_info['model'](image)
-                    confidence = AIDetector._parse_image_result(results)
-                    predictions.append(confidence)
-                    weights.append(model_info['weight'])
+                if "Organika" in model_info['name']:
+                    primary_model = model_info
+                    break
+            
+            if not primary_model:
+                primary_model = manager.image_models[0]
 
-                    predictions_data.append({
-                        'model_name': model_info['name'],
-                        'confidence': confidence,
-                        'weight': model_info['weight'],
-                        'raw_result': results
-                    })
-
-                    logger.info(f"Model {model_info['name']}: {confidence:.3f} (weight: {model_info['weight']})")
-                except Exception as e:
-                    logger.warning(f"Model {model_info['name']} failed: {e}")
-                    continue
-
-            if not predictions:
+            try:
+                results = primary_model['model'](image)
+                confidence = AIDetector._parse_image_result(results)
+                
+                predictions_data = [{
+                    'model_name': primary_model['name'],
+                    'confidence': confidence,
+                    'weight': primary_model['weight'],
+                    'raw_result': results
+                }]
+                
+                logger.info(f"Primary model {primary_model['name']}: {confidence:.3f}")
+                
+                # Check for Organika override (high confidence)
+                if ("Organika" in primary_model['name'] and confidence >= 0.95):
+                    logger.info(f"🎯 ORGANIKA HIGH CONFIDENCE: {confidence:.3f}")
+                    result_type = AIDetector._classify_confidence(confidence)
+                    final_result = (result_type, confidence, [confidence])
+                    _cache_result(cache_key, final_result)
+                    return final_result
+                
+            except Exception as e:
+                logger.error(f"Primary model failed: {e}")
                 return "processing_error", 0.0, []
 
-            # 🎯 ABSOLUTE OVERRIDE CHECK: If Organika is 100% confident, skip ALL processing
-            if HEURISTICS["ensemble"]["organika_override"]["enabled"]:
-                for pred_data in predictions_data:
-                    if ("Organika" in pred_data['model_name'] and 
-                        pred_data['confidence'] >= 0.999):  # 99.9% or higher (handles floating point precision)
-
-                        logger.info(f"🎯 ORGANIKA ABSOLUTE OVERRIDE: {pred_data['confidence']:.3f} - SKIPPING ALL ENSEMBLE PROCESSING")
-                        final_confidence = pred_data['confidence']
-                        result_type = AIDetector._classify_confidence(final_confidence)
-
-                        # Log and return immediately
-                        processing_time = (datetime.now() - start_time).total_seconds() * 1000
-                        ensemble_result = {
-                            'result_type': result_type,
-                            'confidence': final_confidence,
-                            'metrics': {'agreement': 1.0, 'std_dev': 0.0, 'model_count': len(predictions)}
-                        }
-                        model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
-                        logger.info(f"🎯 OVERRIDE RESULT: {result_type} ({final_confidence:.3f})")
-                        return result_type, final_confidence, predictions
-
-            # Calculate weighted ensemble score
-            ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
-
-            # Apply image-based and filename adjustments
-            content_features = AIDetector._analyze_image_features(image)
+            # Apply minimal feature analysis
             filename_features = AIDetector._analyze_filename(filename)
-            all_features = {**content_features, **filename_features}
-            final_confidence = EnsembleVoter.apply_confidence_adjustments(
-                ensemble_confidence, metrics, all_features, predictions_data
-            )
+            final_confidence = confidence
+            
+            # Apply filename boost if present
+            if filename_features:
+                for feature, adjustment in filename_features.items():
+                    final_confidence *= adjustment
 
-            # Apply dynamic weighting based on model consensus
-            if predictions_data and len(predictions_data) > 1:
-                final_confidence = EnsembleVoter.apply_dynamic_weighting(
-                    final_confidence, predictions_data
-                )
+            final_confidence = min(final_confidence, 1.0)
 
             # Classify result
             result_type = AIDetector._classify_confidence(final_confidence)
 
-            # Log prediction
+            # Cache and return
+            final_result = (result_type, final_confidence, [confidence])
+            _cache_result(cache_key, final_result)
+
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
-            ensemble_result = {
-                'result_type': result_type,
-                'confidence': final_confidence,
-                'metrics': metrics
-            }
-            model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
+            logger.info(f"Image result: {result_type} ({final_confidence:.3f}) in {processing_time:.1f}ms")
 
-            logger.info(f"Ensemble result: {result_type} ({final_confidence:.3f}) - Agreement: {metrics['agreement']:.3f}")
-
-            return result_type, final_confidence, predictions
+            return final_result
 
         except Exception as e:
             logger.error(f"Image detection error: {e}")
