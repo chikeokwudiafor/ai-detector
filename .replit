@@ -7,52 +7,6 @@ channel = "stable-24_05"
 run = ["python", "app.py"]
 deploymentTarget = "gce"
 
-[workflows]
-runButton = "Production"
-
-[[workflows.workflow]]
-name = "Run"
-author = 44510387
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "fuser -k 5000/tcp || true"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "sleep 1"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python app.py"
-
-[[workflows.workflow]]
-name = "Test App"
-author = 44510387
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python app_test.py"
-
-[[workflows.workflow]]
-name = "Production"
-author = 44510387
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "fuser -k 5000/tcp 2>/dev/null || true"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "sleep 1"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python app.py"
-
 [[ports]]
 localPort = 5000
 externalPort = 80
