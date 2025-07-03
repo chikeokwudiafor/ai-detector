@@ -2269,7 +2269,7 @@
 
         // Create animated particles
         function createParticles() {
-            const particleCount = 80;
+            const particleCount = 40; // Reduced from 80
             const hero = document.querySelector('.hero');
             const colors = ['blue', 'purple', 'cyan', 'pink'];
 
@@ -2288,7 +2288,7 @@
             }
 
             // Add some larger glowing orbs
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 5; i++) { // Reduced from 10
                 const orb = document.createElement('div');
                 orb.className = 'particle glow';
                 orb.style.width = '6px';

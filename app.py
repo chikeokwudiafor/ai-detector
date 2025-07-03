@@ -195,7 +195,7 @@ def index():
                 'confidence': confidence
             })
 
-    return render_template("index.html", 
+    response = render_template("index.html", 
                          result=result, 
                          confidence=confidence, 
                          result_class=result_class,
@@ -203,6 +203,15 @@ def index():
                          result_description=result_description,
                          result_footer=result_footer if 'result_footer' in locals() else None,
                          session_id=session_id)
+    
+    # Add performance headers for GET requests
+    if request.method == "GET":
+        from flask import make_response
+        resp = make_response(response)
+        resp.headers['Cache-Control'] = 'public, max-age=300'  # 5 minutes
+        return resp
+    
+    return response
 
 @app.route("/about")
 def about():
