@@ -12,6 +12,11 @@ import torch
 from transformers import pipeline
 import numpy as np
 from config import *
+
+import concurrent.futures
+from functools import partial
+import threading
+
 from results_manager import results_manager
 
 # Set up logging
@@ -95,6 +100,7 @@ class ModelManager:
     def __init__(self):
         self.text_models = []
         self.image_models = []
+        self._model_cache = {}
         self._load_models()
 
     def _load_models(self):
@@ -124,19 +130,43 @@ class ModelManager:
         logger.info(f"✓ Loaded {len(self.text_models)} text models and {len(self.image_models)} image models")
 
     def _load_text_model(self, model_config):
-        """Load a text classification model with fallback"""
+        """Load a text classification model with caching and fallback"""
+        model_name = model_config['name']
+        
+        # Check cache first
+        if model_name in self._model_cache:
+            logger.info(f"✓ Text model loaded from cache: {model_name}")
+            return self._model_cache[model_name]
+            
         try:
-            model = pipeline("text-classification", model=model_config['name'])
-            logger.info(f"✓ Text model loaded: {model_config['name']}")
+            # Load with optimizations
+            model = pipeline(
+                "text-classification", 
+                model=model_name,
+                device=0 if torch.cuda.is_available() else -1,  # GPU if available
+                torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
+            )
+            self._model_cache[model_name] = model
+            logger.info(f"✓ Text model loaded: {model_name}")
             return model
         except Exception as e:
-            logger.warning(f"✗ Failed to load {model_config['name']}: {e}")
+            logger.warning(f"✗ Failed to load {model_name}: {e}")
 
             # Try fallback
             if model_config['fallback']:
+                fallback_name = model_config['fallback']
+                if fallback_name in self._model_cache:
+                    return self._model_cache[fallback_name]
+                    
                 try:
-                    model = pipeline("text-classification", model=model_config['fallback'])
-                    logger.info(f"✓ Text model loaded (fallback): {model_config['fallback']}")
+                    model = pipeline(
+                        "text-classification", 
+                        model=fallback_name,
+                        device=0 if torch.cuda.is_available() else -1,
+                        torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
+                    )
+                    self._model_cache[fallback_name] = model
+                    logger.info(f"✓ Text model loaded (fallback): {fallback_name}")
                     return model
                 except Exception as e2:
                     logger.error(f"✗ Fallback also failed: {e2}")
@@ -282,29 +312,41 @@ class AIDetector:
             if len(text_content) > MAX_TEXT_LENGTH:
                 text_content = text_content[:MAX_TEXT_LENGTH]
 
-            # Get predictions from all models
+            # Get predictions from all models in parallel
             predictions = []
             weights = []
             predictions_data = []
 
-            for model_info in manager.text_models:
+            def run_model(model_info):
                 try:
                     result = model_info['model'](text_content)
                     confidence = AIDetector._parse_text_result(result)
-                    predictions.append(confidence)
-                    weights.append(model_info['weight'])
-
-                    predictions_data.append({
+                    return {
                         'model_name': model_info['name'],
                         'confidence': confidence,
                         'weight': model_info['weight'],
-                        'raw_result': result
-                    })
-
-                    logger.info(f"Model {model_info['name']}: {confidence:.3f} (weight: {model_info['weight']})")
+                        'raw_result': result,
+                        'success': True
+                    }
                 except Exception as e:
                     logger.warning(f"Model {model_info['name']} failed: {e}")
-                    continue
+                    return {'success': False, 'model_name': model_info['name']}
+
+            # Run models in parallel (up to 3 threads for better performance)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+                results = list(executor.map(run_model, manager.text_models))
+
+            for result in results:
+                if result['success']:
+                    predictions.append(result['confidence'])
+                    weights.append(result['weight'])
+                    predictions_data.append({
+                        'model_name': result['model_name'],
+                        'confidence': result['confidence'],
+                        'weight': result['weight'],
+                        'raw_result': result['raw_result']
+                    })
+                    logger.info(f"Model {result['model_name']}: {result['confidence']:.3f} (weight: {result['weight']})")
 
             if not predictions:
                 return "processing_error", 0.0, []
