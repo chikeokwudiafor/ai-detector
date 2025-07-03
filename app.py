@@ -310,18 +310,41 @@ def analytics_dashboard():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
-    import os
-    
-    # Initialize database
-    print("🔧 Initializing database...")
-    init_database()
-    print("✅ Database initialized")
-    
-    # Replit deployments use PORT environment variable
-    port = int(os.environ.get('PORT', 5000))
-    
-    print(f"🚀 Starting Flask app on 0.0.0.0:{port}")
-    print(f"📊 Environment: {'DEPLOYMENT' if os.environ.get('REPL_DEPLOYMENT') else 'DEVELOPMENT'}")
-    
-    app.logger.info(f"Starting Flask app on host 0.0.0.0 port {port}...")
-    app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
+    try:
+        import os
+        
+        print("🔧 Starting application initialization...")
+        
+        # Initialize database
+        print("🔧 Initializing database...")
+        init_database()
+        print("✅ Database initialized")
+        
+        # Replit deployments use PORT environment variable
+        port = int(os.environ.get('PORT', 5000))
+        
+        print(f"🚀 Starting Flask app on 0.0.0.0:{port}")
+        print(f"📊 Environment: {'DEPLOYMENT' if os.environ.get('REPL_DEPLOYMENT') else 'DEVELOPMENT'}")
+        print(f"🔍 Python path: {os.sys.path}")
+        print(f"🔍 Working directory: {os.getcwd()}")
+        
+        app.logger.info(f"Starting Flask app on host 0.0.0.0 port {port}...")
+        
+        # Try to start the Flask app
+        app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
+        
+    except ImportError as e:
+        print(f"❌ Import Error: {e}")
+        print("Missing dependencies - check requirements.txt")
+        exit(1)
+    except OSError as e:
+        print(f"❌ OS Error (likely port issue): {e}")
+        print(f"Tried to bind to port {port}")
+        exit(1)
+    except Exception as e:
+        print(f"❌ Unexpected startup error: {e}")
+        print(f"Error type: {type(e).__name__}")
+        import traceback
+        print("Full traceback:")
+        traceback.print_exc()
+        exit(1)
