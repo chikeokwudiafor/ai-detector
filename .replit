@@ -7,8 +7,16 @@ channel = "stable-23_05"
 run = "python app.py"
 ignorePorts = false
 
+[packager]
+language = "python3"
+
+[packager.features]
+guessImports = true
+packageSearch = true
+enabledForHosting = true
+
 [workflows]
-runButton = "Clean Start"
+runButton = "Start App"
 
 [[workflows.workflow]]
 name = "Run"
@@ -54,7 +62,7 @@ task = "shell.exec"
 args = "python app.py"
 
 [[workflows.workflow]]
-name = "Clean Start"
+name = "Start App"
 author = 44510387
 mode = "sequential"
 
