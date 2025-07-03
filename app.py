@@ -1,15 +1,14 @@
-from flask import Flask, render_template, request, flash, session, jsonify
 import os
 import uuid
-import json
-from datetime import datetime
-from detection import AIDetector, get_result_classification
+import hashlib
+from flask import Flask, render_template, request, flash, session, jsonify, make_response
+from app_core import create_app
+from database import log_analytics_db, save_feedback_db, get_analytics_summary, cache_analysis_result, get_cached_result
+from utils.file_helpers import validate_file_extension, validate_file_size
 from feedback import feedback_manager
-from config import *
 from auto_feedback_updater import auto_updater
 
-app = Flask(__name__)
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
+app = create_app(test_mode=False)
 
 def track_user_activity(event_type, data=None):
     """Track user activities for analytics"""
