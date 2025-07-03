@@ -319,6 +319,6 @@ def analytics_dashboard():
 if __name__ == "__main__":
     import os
     port = int(os.environ.get('PORT', 5000))
-
-    app.logger.info("Starting Flask app...")
+    
+    app.logger.info(f"Starting Flask app on port {port}...")
     app.run(debug=False, host="0.0.0.0", port=port, threaded=True)
