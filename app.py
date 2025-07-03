@@ -313,10 +313,15 @@ if __name__ == "__main__":
     import os
     
     # Initialize database
+    print("🔧 Initializing database...")
     init_database()
+    print("✅ Database initialized")
     
     # Replit deployments use PORT environment variable
     port = int(os.environ.get('PORT', 5000))
-
+    
+    print(f"🚀 Starting Flask app on 0.0.0.0:{port}")
+    print(f"📊 Environment: {'DEPLOYMENT' if os.environ.get('REPL_DEPLOYMENT') else 'DEVELOPMENT'}")
+    
     app.logger.info(f"Starting Flask app on host 0.0.0.0 port {port}...")
     app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
