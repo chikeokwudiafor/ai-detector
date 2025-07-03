@@ -1,0 +1,27 @@
+{
+  "analysis_date": "2025-07-02T12:15:22.952323",
+  "model_performance": {
+    "Organika/sdxl-detector": {
+      "accuracy": 0.7142857142857143,
+      "total_samples": 21,
+      "correct_predictions": 15
+    },
+    "umm-maybe/AI-image-detector": {
+      "accuracy": 0.7142857142857143,
+      "total_samples": 21,
+      "correct_predictions": 15
+    },
+    "saltacc/anime-ai-detect": {
+      "accuracy": 0.7142857142857143,
+      "total_samples": 21,
+      "correct_predictions": 15
+    }
+  },
+  "suggested_weights": {
+    "Organika/sdxl-detector": 1.0,
+    "umm-maybe/AI-image-detector": 1.0,
+    "saltacc/anime-ai-detect": 1.0
+  },
+  "average_accuracy": 0.7142857142857143,
+  "total_feedback_samples": 21
+}

@@ -1,0 +1,25 @@
+run = "python app.py"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["python", "app.py"]
+deploymentTarget = "gce"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[workflows]
+runButton = "Run"
+
+[[workflows.workflow]]
+name = "Run"
+author = 44510387
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python app.py"
+

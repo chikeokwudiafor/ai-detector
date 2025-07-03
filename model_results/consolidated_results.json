@@ -1,0 +1,1039 @@
+{
+  "metadata": {
+    "created": "2025-07-02T14:06:52.376727",
+    "last_updated": "2025-07-03T02:32:49.599651",
+    "version": "1.0"
+  },
+  "model_performance": {
+    "2025-07-02T14:06:52.379014": {
+      "analysis_date": "2025-07-02T12:15:22.952323",
+      "model_performance": {
+        "Organika/sdxl-detector": {
+          "accuracy": 0.7142857142857143,
+          "total_samples": 21,
+          "correct_predictions": 15
+        },
+        "umm-maybe/AI-image-detector": {
+          "accuracy": 0.7142857142857143,
+          "total_samples": 21,
+          "correct_predictions": 15
+        },
+        "saltacc/anime-ai-detect": {
+          "accuracy": 0.7142857142857143,
+          "total_samples": 21,
+          "correct_predictions": 15
+        }
+      },
+      "suggested_weights": {
+        "Organika/sdxl-detector": 1.0,
+        "umm-maybe/AI-image-detector": 1.0,
+        "saltacc/anime-ai-detect": 1.0
+      },
+      "average_accuracy": 0.7142857142857143,
+      "total_feedback_samples": 21
+    },
+    "2025-07-02T14:11:18.504494": {
+      "model_performance": {
+        "Organika/sdxl-detector": {
+          "accuracy": 0.7777777777777778,
+          "total_samples": 36,
+          "correct_predictions": 28
+        },
+        "umm-maybe/AI-image-detector": {
+          "accuracy": 0.6666666666666666,
+          "total_samples": 36,
+          "correct_predictions": 24
+        },
+        "saltacc/anime-ai-detect": {
+          "accuracy": 0.6666666666666666,
+          "total_samples": 36,
+          "correct_predictions": 24
+        }
+      }
+    },
+    "2025-07-02T14:16:42.715327": {
+      "model_performance": {
+        "Organika/sdxl-detector": {
+          "accuracy": 0.75,
+          "total_samples": 36,
+          "correct_predictions": 27
+        },
+        "umm-maybe/AI-image-detector": {
+          "accuracy": 0.8055555555555556,
+          "total_samples": 36,
+          "correct_predictions": 29
+        },
+        "saltacc/anime-ai-detect": {
+          "accuracy": 0.5833333333333334,
+          "total_samples": 36,
+          "correct_predictions": 21
+        }
+      }
+    },
+    "2025-07-02T14:26:12.400101": {
+      "model_performance": {
+        "Organika/sdxl-detector": {
+          "accuracy": 0.7948717948717948,
+          "total_samples": 39,
+          "correct_predictions": 31
+        },
+        "umm-maybe/AI-image-detector": {
+          "accuracy": 0.8461538461538461,
+          "total_samples": 39,
+          "correct_predictions": 33
+        },
+        "saltacc/anime-ai-detect": {
+          "accuracy": 0.717948717948718,
+          "total_samples": 39,
+          "correct_predictions": 28
+        }
+      }
+    },
+    "2025-07-02T14:27:52.078405": {
+      "model_performance": {
+        "Organika/sdxl-detector": {
+          "accuracy": 0.7692307692307693,
+          "total_samples": 39,
+          "correct_predictions": 30
+        },
+        "umm-maybe/AI-image-detector": {
+          "accuracy": 0.5897435897435898,
+          "total_samples": 39,
+          "correct_predictions": 23
+        },
+        "saltacc/anime-ai-detect": {
+          "accuracy": 0.6923076923076923,
+          "total_samples": 39,
+          "correct_predictions": 27
+        }
+      }
+    }
+  },
+  "feedback_analysis": {
+    "raw_feedback": [
+      {
+        "timestamp": "2025-07-02T08:27:17.911232",
+        "session_id": "938fcf02-57b6-4bda-ab8e-45ae95013b96",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+        "model_prediction": "AI-Generated",
+        "user_feedback": "accurate",
+        "feedback_type": "accuracy_rating"
+      },
+      {
+        "timestamp": "2025-07-02T08:35:39.353624",
+        "session_id": "d363446e-0b5c-42b9-a9b9-d88baf88cef2",
+        "file_type": "image",
+        "filename": "afrocaribbean2_-34.jpg",
+        "model_prediction": "Likely Human-Created",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T08:36:08.942898",
+        "session_id": "ea34890b-8da5-4bfa-afcd-b1cca40e325b",
+        "file_type": "image",
+        "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+        "model_prediction": "Likely AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T08:37:14.118053",
+        "session_id": "9cb2d7b1-0f3d-499d-9e0e-5bde58d6e6d0",
+        "file_type": "text",
+        "filename": "direct_text_input",
+        "model_prediction": "Likely AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T08:38:57.815423",
+        "session_id": "8df7f4cc-a446-4312-af26-24461aed6ef2",
+        "file_type": "text",
+        "filename": "direct_text_input",
+        "model_prediction": "Needs Manual Review",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T08:53:09.832858",
+        "session_id": "2a163808-18e3-4362-8f3b-fd48cbd25d36",
+        "file_type": "image",
+        "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+        "model_prediction": "\ud83e\udde0 Likely Human",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T08:54:49.261428",
+        "session_id": "76b0d4b1-b596-4f47-8758-1a74cf5d4676",
+        "file_type": "image",
+        "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+        "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T09:06:55.836963",
+        "session_id": "c951cce3-9f37-4879-b992-f6f226619322",
+        "file_type": "image",
+        "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+        "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T09:07:08.419147",
+        "session_id": "aa293df0-d244-483b-b409-74305cefdaa8",
+        "file_type": "image",
+        "filename": "6d8d7a3a-0f90-4e42-ad39-3774d54c27bd.png",
+        "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T09:07:25.195731",
+        "session_id": "d5beb98b-3c50-4835-a0e1-8a23fcef946a",
+        "file_type": "image",
+        "filename": "2025-06-07 21.46.20.jpg",
+        "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T09:19:45.740363",
+        "session_id": "4b9524a9-b05d-42b1-84cd-13f81ac0fc13",
+        "file_type": "image",
+        "filename": "$10 ENTRY.png",
+        "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T09:20:49.222096",
+        "session_id": "e91d8cd9-352d-44ed-8dab-306396c41b72",
+        "file_type": "image",
+        "filename": "brianna-23.jpg",
+        "model_prediction": "\ud83e\udde0 Likely Human",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T09:44:48.898370",
+        "session_id": "deaabb78-18ae-4c53-90ee-db0d4e57b917",
+        "file_type": "image",
+        "filename": "af005353-84e3-4cf5-8ab6-2e1a2ee6fd0a.png",
+        "model_prediction": "\u2705 Almost Certainly Human",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T10:28:43.186830",
+        "session_id": "41cd3d77-e70a-40b3-afc9-328c5f7c55ca",
+        "file_type": "image",
+        "filename": "1000116377.jpg",
+        "model_prediction": "\u2705 Almost Certainly Human",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T10:38:15.292560",
+        "session_id": "c8fc8def-7b01-4a04-9b9f-e863dbe696da",
+        "file_type": "image",
+        "filename": "$10 ENTRY.png",
+        "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T10:38:39.248094",
+        "session_id": "285ca6e6-8c5b-4b12-bccf-6d78954fffe5",
+        "file_type": "image",
+        "filename": "2025-05-28 17.03.52.jpg",
+        "model_prediction": "\u2705 Almost Certainly Human",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T10:47:47.269515",
+        "session_id": "d8bf9f90-f9ef-44fc-b880-bfc55a8b8b7a",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\u2705 Almost Certainly Human",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T11:12:10.240948",
+        "session_id": "b951ece1-60bf-47db-9dc7-6fc3e7b8cb69",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\u2705 Almost Certainly Human",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T11:14:09.480495",
+        "session_id": "1a82e016-3ab5-40eb-98fa-d0bb9f8f1a7d",
+        "file_type": "image",
+        "filename": "6cd8e9c9-a552-497f-b205-ad909d28e08d.png",
+        "model_prediction": "\u2705 Almost Certainly Human",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T12:10:24.016039",
+        "session_id": "72bab9c0-5fc8-4985-a0c8-7d38d27f0247",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\ud83e\udde0 Likely Human",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T12:10:41.910862",
+        "session_id": "a7e8696e-a5e2-45dd-a3a6-05051a4ef257",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03 (1).jpeg",
+        "model_prediction": "\ud83e\udde0 Likely Human",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T12:16:11.265819",
+        "session_id": "931f59b4-2311-4557-b0ba-f6cf6c3a35c7",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T12:16:35.521998",
+        "session_id": "94f7f7aa-9a11-472d-a79d-5a548f1bfdf5",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03 (1).jpeg",
+        "model_prediction": "\ud83e\udde0 Likely Human",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T12:20:46.770607",
+        "session_id": "809ca7e6-6505-46f5-bef2-7297bf57f579",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03 (1).jpeg",
+        "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T12:21:27.200848",
+        "session_id": "a943cfa7-d295-496a-ab1a-604629f8c6af",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T12:38:27.002801",
+        "session_id": "9b4dbbbb-a970-469e-bda5-2117d43c2344",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03 (1).jpeg",
+        "model_prediction": "\ud83e\udde0 Likely Human",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T12:38:50.288520",
+        "session_id": "0ca1327f-6dc0-4a05-94a1-97679e5a42bb",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T13:03:04.791297",
+        "session_id": "f942bc42-c7e8-4c5a-9921-0f61519a2050",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T13:20:52.903785",
+        "session_id": "6f62419a-3dbe-4bff-b43f-fa6143fe523e",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T13:26:31.019939",
+        "session_id": "f9e8d205-f0a0-4f2c-a338-419196739197",
+        "file_type": "image",
+        "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+        "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T13:47:16.840152",
+        "session_id": "b0355f72-c8fe-4b64-b250-14835609dbfe",
+        "file_type": "image",
+        "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+        "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T13:48:17.201900",
+        "session_id": "fdc760b5-fdc8-4105-a82f-5ba4a315fcf0",
+        "file_type": "image",
+        "filename": "2025-06-17 20.48.08.jpg",
+        "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T13:57:21.382894",
+        "session_id": "1d7fbd70-e345-4486-a3ab-d14d38e36859",
+        "file_type": "image",
+        "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+        "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T14:00:23.857296",
+        "session_id": "ade50aa5-0d60-4126-9e38-73fca39ae072",
+        "file_type": "image",
+        "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+        "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T14:01:24.798020",
+        "session_id": "f1cbd148-d9aa-4589-b6df-0f7c705bd6bf",
+        "file_type": "image",
+        "filename": "afrojoeymay-122.jpg",
+        "model_prediction": "\ud83e\udde0 Likely Human",
+        "true_label": "human_created",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T14:01:52.874355",
+        "session_id": "47a95a38-af89-4ae1-9827-c5717cdf073d",
+        "file_type": "image",
+        "filename": "629e0c60-4197-4fb6-a35e-0297b1026647.png",
+        "model_prediction": "\ud83e\udde0 Likely Human",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      },
+      {
+        "timestamp": "2025-07-02T14:02:13.725600",
+        "session_id": "8d27a6e8-f6e4-4cbb-9c2b-1936c21dcfad",
+        "file_type": "image",
+        "filename": "bf92b566-3238-4d2f-8e05-97c7877bbfa7.png",
+        "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+        "true_label": "ai_generated",
+        "feedback_type": "true_label_verification"
+      }
+    ],
+    "last_updated": "2025-07-02T14:06:52.382061"
+  },
+  "pattern_discoveries": {
+    "pattern_analysis/discovered_patterns.json": {
+      "timestamp": "2025-07-02T14:06:52.380109",
+      "data": {
+        "timestamp": "2025-07-02T09:24:52.399670",
+        "patterns": {
+          "filename_analysis": {
+            "ai_indicators": {
+              "chatgpt": 3,
+              "direct": 2,
+              "input": 2,
+              "jul": 2,
+              "jun": 1
+            },
+            "human_indicators": {
+              "entry": 1,
+              "brianna": 1
+            },
+            "total_ai_files": 8,
+            "total_human_files": 3
+          },
+          "confidence_analysis": {
+            "high_confidence": {
+              "total": 6,
+              "correct": 5,
+              "accuracy": 0.8333333333333334,
+              "samples": [
+                {
+                  "filename": "afrocaribbean2_-34.jpg",
+                  "prediction": "likely human-created",
+                  "true_label": "human_created",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                },
+                {
+                  "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+                  "prediction": "likely ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                },
+                {
+                  "filename": "direct_text_input",
+                  "prediction": "likely ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                }
+              ]
+            },
+            "medium_confidence": {
+              "total": 6,
+              "correct": 2,
+              "accuracy": 0.3333333333333333,
+              "samples": [
+                {
+                  "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+                  "prediction": "ai-generated",
+                  "true_label": "",
+                  "is_correct": false,
+                  "estimated_confidence": 0.6
+                },
+                {
+                  "filename": "direct_text_input",
+                  "prediction": "needs manual review",
+                  "true_label": "ai_generated",
+                  "is_correct": false,
+                  "estimated_confidence": 0.5
+                },
+                {
+                  "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+                  "prediction": "\u26a0\ufe0f possibly ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.65
+                }
+              ]
+            },
+            "low_confidence": {
+              "total": 0,
+              "correct": 0,
+              "accuracy": 0,
+              "samples": []
+            }
+          },
+          "misclassification_analysis": {
+            "total_errors": 5,
+            "error_types": {
+              "uncertain_classification": 3,
+              "false_negative": 1,
+              "false_positive": 1
+            },
+            "error_samples": {
+              "uncertain_classification": [
+                {
+                  "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+                  "file_type": "image",
+                  "model_prediction": "ai-generated",
+                  "true_label": "",
+                  "error_type": "uncertain_classification"
+                },
+                {
+                  "filename": "direct_text_input",
+                  "file_type": "text",
+                  "model_prediction": "needs manual review",
+                  "true_label": "ai_generated",
+                  "error_type": "uncertain_classification"
+                },
+                {
+                  "filename": "6d8d7a3a-0f90-4e42-ad39-3774d54c27bd.png",
+                  "file_type": "image",
+                  "model_prediction": "\ud83e\udd14 unsure \u2013 needs a closer look",
+                  "true_label": "ai_generated",
+                  "error_type": "uncertain_classification"
+                }
+              ],
+              "false_negative": [
+                {
+                  "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+                  "file_type": "image",
+                  "model_prediction": "\ud83e\udde0 likely human",
+                  "true_label": "ai_generated",
+                  "error_type": "false_negative"
+                }
+              ],
+              "false_positive": [
+                {
+                  "filename": "$10 ENTRY.png",
+                  "file_type": "image",
+                  "model_prediction": "\u26a0\ufe0f possibly ai-generated",
+                  "true_label": "human_created",
+                  "error_type": "false_positive"
+                }
+              ]
+            },
+            "filename_patterns": {
+              "false_positive_patterns": {
+                "entry": 1
+              },
+              "false_negative_patterns": {
+                "chatgpt": 1,
+                "jul": 1
+              }
+            }
+          },
+          "temporal_analysis": {
+            "2025-07-02": {
+              "total": 12,
+              "correct": 7,
+              "ai_labels": 8,
+              "human_labels": 4,
+              "accuracy": 0.5833333333333334
+            }
+          },
+          "file_type_analysis": {
+            "image": {
+              "total": 10,
+              "correct": 6,
+              "ai_true": 6,
+              "human_true": 4,
+              "accuracy": 0.6
+            },
+            "text": {
+              "total": 2,
+              "correct": 1,
+              "ai_true": 2,
+              "human_true": 0,
+              "accuracy": 0.5
+            }
+          }
+        },
+        "insights": [
+          {
+            "type": "filename_heuristic",
+            "priority": "high",
+            "insight": "Semantic keyword 'chatgpt' appears 3 times in AI-generated files",
+            "action": "Enhance detection for 'chatgpt' pattern in filenames",
+            "confidence_boost": 1.3
+          },
+          {
+            "type": "error_pattern",
+            "priority": "medium",
+            "insight": "Files with semantic keyword 'chatgpt' often misclassified",
+            "action": "Improve detection accuracy for 'chatgpt' pattern"
+          },
+          {
+            "type": "model_performance",
+            "priority": "medium",
+            "insight": "Image detection accuracy is 60.0%",
+            "action": "Consider additional image detection models or fine-tuning"
+          }
+        ],
+        "metadata": {
+          "analysis_version": "1.0",
+          "total_patterns": 3
+        }
+      }
+    },
+    "pattern_analysis/report_20250702_091533.json": {
+      "timestamp": "2025-07-02T14:06:52.380879",
+      "data": {
+        "patterns": {
+          "filename_analysis": {
+            "ai_indicators": {
+              "png": 5,
+              "chatgpt": 3,
+              "image": 3,
+              "direct": 2,
+              "text": 2,
+              "input": 2,
+              "jul": 2,
+              "jun": 1
+            },
+            "human_indicators": {},
+            "total_ai_files": 8,
+            "total_human_files": 1
+          },
+          "confidence_analysis": {
+            "high_confidence": {
+              "total": 5,
+              "correct": 4,
+              "accuracy": 0.8,
+              "samples": [
+                {
+                  "filename": "afrocaribbean2_-34.jpg",
+                  "prediction": "likely human-created",
+                  "true_label": "human_created",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                },
+                {
+                  "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+                  "prediction": "likely ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                },
+                {
+                  "filename": "direct_text_input",
+                  "prediction": "likely ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                }
+              ]
+            },
+            "medium_confidence": {
+              "total": 5,
+              "correct": 2,
+              "accuracy": 0.4,
+              "samples": [
+                {
+                  "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+                  "prediction": "ai-generated",
+                  "true_label": "",
+                  "is_correct": false,
+                  "estimated_confidence": 0.6
+                },
+                {
+                  "filename": "direct_text_input",
+                  "prediction": "needs manual review",
+                  "true_label": "ai_generated",
+                  "is_correct": false,
+                  "estimated_confidence": 0.5
+                },
+                {
+                  "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+                  "prediction": "\u26a0\ufe0f possibly ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.65
+                }
+              ]
+            },
+            "low_confidence": {
+              "total": 0,
+              "correct": 0,
+              "accuracy": 0,
+              "samples": []
+            }
+          },
+          "misclassification_analysis": {
+            "total_errors": 4,
+            "error_types": {
+              "uncertain_classification": 3,
+              "false_negative": 1
+            },
+            "error_samples": {
+              "uncertain_classification": [
+                {
+                  "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+                  "file_type": "image",
+                  "model_prediction": "ai-generated",
+                  "true_label": "",
+                  "error_type": "uncertain_classification"
+                },
+                {
+                  "filename": "direct_text_input",
+                  "file_type": "text",
+                  "model_prediction": "needs manual review",
+                  "true_label": "ai_generated",
+                  "error_type": "uncertain_classification"
+                },
+                {
+                  "filename": "6d8d7a3a-0f90-4e42-ad39-3774d54c27bd.png",
+                  "file_type": "image",
+                  "model_prediction": "\ud83e\udd14 unsure \u2013 needs a closer look",
+                  "true_label": "ai_generated",
+                  "error_type": "uncertain_classification"
+                }
+              ],
+              "false_negative": [
+                {
+                  "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+                  "file_type": "image",
+                  "model_prediction": "\ud83e\udde0 likely human",
+                  "true_label": "ai_generated",
+                  "error_type": "false_negative"
+                }
+              ]
+            },
+            "filename_patterns": {
+              "false_positive_patterns": {},
+              "false_negative_patterns": {
+                "chatgpt": 1,
+                "image": 1,
+                "jul": 1,
+                "png": 1
+              }
+            }
+          },
+          "temporal_analysis": {
+            "2025-07-02": {
+              "total": 10,
+              "correct": 6,
+              "ai_labels": 8,
+              "human_labels": 2,
+              "accuracy": 0.6
+            }
+          },
+          "file_type_analysis": {
+            "image": {
+              "total": 8,
+              "correct": 5,
+              "ai_true": 6,
+              "human_true": 2,
+              "accuracy": 0.625
+            },
+            "text": {
+              "total": 2,
+              "correct": 1,
+              "ai_true": 2,
+              "human_true": 0,
+              "accuracy": 0.5
+            }
+          }
+        },
+        "insights": [
+          {
+            "type": "filename_heuristic",
+            "priority": "high",
+            "insight": "Keyword 'png' appears 5 times in AI-generated files",
+            "action": "Add 'png' to AI keyword detection list",
+            "confidence_boost": 1.5
+          },
+          {
+            "type": "error_pattern",
+            "priority": "medium",
+            "insight": "Files with 'chatgpt' often misclassified as false_negative_patterns",
+            "action": "Create specific rule for 'chatgpt' pattern"
+          }
+        ],
+        "total_samples": 10
+      }
+    },
+    "pattern_analysis/report_20250702_092452.json": {
+      "timestamp": "2025-07-02T14:06:52.381448",
+      "data": {
+        "patterns": {
+          "filename_analysis": {
+            "ai_indicators": {
+              "chatgpt": 3,
+              "direct": 2,
+              "input": 2,
+              "jul": 2,
+              "jun": 1
+            },
+            "human_indicators": {
+              "entry": 1,
+              "brianna": 1
+            },
+            "total_ai_files": 8,
+            "total_human_files": 3
+          },
+          "confidence_analysis": {
+            "high_confidence": {
+              "total": 6,
+              "correct": 5,
+              "accuracy": 0.8333333333333334,
+              "samples": [
+                {
+                  "filename": "afrocaribbean2_-34.jpg",
+                  "prediction": "likely human-created",
+                  "true_label": "human_created",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                },
+                {
+                  "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+                  "prediction": "likely ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                },
+                {
+                  "filename": "direct_text_input",
+                  "prediction": "likely ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.85
+                }
+              ]
+            },
+            "medium_confidence": {
+              "total": 6,
+              "correct": 2,
+              "accuracy": 0.3333333333333333,
+              "samples": [
+                {
+                  "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+                  "prediction": "ai-generated",
+                  "true_label": "",
+                  "is_correct": false,
+                  "estimated_confidence": 0.6
+                },
+                {
+                  "filename": "direct_text_input",
+                  "prediction": "needs manual review",
+                  "true_label": "ai_generated",
+                  "is_correct": false,
+                  "estimated_confidence": 0.5
+                },
+                {
+                  "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+                  "prediction": "\u26a0\ufe0f possibly ai-generated",
+                  "true_label": "ai_generated",
+                  "is_correct": true,
+                  "estimated_confidence": 0.65
+                }
+              ]
+            },
+            "low_confidence": {
+              "total": 0,
+              "correct": 0,
+              "accuracy": 0,
+              "samples": []
+            }
+          },
+          "misclassification_analysis": {
+            "total_errors": 5,
+            "error_types": {
+              "uncertain_classification": 3,
+              "false_negative": 1,
+              "false_positive": 1
+            },
+            "error_samples": {
+              "uncertain_classification": [
+                {
+                  "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+                  "file_type": "image",
+                  "model_prediction": "ai-generated",
+                  "true_label": "",
+                  "error_type": "uncertain_classification"
+                },
+                {
+                  "filename": "direct_text_input",
+                  "file_type": "text",
+                  "model_prediction": "needs manual review",
+                  "true_label": "ai_generated",
+                  "error_type": "uncertain_classification"
+                },
+                {
+                  "filename": "6d8d7a3a-0f90-4e42-ad39-3774d54c27bd.png",
+                  "file_type": "image",
+                  "model_prediction": "\ud83e\udd14 unsure \u2013 needs a closer look",
+                  "true_label": "ai_generated",
+                  "error_type": "uncertain_classification"
+                }
+              ],
+              "false_negative": [
+                {
+                  "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+                  "file_type": "image",
+                  "model_prediction": "\ud83e\udde0 likely human",
+                  "true_label": "ai_generated",
+                  "error_type": "false_negative"
+                }
+              ],
+              "false_positive": [
+                {
+                  "filename": "$10 ENTRY.png",
+                  "file_type": "image",
+                  "model_prediction": "\u26a0\ufe0f possibly ai-generated",
+                  "true_label": "human_created",
+                  "error_type": "false_positive"
+                }
+              ]
+            },
+            "filename_patterns": {
+              "false_positive_patterns": {
+                "entry": 1
+              },
+              "false_negative_patterns": {
+                "chatgpt": 1,
+                "jul": 1
+              }
+            }
+          },
+          "temporal_analysis": {
+            "2025-07-02": {
+              "total": 12,
+              "correct": 7,
+              "ai_labels": 8,
+              "human_labels": 4,
+              "accuracy": 0.5833333333333334
+            }
+          },
+          "file_type_analysis": {
+            "image": {
+              "total": 10,
+              "correct": 6,
+              "ai_true": 6,
+              "human_true": 4,
+              "accuracy": 0.6
+            },
+            "text": {
+              "total": 2,
+              "correct": 1,
+              "ai_true": 2,
+              "human_true": 0,
+              "accuracy": 0.5
+            }
+          }
+        },
+        "insights": [
+          {
+            "type": "filename_heuristic",
+            "priority": "high",
+            "insight": "Semantic keyword 'chatgpt' appears 3 times in AI-generated files",
+            "action": "Enhance detection for 'chatgpt' pattern in filenames",
+            "confidence_boost": 1.3
+          },
+          {
+            "type": "error_pattern",
+            "priority": "medium",
+            "insight": "Files with semantic keyword 'chatgpt' often misclassified",
+            "action": "Improve detection accuracy for 'chatgpt' pattern"
+          },
+          {
+            "type": "model_performance",
+            "priority": "medium",
+            "insight": "Image detection accuracy is 60.0%",
+            "action": "Consider additional image detection models or fine-tuning"
+          }
+        ],
+        "total_samples": 12
+      }
+    }
+  },
+  "weight_adjustments": [
+    {
+      "timestamp": "2025-07-02T14:06:52.379492",
+      "source_file": "last_weight_update.json",
+      "data": {
+        "timestamp": "2025-07-02T12:44:10.473991",
+        "performance": {
+          "total_samples": 27,
+          "correct": 18,
+          "accuracy": 0.6666666666666666,
+          "false_positives": 2,
+          "false_negatives": 2,
+          "false_positive_rate": 0.07407407407407407,
+          "false_negative_rate": 0.07407407407407407
+        },
+        "adjustments": {}
+      }
+    }
+  ],
+  "tuning_history": []
+}

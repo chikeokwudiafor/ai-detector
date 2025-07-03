@@ -1,0 +1,443 @@
+[
+  {
+    "timestamp": "2025-07-02T08:27:17.911232",
+    "session_id": "938fcf02-57b6-4bda-ab8e-45ae95013b96",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+    "model_prediction": "AI-Generated",
+    "user_feedback": "accurate",
+    "feedback_type": "accuracy_rating"
+  },
+  {
+    "timestamp": "2025-07-02T08:35:39.353624",
+    "session_id": "d363446e-0b5c-42b9-a9b9-d88baf88cef2",
+    "file_type": "image",
+    "filename": "afrocaribbean2_-34.jpg",
+    "model_prediction": "Likely Human-Created",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T08:36:08.942898",
+    "session_id": "ea34890b-8da5-4bfa-afcd-b1cca40e325b",
+    "file_type": "image",
+    "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+    "model_prediction": "Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T08:37:14.118053",
+    "session_id": "9cb2d7b1-0f3d-499d-9e0e-5bde58d6e6d0",
+    "file_type": "text",
+    "filename": "direct_text_input",
+    "model_prediction": "Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T08:38:57.815423",
+    "session_id": "8df7f4cc-a446-4312-af26-24461aed6ef2",
+    "file_type": "text",
+    "filename": "direct_text_input",
+    "model_prediction": "Needs Manual Review",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T08:53:09.832858",
+    "session_id": "2a163808-18e3-4362-8f3b-fd48cbd25d36",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T08:54:49.261428",
+    "session_id": "76b0d4b1-b596-4f47-8758-1a74cf5d4676",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:06:55.836963",
+    "session_id": "c951cce3-9f37-4879-b992-f6f226619322",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:07:08.419147",
+    "session_id": "aa293df0-d244-483b-b409-74305cefdaa8",
+    "file_type": "image",
+    "filename": "6d8d7a3a-0f90-4e42-ad39-3774d54c27bd.png",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:07:25.195731",
+    "session_id": "d5beb98b-3c50-4835-a0e1-8a23fcef946a",
+    "file_type": "image",
+    "filename": "2025-06-07 21.46.20.jpg",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:19:45.740363",
+    "session_id": "4b9524a9-b05d-42b1-84cd-13f81ac0fc13",
+    "file_type": "image",
+    "filename": "$10 ENTRY.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:20:49.222096",
+    "session_id": "e91d8cd9-352d-44ed-8dab-306396c41b72",
+    "file_type": "image",
+    "filename": "brianna-23.jpg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T09:44:48.898370",
+    "session_id": "deaabb78-18ae-4c53-90ee-db0d4e57b917",
+    "file_type": "image",
+    "filename": "af005353-84e3-4cf5-8ab6-2e1a2ee6fd0a.png",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T10:28:43.186830",
+    "session_id": "41cd3d77-e70a-40b3-afc9-328c5f7c55ca",
+    "file_type": "image",
+    "filename": "1000116377.jpg",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T10:38:15.292560",
+    "session_id": "c8fc8def-7b01-4a04-9b9f-e863dbe696da",
+    "file_type": "image",
+    "filename": "$10 ENTRY.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T10:38:39.248094",
+    "session_id": "285ca6e6-8c5b-4b12-bccf-6d78954fffe5",
+    "file_type": "image",
+    "filename": "2025-05-28 17.03.52.jpg",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T10:47:47.269515",
+    "session_id": "d8bf9f90-f9ef-44fc-b880-bfc55a8b8b7a",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T11:12:10.240948",
+    "session_id": "b951ece1-60bf-47db-9dc7-6fc3e7b8cb69",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T11:14:09.480495",
+    "session_id": "1a82e016-3ab5-40eb-98fa-d0bb9f8f1a7d",
+    "file_type": "image",
+    "filename": "6cd8e9c9-a552-497f-b205-ad909d28e08d.png",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T12:10:24.016039",
+    "session_id": "72bab9c0-5fc8-4985-a0c8-7d38d27f0247",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T12:10:41.910862",
+    "session_id": "a7e8696e-a5e2-45dd-a3a6-05051a4ef257",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03 (1).jpeg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T12:16:11.265819",
+    "session_id": "931f59b4-2311-4557-b0ba-f6cf6c3a35c7",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T12:16:35.521998",
+    "session_id": "94f7f7aa-9a11-472d-a79d-5a548f1bfdf5",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03 (1).jpeg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T12:20:46.770607",
+    "session_id": "809ca7e6-6505-46f5-bef2-7297bf57f579",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03 (1).jpeg",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T12:21:27.200848",
+    "session_id": "a943cfa7-d295-496a-ab1a-604629f8c6af",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T12:38:27.002801",
+    "session_id": "9b4dbbbb-a970-469e-bda5-2117d43c2344",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03 (1).jpeg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T12:38:50.288520",
+    "session_id": "0ca1327f-6dc0-4a05-94a1-97679e5a42bb",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:03:04.791297",
+    "session_id": "f942bc42-c7e8-4c5a-9921-0f61519a2050",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:20:52.903785",
+    "session_id": "6f62419a-3dbe-4bff-b43f-fa6143fe523e",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:26:31.019939",
+    "session_id": "f9e8d205-f0a0-4f2c-a338-419196739197",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:47:16.840152",
+    "session_id": "b0355f72-c8fe-4b64-b250-14835609dbfe",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:48:17.201900",
+    "session_id": "fdc760b5-fdc8-4105-a82f-5ba4a315fcf0",
+    "file_type": "image",
+    "filename": "2025-06-17 20.48.08.jpg",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T13:57:21.382894",
+    "session_id": "1d7fbd70-e345-4486-a3ab-d14d38e36859",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\ud83e\udd14 Unsure \u2013 Needs a Closer Look",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:00:23.857296",
+    "session_id": "ade50aa5-0d60-4126-9e38-73fca39ae072",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jun 28, 2025, 06_59_24 PM.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:01:24.798020",
+    "session_id": "f1cbd148-d9aa-4589-b6df-0f7c705bd6bf",
+    "file_type": "image",
+    "filename": "afrojoeymay-122.jpg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:01:52.874355",
+    "session_id": "47a95a38-af89-4ae1-9827-c5717cdf073d",
+    "file_type": "image",
+    "filename": "629e0c60-4197-4fb6-a35e-0297b1026647.png",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:02:13.725600",
+    "session_id": "8d27a6e8-f6e4-4cbb-9c2b-1936c21dcfad",
+    "file_type": "image",
+    "filename": "bf92b566-3238-4d2f-8e05-97c7877bbfa7.png",
+    "model_prediction": "\u26a0\ufe0f Possibly AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:21:33.831529",
+    "session_id": "32e1df8e-0591-45a6-96c0-18518b6ca60b",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:21:56.968963",
+    "session_id": "156fd3ba-d525-4a71-913e-a5bc3e22e0c8",
+    "file_type": "image",
+    "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:26:04.992241",
+    "session_id": "f5f3cbf3-075e-469c-8e6c-1d74445a59c1",
+    "file_type": "image",
+    "filename": "68587a80-c024-4cfd-b572-7f9dfadf66df.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T14:39:09.283457",
+    "session_id": "48fa46df-6961-487e-bbc2-29ae7d1b9618",
+    "file_type": "image",
+    "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T22:31:01.253703",
+    "session_id": "67f27481-797a-4985-a276-314ee8ec8309",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T22:31:53.461302",
+    "session_id": "31fbcab2-7002-4c89-b015-46d26398c706",
+    "file_type": "image",
+    "filename": "IMG_2839.png",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T22:46:11.941492",
+    "session_id": "18a823a0-625d-4488-96fc-cafa3fa3bee2",
+    "file_type": "image",
+    "filename": "IMG_2941.png",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-02T22:46:46.528037",
+    "session_id": "34b235bd-f748-4a66-bb54-f30ac7eef4d7",
+    "file_type": "image",
+    "filename": "IMG_8154.jpeg",
+    "model_prediction": "\ud83e\udde0 Likely Human",
+    "true_label": "human_created",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-03T01:00:23.060037",
+    "session_id": "ff7109e9-f0ed-4e70-9e95-c86e45de05b9",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-03T01:24:24.706118",
+    "session_id": "575c7f93-9591-4552-b77a-0b7a34fb283e",
+    "file_type": "text",
+    "filename": "direct_text_input",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-03T02:32:35.981680",
+    "session_id": "c4d27243-0554-4d11-90d8-d68540aad26b",
+    "file_type": "image",
+    "filename": "WhatsApp Image 2025-07-02 at 06.31.03.jpeg",
+    "model_prediction": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-03T02:32:52.487157",
+    "session_id": "f77fc1e6-3612-4661-a727-ae389f878f6f",
+    "file_type": "text",
+    "filename": "direct_text_input",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
+  }
+]

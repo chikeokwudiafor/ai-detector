@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License – AIthentic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-blue: #1e40af;
+            --primary-blue-light: #3b82f6;
+            --secondary-gray: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --danger-red: #ef4444;
+            --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-brand::before {
+            content: "🔍";
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .nav-links a.active {
+            color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .license-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid var(--border-light);
+        }
+        
+        .license-section h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .license-section p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border: 1px solid #fca5a5;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .warning-box h3 {
+            color: var(--danger-red);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .warning-box h3::before {
+            content: "⚠️";
+            font-size: 1.5rem;
+        }
+        
+        .warning-box p {
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+        
+        .warning-box ul {
+            color: #dc2626;
+            margin-left: 1.5rem;
+        }
+        
+        .warning-box li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-info {
+            background: var(--secondary-gray);
+            border: 1px solid var(--border-light);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .contact-info h3 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-info p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.875rem;
+        }
+        
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow-medium);
+                border-top: 1px solid var(--border-light);
+                gap: 0;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                padding: 6rem 1rem 2rem;
+            }
+            
+            .license-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .warning-box {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">AIthentic</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/roadmap">Roadmap</a></li>
+                <li><a href="/license" class="active">License</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">License & Terms</h1>
+            <p class="page-subtitle">
+                Important legal information regarding the use of AIthentic and its detection services.
+            </p>
+        </div>
+
+        <div class="license-section">
+            <h2>Software License</h2>
+            <p>
+                This project is protected under <strong>All Rights Reserved</strong>. Unauthorized use or duplication is prohibited.
+            </p>
+            <p>
+                The AIthentic platform, including but not limited to its source code, algorithms, user interface, 
+                documentation, and associated intellectual property, is the exclusive property of the project owners 
+                and contributors.
+            </p>
+        </div>
+
+        <div class="warning-box">
+            <h3>Prohibited Activities</h3>
+            <p>The following activities are strictly prohibited without explicit written permission:</p>
+            <ul>
+                <li>Copying, modifying, or distributing the source code</li>
+                <li>Reverse engineering the detection algorithms</li>
+                <li>Creating derivative works based on this software</li>
+                <li>Commercial use or resale of the detection services</li>
+                <li>Unauthorized access to the underlying AI models</li>
+                <li>Bypassing or circumventing usage limitations</li>
+            </ul>
+        </div>
+
+        <div class="license-section">
+            <h2>Service Usage Terms</h2>
+            <p>
+                By using AIthentic, you agree to use the service for legitimate content verification purposes only. 
+                The detection results are provided "as-is" without warranties of any kind.
+            </p>
+            <p>
+                Users are responsible for ensuring their uploaded content complies with applicable laws and 
+                does not infringe on third-party rights. AIthentic reserves the right to refuse service 
+                to any user or terminate access at any time.
+            </p>
+        </div>
+
+        <div class="license-section">
+            <h2>Liability Disclaimer</h2>
+            <p>
+                AIthentic detection results are for informational purposes only and should not be considered 
+                as definitive proof of content authenticity. Users should exercise their own judgment and 
+                consider additional verification methods when making important decisions based on detection results.
+            </p>
+            <p>
+                The service owners shall not be liable for any damages arising from the use or inability to use 
+                the detection service, including but not limited to direct, indirect, incidental, or consequential damages.
+            </p>
+        </div>
+
+        <div class="contact-info">
+            <h3>License Inquiries</h3>
+            <p>
+                For licensing requests, commercial usage permissions, or legal inquiries, 
+                please contact the project maintainers through the official repository channels.
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 AIthentic. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

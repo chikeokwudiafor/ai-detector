@@ -1,0 +1,190 @@
+{
+  "patterns": {
+    "filename_analysis": {
+      "ai_indicators": {
+        "chatgpt": 3,
+        "direct": 2,
+        "input": 2,
+        "jul": 2,
+        "jun": 1
+      },
+      "human_indicators": {
+        "entry": 1,
+        "brianna": 1
+      },
+      "total_ai_files": 8,
+      "total_human_files": 3
+    },
+    "confidence_analysis": {
+      "high_confidence": {
+        "total": 6,
+        "correct": 5,
+        "accuracy": 0.8333333333333334,
+        "samples": [
+          {
+            "filename": "afrocaribbean2_-34.jpg",
+            "prediction": "likely human-created",
+            "true_label": "human_created",
+            "is_correct": true,
+            "estimated_confidence": 0.85
+          },
+          {
+            "filename": "404fc3c1-a91c-4156-b8dc-163cd2f02c18.png",
+            "prediction": "likely ai-generated",
+            "true_label": "ai_generated",
+            "is_correct": true,
+            "estimated_confidence": 0.85
+          },
+          {
+            "filename": "direct_text_input",
+            "prediction": "likely ai-generated",
+            "true_label": "ai_generated",
+            "is_correct": true,
+            "estimated_confidence": 0.85
+          }
+        ]
+      },
+      "medium_confidence": {
+        "total": 6,
+        "correct": 2,
+        "accuracy": 0.3333333333333333,
+        "samples": [
+          {
+            "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+            "prediction": "ai-generated",
+            "true_label": "",
+            "is_correct": false,
+            "estimated_confidence": 0.6
+          },
+          {
+            "filename": "direct_text_input",
+            "prediction": "needs manual review",
+            "true_label": "ai_generated",
+            "is_correct": false,
+            "estimated_confidence": 0.5
+          },
+          {
+            "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+            "prediction": "\u26a0\ufe0f possibly ai-generated",
+            "true_label": "ai_generated",
+            "is_correct": true,
+            "estimated_confidence": 0.65
+          }
+        ]
+      },
+      "low_confidence": {
+        "total": 0,
+        "correct": 0,
+        "accuracy": 0,
+        "samples": []
+      }
+    },
+    "misclassification_analysis": {
+      "total_errors": 5,
+      "error_types": {
+        "uncertain_classification": 3,
+        "false_negative": 1,
+        "false_positive": 1
+      },
+      "error_samples": {
+        "uncertain_classification": [
+          {
+            "filename": "WhatsApp Image 2025-04-12 at 13.10.58.jpeg",
+            "file_type": "image",
+            "model_prediction": "ai-generated",
+            "true_label": "",
+            "error_type": "uncertain_classification"
+          },
+          {
+            "filename": "direct_text_input",
+            "file_type": "text",
+            "model_prediction": "needs manual review",
+            "true_label": "ai_generated",
+            "error_type": "uncertain_classification"
+          },
+          {
+            "filename": "6d8d7a3a-0f90-4e42-ad39-3774d54c27bd.png",
+            "file_type": "image",
+            "model_prediction": "\ud83e\udd14 unsure \u2013 needs a closer look",
+            "true_label": "ai_generated",
+            "error_type": "uncertain_classification"
+          }
+        ],
+        "false_negative": [
+          {
+            "filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png",
+            "file_type": "image",
+            "model_prediction": "\ud83e\udde0 likely human",
+            "true_label": "ai_generated",
+            "error_type": "false_negative"
+          }
+        ],
+        "false_positive": [
+          {
+            "filename": "$10 ENTRY.png",
+            "file_type": "image",
+            "model_prediction": "\u26a0\ufe0f possibly ai-generated",
+            "true_label": "human_created",
+            "error_type": "false_positive"
+          }
+        ]
+      },
+      "filename_patterns": {
+        "false_positive_patterns": {
+          "entry": 1
+        },
+        "false_negative_patterns": {
+          "chatgpt": 1,
+          "jul": 1
+        }
+      }
+    },
+    "temporal_analysis": {
+      "2025-07-02": {
+        "total": 12,
+        "correct": 7,
+        "ai_labels": 8,
+        "human_labels": 4,
+        "accuracy": 0.5833333333333334
+      }
+    },
+    "file_type_analysis": {
+      "image": {
+        "total": 10,
+        "correct": 6,
+        "ai_true": 6,
+        "human_true": 4,
+        "accuracy": 0.6
+      },
+      "text": {
+        "total": 2,
+        "correct": 1,
+        "ai_true": 2,
+        "human_true": 0,
+        "accuracy": 0.5
+      }
+    }
+  },
+  "insights": [
+    {
+      "type": "filename_heuristic",
+      "priority": "high",
+      "insight": "Semantic keyword 'chatgpt' appears 3 times in AI-generated files",
+      "action": "Enhance detection for 'chatgpt' pattern in filenames",
+      "confidence_boost": 1.3
+    },
+    {
+      "type": "error_pattern",
+      "priority": "medium",
+      "insight": "Files with semantic keyword 'chatgpt' often misclassified",
+      "action": "Improve detection accuracy for 'chatgpt' pattern"
+    },
+    {
+      "type": "model_performance",
+      "priority": "medium",
+      "insight": "Image detection accuracy is 60.0%",
+      "action": "Consider additional image detection models or fine-tuning"
+    }
+  ],
+  "total_samples": 12
+}
