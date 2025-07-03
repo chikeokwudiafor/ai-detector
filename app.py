@@ -320,35 +320,16 @@ if __name__ == "__main__":
         init_database()
         print("✅ Database initialized")
         
-        # Replit deployments use PORT environment variable (80 in production, 5000 in dev)
+        # Get port from environment or default to 5000
         port = int(os.environ.get('PORT', 5000))
         
         print(f"🚀 Starting Flask app on 0.0.0.0:{port}")
         print(f"📊 Environment: {'DEPLOYMENT' if os.environ.get('REPL_DEPLOYMENT') else 'DEVELOPMENT'}")
-        print(f"🔍 Python path: {os.sys.path}")
-        print(f"🔍 Working directory: {os.getcwd()}")
         
         app.logger.info(f"Starting Flask app on host 0.0.0.0 port {port}...")
         
-        # Always use the exact PORT in deployment, allow retries in development
-        if os.environ.get('REPL_DEPLOYMENT'):
-            # In deployment: use exact port, no retries
-            print(f"🚀 DEPLOYMENT MODE: Starting on port {port}")
-            app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
-        else:
-            # In development: allow port conflict resolution
-            print(f"🔧 DEVELOPMENT MODE: Starting on port {port} with fallbacks")
-            max_retries = 5
-            for attempt in range(max_retries):
-                try:
-                    app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
-                    break
-                except OSError as e:
-                    if "Address already in use" in str(e) and attempt < max_retries - 1:
-                        print(f"⚠️  Port {port} in use, trying {port + 1}")
-                        port += 1
-                    else:
-                        raise
+        # Start Flask app - always bind to 0.0.0.0 for external access
+        app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
         
     except ImportError as e:
         print(f"❌ Import Error: {e}")
