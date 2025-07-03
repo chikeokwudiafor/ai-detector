@@ -320,7 +320,7 @@ if __name__ == "__main__":
         init_database()
         print("✅ Database initialized")
         
-        # Replit deployments use PORT environment variable
+        # Replit deployments use PORT environment variable (80 in production, 5000 in dev)
         port = int(os.environ.get('PORT', 5000))
         
         print(f"🚀 Starting Flask app on 0.0.0.0:{port}")
@@ -330,18 +330,22 @@ if __name__ == "__main__":
         
         app.logger.info(f"Starting Flask app on host 0.0.0.0 port {port}...")
         
-        # Try to start the Flask app with automatic port conflict resolution
-        max_retries = 5
-        for attempt in range(max_retries):
-            try:
-                app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
-                break
-            except OSError as e:
-                if "Address already in use" in str(e) and attempt < max_retries - 1:
-                    print(f"⚠️  Port {port} in use, trying {port + 1}")
-                    port += 1
-                else:
-                    raise
+        # In deployment, use the exact PORT - no retries, no port changes
+        if os.environ.get('REPL_DEPLOYMENT'):
+            app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
+        else:
+            # In development, allow port conflict resolution
+            max_retries = 5
+            for attempt in range(max_retries):
+                try:
+                    app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
+                    break
+                except OSError as e:
+                    if "Address already in use" in str(e) and attempt < max_retries - 1:
+                        print(f"⚠️  Port {port} in use, trying {port + 1}")
+                        port += 1
+                    else:
+                        raise
         
     except ImportError as e:
         print(f"❌ Import Error: {e}")
