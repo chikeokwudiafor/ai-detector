@@ -614,9 +614,9 @@
             font-family: 'Inter', system-ui, sans-serif;
             font-size: 1rem;
             line-height: 1.6;
-            color: #f0f0f0;
+            color: white;
             background: #1a1a2e;
-            caret-color: #f0f0f0;
+            caret-color: white;
             resize: vertical;
             transition: all 0.3s ease;
             box-shadow: var(--shadow-soft);
@@ -1390,7 +1390,10 @@
 
         /* Use Cases Section */
         .use-cases-section {
-            margin-top: 4rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             padding: 3rem 8rem;
             background: rgba(15, 15, 35, 0.3);
             position: relative;
