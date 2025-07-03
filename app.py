@@ -25,10 +25,6 @@ def ensure_models_loaded():
     if not _models_loaded:
         print("🚀 Loading AI detection modules...")
         try:
-            # Initialize database first
-            init_database()
-            print("✅ Database initialized")
-
             # Import detection modules (models load lazily)
             from detection import AIDetector as _AIDetector, get_result_classification as _get_result_classification
             AIDetector = _AIDetector
@@ -41,37 +37,19 @@ def ensure_models_loaded():
             raise e
 
 def track_user_activity(event_type, data=None):
-    """Track user activities for analytics"""
+    """Track user activities for analytics (simplified)"""
     try:
-        # Skip tracking for development/admin IP
-        if request.remote_addr == "172.31.128.93":
-            return
-
-        # Log to database
-        log_analytics_db(
-            event_type=event_type,
-            ip_address=request.remote_addr,
-            user_agent=request.headers.get('User-Agent', ''),
-            referrer=request.headers.get('Referer', ''),
-            data=data
-        )
-
-        # Also log to file as backup
-        analytics_data = {
-            'timestamp': datetime.now().isoformat(),
-            'event_type': event_type,
-            'ip_address': request.remote_addr,
-            'user_agent': request.headers.get('User-Agent', ''),
-            'referrer': request.headers.get('Referer', ''),
-            'data': data or {}
-        }
-
-        os.makedirs('analytics', exist_ok=True)
-        with open('analytics/user_activity.json', 'a') as f:
-            f.write(json.dumps(analytics_data) + '\n')
-
-    except Exception as e:
-        app.logger.error(f"Analytics tracking error: {str(e)}")
+        # Only track important events
+        if event_type == 'analysis_completed':
+            log_analytics_db(
+                event_type=event_type,
+                ip_address=request.remote_addr,
+                user_agent=request.headers.get('User-Agent', ''),
+                referrer=request.headers.get('Referer', ''),
+                data=data
+            )
+    except Exception:
+        pass  # Ignore analytics errors
 
 def validate_file(file):
     """
@@ -164,9 +142,7 @@ def index():
     result_description = None
     session_id = None
 
-    # Track page visits
-    if request.method == "GET":
-        track_user_activity('page_visit', {'page': 'home'})
+    # Skip page visit tracking for performance
 
     if request.method == "POST":
         # Ensure models are loaded before processing

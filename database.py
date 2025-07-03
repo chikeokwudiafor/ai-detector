@@ -1,184 +1,145 @@
-import sqlite3
 import json
-from datetime import datetime, timedelta
 import os
+from datetime import datetime
 from contextlib import contextmanager
-import threading
 
-DB_PATH = 'aithentic.db'
+# Simple file-based storage paths
+ANALYTICS_FILE = 'analytics/simple_analytics.json'
+FEEDBACK_FILE = 'feedback_data/user_feedback.json'
+CACHE_FILE = 'cache/analysis_cache.json'
 
-# Simple connection with WAL mode for better concurrent performance
-_db_connection = None
-_db_lock = threading.Lock()
-
-def _get_connection():
-    """Get optimized SQLite connection"""
-    global _db_connection
-    if _db_connection is None:
-        with _db_lock:
-            if _db_connection is None:
-                _db_connection = sqlite3.connect(DB_PATH, check_same_thread=False)
-                _db_connection.row_factory = sqlite3.Row
-                # Enable WAL mode for better concurrent performance
-                _db_connection.execute("PRAGMA journal_mode=WAL")
-                _db_connection.execute("PRAGMA synchronous=NORMAL")
-                _db_connection.execute("PRAGMA cache_size=10000")
-                _db_connection.execute("PRAGMA temp_store=memory")
-    return _db_connection
+def ensure_directories():
+    """Ensure required directories exist"""
+    for directory in ['analytics', 'feedback_data', 'cache']:
+        os.makedirs(directory, exist_ok=True)
 
 @contextmanager
 def get_db_connection():
-    """Context manager for database connections"""
-    conn = _get_connection()
-    try:
-        yield conn
-    finally:
-        # Connection stays open for reuse
-        pass
+    """Dummy context manager for compatibility"""
+    yield None
 
 def init_database():
-    """Initialize database tables"""
-    with get_db_connection() as conn:
-        # Analytics table
-        conn.execute('''
-            CREATE TABLE IF NOT EXISTS analytics (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT NOT NULL,
-                event_type TEXT NOT NULL,
-                ip_address TEXT,
-                user_agent TEXT,
-                referrer TEXT,
-                data TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
+    """Initialize file-based storage"""
+    ensure_directories()
 
-        # Feedback table
-        conn.execute('''
-            CREATE TABLE IF NOT EXISTS feedback (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_id TEXT NOT NULL,
-                file_type TEXT NOT NULL,
-                filename TEXT NOT NULL,
-                model_result TEXT NOT NULL,
-                true_label TEXT NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
+    # Initialize analytics file
+    if not os.path.exists(ANALYTICS_FILE):
+        with open(ANALYTICS_FILE, 'w') as f:
+            json.dump([], f)
 
-        # Analysis results cache
-        conn.execute('''
-            CREATE TABLE IF NOT EXISTS analysis_cache (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                file_hash TEXT UNIQUE NOT NULL,
-                file_type TEXT NOT NULL,
-                result_type TEXT NOT NULL,
-                confidence REAL NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-
-        # Add index for file_hash on analysis_cache table
-        conn.execute('''
-            CREATE INDEX IF NOT EXISTS idx_file_hash ON analysis_cache (file_hash)
-        ''')
-
-        # Optimize database
-        conn.execute("VACUUM")
-
-        conn.commit()
+    # Initialize cache file
+    if not os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, 'w') as f:
+            json.dump({}, f)
 
 def log_analytics_db(event_type, ip_address, user_agent, referrer, data):
-    """Log analytics to database"""
+    """Log analytics to file (simplified)"""
     try:
-        with get_db_connection() as conn:
-            conn.execute('''
-                INSERT INTO analytics (timestamp, event_type, ip_address, user_agent, referrer, data)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (
-                datetime.now().isoformat(),
-                event_type,
-                ip_address,
-                user_agent,
-                referrer,
-                json.dumps(data) if data else None
-            ))
-            conn.commit()
-    except Exception as e:
-        print(f"Analytics DB error: {e}")
+        # Skip detailed analytics for performance
+        if event_type == 'page_visit':
+            return  # Skip page visits entirely
+
+        analytics_data = {
+            'timestamp': datetime.now().isoformat(),
+            'event_type': event_type,
+            'data': data or {}
+        }
+
+        # Simple append to file
+        with open(ANALYTICS_FILE, 'a') as f:
+            f.write(json.dumps(analytics_data) + '\n')
+    except Exception:
+        pass  # Ignore analytics errors
 
 def save_feedback_db(session_id, file_type, filename, model_result, true_label):
-    """Save feedback to database"""
+    """Save feedback to file"""
     try:
-        with get_db_connection() as conn:
-            conn.execute('''
-                INSERT INTO feedback (session_id, file_type, filename, model_result, true_label)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (session_id, file_type, filename, model_result, true_label))
-            conn.commit()
-            return True
-    except Exception as e:
-        print(f"Feedback DB error: {e}")
+        feedback_data = {
+            'session_id': session_id,
+            'file_type': file_type,
+            'filename': filename,
+            'model_result': model_result,
+            'true_label': true_label,
+            'timestamp': datetime.now().isoformat()
+        }
+
+        # Load existing feedback
+        if os.path.exists(FEEDBACK_FILE):
+            with open(FEEDBACK_FILE, 'r') as f:
+                existing_feedback = json.load(f)
+        else:
+            existing_feedback = []
+
+        existing_feedback.append(feedback_data)
+
+        # Save back to file
+        with open(FEEDBACK_FILE, 'w') as f:
+            json.dump(existing_feedback, f, indent=2)
+
+        return True
+    except Exception:
         return False
 
 def get_analytics_summary():
-    """Get analytics summary from database"""
+    """Get simple analytics summary"""
     try:
-        with get_db_connection() as conn:
-            # Total visits
-            visits = conn.execute(
-                "SELECT COUNT(*) as count FROM analytics WHERE event_type = 'page_visit'"
-            ).fetchone()['count']
+        total_analyses = 0
+        if os.path.exists(ANALYTICS_FILE):
+            with open(ANALYTICS_FILE, 'r') as f:
+                for line in f:
+                    if line.strip():
+                        total_analyses += 1
 
-            # Total analyses
-            analyses = conn.execute(
-                "SELECT COUNT(*) as count FROM analytics WHERE event_type = 'analysis_completed'"
-            ).fetchone()['count']
-
-            # Recent activity
-            recent = conn.execute('''
-                SELECT * FROM analytics 
-                ORDER BY created_at DESC 
-                LIMIT 10
-            ''').fetchall()
-
-            return {
-                'total_page_visits': visits,
-                'total_analyses': analyses,
-                'recent_activity': [dict(row) for row in recent]
-            }
-    except Exception as e:
-        print(f"Analytics summary error: {e}")
+        return {
+            'total_page_visits': 0,
+            'total_analyses': total_analyses,
+            'recent_activity': []
+        }
+    except Exception:
         return {'total_page_visits': 0, 'total_analyses': 0, 'recent_activity': []}
 
 def cache_analysis_result(file_hash, file_type, result_type, confidence):
-    """Cache analysis result for performance"""
+    """Cache analysis result"""
     try:
-        with get_db_connection() as conn:
-            conn.execute('''
-                INSERT OR REPLACE INTO analysis_cache (file_hash, file_type, result_type, confidence)
-                VALUES (?, ?, ?, ?)
-            ''', (file_hash, file_type, result_type, confidence))
-            conn.commit()
-    except Exception as e:
-        print(f"Cache error: {e}")
+        cache_data = {}
+        if os.path.exists(CACHE_FILE):
+            with open(CACHE_FILE, 'r') as f:
+                cache_data = json.load(f)
+
+        cache_data[file_hash] = {
+            'file_type': file_type,
+            'result_type': result_type,
+            'confidence': confidence,
+            'timestamp': datetime.now().isoformat()
+        }
+
+        # Keep only last 50 entries for performance
+        if len(cache_data) > 50:
+            sorted_items = sorted(cache_data.items(), key=lambda x: x[1]['timestamp'])
+            cache_data = dict(sorted_items[-50:])
+
+        with open(CACHE_FILE, 'w') as f:
+            json.dump(cache_data, f)
+    except Exception:
+        pass
 
 def get_cached_result(file_hash):
     """Get cached analysis result"""
     try:
-        with get_db_connection() as conn:
-            result = conn.execute('''
-                SELECT result_type, confidence FROM analysis_cache 
-                WHERE file_hash = ? AND datetime(created_at) > datetime('now', '-1 hour')
-            ''', (file_hash,)).fetchone()
+        if os.path.exists(CACHE_FILE):
+            with open(CACHE_FILE, 'r') as f:
+                cache_data = json.load(f)
 
-            if result:
-                return result['result_type'], result['confidence']
-    except Exception as e:
-        print(f"Cache retrieval error: {e}")
+            if file_hash in cache_data:
+                cached = cache_data[file_hash]
+                # Check if cache is still fresh (1 hour)
+                cached_time = datetime.fromisoformat(cached['timestamp'])
+                if (datetime.now() - cached_time).total_seconds() < 3600:
+                    return cached['result_type'], cached['confidence']
+    except Exception:
+        pass
 
     return None, None
 
-# Initialize database on import
-if not os.path.exists(DB_PATH):
-    init_database()
+# Initialize on import
+ensure_directories()
