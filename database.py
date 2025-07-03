@@ -7,50 +7,25 @@ import threading
 
 DB_PATH = 'aithentic.db'
 
-class ConnectionPool:
-    def __init__(self, db_path, max_connections=5):
-        self.db_path = db_path
-        self.max_connections = max_connections
-        self._pool = []
-        self._lock = threading.Lock()
-        self._condition = threading.Condition(self._lock)
+# Thread-local storage for SQLite connections
+_thread_local = threading.local()
 
-        for _ in range(max_connections):
-            self._pool.append(self._create_connection())
-
-    def _create_connection(self):
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row
-        return conn
-
-    def get_connection(self):
-        with self._lock:
-            while not self._pool:
-                self._condition.wait()  # Wait for a connection to become available
-            return self._pool.pop()
-
-    def release_connection(self, conn):
-        with self._lock:
-            self._pool.append(conn)
-            self._condition.notify()  # Notify waiting threads that a connection is available
-
-    def close_all_connections(self):
-        with self._lock:
-            for conn in self._pool:
-                conn.close()
-            self._pool = []
-
-# Initialize the connection pool
-connection_pool = ConnectionPool(DB_PATH)
+def _get_thread_connection():
+    """Get a thread-local SQLite connection"""
+    if not hasattr(_thread_local, 'connection'):
+        _thread_local.connection = sqlite3.connect(DB_PATH, check_same_thread=False)
+        _thread_local.connection.row_factory = sqlite3.Row
+    return _thread_local.connection
 
 @contextmanager
 def get_db_connection():
-    """Context manager for database connections using connection pool"""
-    conn = connection_pool.get_connection()
+    """Context manager for database connections using thread-local storage"""
+    conn = _get_thread_connection()
     try:
         yield conn
     finally:
-        connection_pool.release_connection(conn)
+        # Don't close the connection, keep it for the thread
+        pass
 
 def init_database():
     """Initialize database tables"""
