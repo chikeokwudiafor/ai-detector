@@ -5,7 +5,6 @@ from datetime import datetime
 from flask import Flask, render_template, request, flash, session, jsonify, make_response
 from config import *
 from detection import AIDetector, get_result_classification
-from database import get_analytics_summary
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
@@ -202,14 +201,14 @@ def index():
                          result_description=result_description,
                          result_footer=result_footer if 'result_footer' in locals() else None,
                          session_id=session_id)
-    
+
     # Add performance headers for GET requests
     if request.method == "GET":
         from flask import make_response
         resp = make_response(response)
         resp.headers['Cache-Control'] = 'public, max-age=300'  # 5 minutes
         return resp
-    
+
     return response
 
 @app.route("/about")
@@ -257,24 +256,24 @@ def submit_feedback():
                 'true_label': true_label,
                 'timestamp': datetime.now().isoformat()
             }
-            
+
             os.makedirs('feedback_data', exist_ok=True)
             feedback_file = 'feedback_data/user_feedback.json'
-            
+
             # Load existing feedback
             if os.path.exists(feedback_file):
                 with open(feedback_file, 'r') as f:
                     existing_feedback = json.load(f)
             else:
                 existing_feedback = []
-            
+
             # Add new feedback
             existing_feedback.append(feedback_data)
-            
+
             # Save back to file
             with open(feedback_file, 'w') as f:
                 json.dump(existing_feedback, f, indent=2)
-            
+
             success = True
         except Exception as e:
             app.logger.error(f"Feedback save error: {e}")
@@ -320,6 +319,6 @@ if __name__ == "__main__":
     import os
     # Replit deployments use PORT environment variable
     port = int(os.environ.get('PORT', 5000))
-    
+
     app.logger.info(f"Starting Flask app on host 0.0.0.0 port {port}...")
     app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
