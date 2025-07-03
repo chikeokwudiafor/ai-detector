@@ -298,7 +298,7 @@ def submit_feedback():
 @app.route("/health")
 def health_check():
     """Health check endpoint"""
-    return jsonify({"status": "healthy"}), 200
+    return "OK", 200
 
 @app.route("/analytics")
 def analytics_dashboard():
@@ -309,10 +309,8 @@ def analytics_dashboard():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     try:
-        import os
-        
         print("🔧 Starting application initialization...")
         
         # Initialize database
@@ -320,29 +318,9 @@ if __name__ == "__main__":
         init_database()
         print("✅ Database initialized")
         
-        # Get port from environment or default to 5000
-        port = int(os.environ.get('PORT', 5000))
+        print("🔥 Flask is starting on 0.0.0.0:5000")
+        app.run(host='0.0.0.0', port=5000)
         
-        print(f"🚀 Starting Flask app on 0.0.0.0:{port}")
-        print(f"📊 Environment: {'DEPLOYMENT' if os.environ.get('REPL_DEPLOYMENT') else 'DEVELOPMENT'}")
-        
-        app.logger.info(f"Starting Flask app on host 0.0.0.0 port {port}...")
-        
-        # Start Flask app - always bind to 0.0.0.0 for external access
-        app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
-        
-    except ImportError as e:
-        print(f"❌ Import Error: {e}")
-        print("Missing dependencies - check requirements.txt")
-        exit(1)
-    except OSError as e:
-        print(f"❌ OS Error (likely port issue): {e}")
-        print(f"Tried to bind to port {port}")
-        exit(1)
     except Exception as e:
-        print(f"❌ Unexpected startup error: {e}")
-        print(f"Error type: {type(e).__name__}")
-        import traceback
-        print("Full traceback:")
-        traceback.print_exc()
+        print(f"❌ Startup error: {e}")
         exit(1)
