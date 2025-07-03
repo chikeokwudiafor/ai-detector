@@ -310,18 +310,7 @@ def analytics_dashboard():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    try:
-        print("🔧 Starting application initialization...")
-        
-        # Initialize database
-        print("🔧 Initializing database...")
-        init_database()
-        print("✅ Database initialized")
-        
-        print("🔥 Flask is starting on 0.0.0.0:5000")
-        app.run(host='0.0.0.0', port=5000)
-        
-        
-    except Exception as e:
-        print(f"❌ Startup error: {e}")
-        exit(1)
+    # Initialize database
+    init_database()
+    print("🔥 Flask is starting on 0.0.0.0:5000")
+    app.run(host='0.0.0.0', port=5000)
