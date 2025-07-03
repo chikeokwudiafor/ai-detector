@@ -8,7 +8,7 @@ run = ["python", "app.py"]
 deploymentTarget = "gce"
 
 [workflows]
-runButton = "Clean Start"
+runButton = "Production"
 
 [[workflows.workflow]]
 name = "Run"
@@ -38,23 +38,6 @@ args = "python app_test.py"
 
 [[workflows.workflow]]
 name = "Production"
-author = 44510387
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "fuser -k 5000/tcp 2>/dev/null || true"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "sleep 1"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python app.py"
-
-[[workflows.workflow]]
-name = "Clean Start"
 author = 44510387
 mode = "sequential"
 
