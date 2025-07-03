@@ -439,5 +439,13 @@
     "model_prediction": "\u2705 Almost Certainly Human",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "session_id": "ef19a0ff-12b8-4b00-a284-80e8fccf9378",
+    "file_type": "image",
+    "filename": "fawnheadshots-4.jpg",
+    "model_result": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "human_created",
+    "timestamp": "2025-07-03T06:45:20.942449"
   }
 ]
