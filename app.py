@@ -330,11 +330,14 @@ if __name__ == "__main__":
         
         app.logger.info(f"Starting Flask app on host 0.0.0.0 port {port}...")
         
-        # In deployment, use the exact PORT - no retries, no port changes
+        # Always use the exact PORT in deployment, allow retries in development
         if os.environ.get('REPL_DEPLOYMENT'):
+            # In deployment: use exact port, no retries
+            print(f"🚀 DEPLOYMENT MODE: Starting on port {port}")
             app.run(debug=False, host="0.0.0.0", port=port, threaded=True, use_reloader=False)
         else:
-            # In development, allow port conflict resolution
+            # In development: allow port conflict resolution
+            print(f"🔧 DEVELOPMENT MODE: Starting on port {port} with fallbacks")
             max_retries = 5
             for attempt in range(max_retries):
                 try:
