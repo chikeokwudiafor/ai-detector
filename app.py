@@ -1,14 +1,14 @@
 import os
 import uuid
-import hashlib
+import json
+from datetime import datetime
 from flask import Flask, render_template, request, flash, session, jsonify, make_response
-from app_core import create_app
-from database import log_analytics_db, save_feedback_db, get_analytics_summary, cache_analysis_result, get_cached_result
-from utils.file_helpers import validate_file_extension, validate_file_size
-from feedback import feedback_manager
-from auto_feedback_updater import auto_updater
+from config import *
+from detection import AIDetector, get_result_classification
+from database import get_analytics_summary
 
-app = create_app(test_mode=False)
+app = Flask(__name__)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
 
 def track_user_activity(event_type, data=None):
     """Track user activities for analytics"""
@@ -247,14 +247,38 @@ def submit_feedback():
         if not session_data:
             return jsonify({"error": "No recent analysis found"}), 400
 
-        # Save feedback
-        success = feedback_manager.save_feedback(
-            session_id=session_id,
-            file_type=session_data['file_type'],
-            filename=session_data['filename'],
-            model_result=session_data['result'],
-            true_label=true_label
-        )
+        # Save feedback to file
+        try:
+            feedback_data = {
+                'session_id': session_id,
+                'file_type': session_data['file_type'],
+                'filename': session_data['filename'],
+                'model_result': session_data['result'],
+                'true_label': true_label,
+                'timestamp': datetime.now().isoformat()
+            }
+            
+            os.makedirs('feedback_data', exist_ok=True)
+            feedback_file = 'feedback_data/user_feedback.json'
+            
+            # Load existing feedback
+            if os.path.exists(feedback_file):
+                with open(feedback_file, 'r') as f:
+                    existing_feedback = json.load(f)
+            else:
+                existing_feedback = []
+            
+            # Add new feedback
+            existing_feedback.append(feedback_data)
+            
+            # Save back to file
+            with open(feedback_file, 'w') as f:
+                json.dump(existing_feedback, f, indent=2)
+            
+            success = True
+        except Exception as e:
+            app.logger.error(f"Feedback save error: {e}")
+            success = False
 
         if success:
             return jsonify({"message": "Thank you for your feedback!"})
