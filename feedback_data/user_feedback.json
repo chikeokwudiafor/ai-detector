@@ -412,5 +412,14 @@
     "model_prediction": "\ud83e\udd16 Likely AI-Generated",
     "true_label": "ai_generated",
     "feedback_type": "true_label_verification"
+  },
+  {
+    "timestamp": "2025-07-03T01:24:24.706118",
+    "session_id": "575c7f93-9591-4552-b77a-0b7a34fb283e",
+    "file_type": "text",
+    "filename": "direct_text_input",
+    "model_prediction": "\u2705 Almost Certainly Human",
+    "true_label": "ai_generated",
+    "feedback_type": "true_label_verification"
   }
 ]
