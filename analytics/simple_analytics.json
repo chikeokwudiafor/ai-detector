@@ -1,3 +1,5 @@
 {"timestamp": "2025-07-03T06:45:11.850752", "event_type": "analysis_completed", "data": {"filename": "fawnheadshots-4.jpg", "file_type": "image", "result_type": "likely_ai", "confidence": 0.9905111193656921}}
 {"timestamp": "2025-07-03T06:46:04.389438", "event_type": "analysis_completed", "data": {"filename": "afrohaus_ccjo-3.jpg", "file_type": "image", "result_type": "almost_certainly_human", "confidence": 1.2259633308531193e-07}}
 {"timestamp": "2025-07-03T20:40:06.975321", "event_type": "analysis_completed", "data": {"filename": "629e0c60-4197-4fb6-a35e-0297b1026647.png", "file_type": "image", "result_type": "likely_ai", "confidence": 0.8970047235488892}}
+{"timestamp": "2025-07-04T03:42:44.557318", "event_type": "analysis_completed", "data": {"filename": "IMG_0745.png", "file_type": "image", "result_type": "likely_ai", "confidence": 0.9984100440051407}}
+{"timestamp": "2025-07-04T03:49:41.107935", "event_type": "analysis_completed", "data": {"filename": "IMG_0745.png", "file_type": "image", "result_type": "likely_ai", "confidence": 0.9984100440051407}}

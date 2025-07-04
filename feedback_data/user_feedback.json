@@ -447,5 +447,13 @@
     "model_result": "\ud83e\udd16 Likely AI-Generated",
     "true_label": "human_created",
     "timestamp": "2025-07-03T06:45:20.942449"
+  },
+  {
+    "session_id": "199b8775-d1cb-4d5a-9473-1d740dacc165",
+    "file_type": "image",
+    "filename": "IMG_0745.png",
+    "model_result": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "human_created",
+    "timestamp": "2025-07-04T03:49:45.394300"
   }
 ]
