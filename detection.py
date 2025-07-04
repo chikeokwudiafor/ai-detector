@@ -36,6 +36,7 @@ class ModelLogger:
 
     def _init_csv(self):
         """Initialize CSV file with headers if it doesn't exist"""
+        self._ensure_log_dir()  # Ensure directory exists before creating file
         if not os.path.exists(self.csv_file):
             with open(self.csv_file, 'w', newline='') as f:
                 writer = csv.writer(f)
