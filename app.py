@@ -298,6 +298,46 @@ def ping():
     """Quick health check endpoint"""
     return "pong", 200
 
+
+@app.route('/admin/feedback-analysis')
+def feedback_analysis():
+    """Admin endpoint to view feedback analysis and weight suggestions"""
+    try:
+        from feedback_analyzer import FeedbackAnalyzer
+        analyzer = FeedbackAnalyzer()
+        analysis = analyzer.analyze_model_performance()
+        suggestions = analyzer.suggest_weight_adjustments()
+        
+        return jsonify({
+            'analysis': analysis,
+            'suggestions': suggestions,
+            'status': 'success'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/update-weights', methods=['POST'])
+def update_weights():
+    """Force update adaptive weights from feedback"""
+    try:
+        from feedback_analyzer import adaptive_weight_manager
+        updated_weights = adaptive_weight_manager.update_weights_from_feedback(force_update=True)
+        
+        if updated_weights:
+            return jsonify({
+                'message': 'Weights updated successfully',
+                'updated_weights': updated_weights,
+                'status': 'success'
+            })
+        else:
+            return jsonify({
+                'message': 'No weight updates needed',
+                'status': 'no_changes'
+            })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+
 @app.route("/health")
 def health_check():
     """Detailed health check endpoint"""

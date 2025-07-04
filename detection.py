@@ -103,9 +103,14 @@ class ModelManager:
         for model_config in TEXT_MODELS:
             model = self._load_text_model(model_config)
             if model:
+                # Apply adaptive weight if available
+                adaptive_weight = adaptive_weights.get_model_weight(
+                    model_config['name'], 
+                    model_config['weight']
+                )
                 self.text_models.append({
                     'model': model,
-                    'weight': model_config['weight'],
+                    'weight': adaptive_weight,
                     'name': model_config['name']
                 })
 
@@ -113,9 +118,14 @@ class ModelManager:
         for model_config in IMAGE_MODELS:
             model = self._load_image_model(model_config)
             if model:
+                # Apply adaptive weight if available, but preserve Organika override logic
+                adaptive_weight = adaptive_weights.get_model_weight(
+                    model_config['name'], 
+                    model_config['weight']
+                )
                 self.image_models.append({
                     'model': model,
-                    'weight': model_config['weight'],
+                    'weight': adaptive_weight,
                     'name': model_config['name']
                 })
 
@@ -476,7 +486,7 @@ class AIDetector:
             if not predictions:
                 return "processing_error", 0.0, []
 
-            # Check for Organika override BEFORE ensemble
+            # Check for Organika override BEFORE ensemble (PRESERVED - no changes)
             organika_result = None
             for pred_data in predictions_data:
                 if "Organika" in pred_data['model_name'] and pred_data['confidence'] >= 0.95:
@@ -686,15 +696,42 @@ def get_result_classification(result_type):
         # Fallback
         return ("Unknown Result", "confidence-tier-3", "❓", "Unable to classify", "Analysis inconclusive")
 
-# Placeholder for AdaptiveWeights class
+# Import adaptive weight manager
+try:
+    from feedback_analyzer import adaptive_weight_manager
+    ADAPTIVE_WEIGHTS_AVAILABLE = True
+except ImportError:
+    ADAPTIVE_WEIGHTS_AVAILABLE = False
+    logger.warning("Adaptive weights not available - using static weights")
+
 class AdaptiveWeights:
     """
     Manages adaptive weights for AI detection models based on feedback.
+    Now integrated with feedback analysis system.
     """
 
     def __init__(self):
         # Initialize weights with default values
         self.model_weights = {}
+        self._load_adaptive_weights()
+
+    def _load_adaptive_weights(self):
+        """Load adaptive weights from feedback analysis"""
+        if ADAPTIVE_WEIGHTS_AVAILABLE:
+            try:
+                adaptive_weights = adaptive_weight_manager.get_updated_weights()
+                if adaptive_weights:
+                    self.model_weights.update(adaptive_weights)
+                    logger.info(f"Loaded {len(adaptive_weights)} adaptive weights")
+                
+                # Automatically update weights if enough feedback available
+                updated = adaptive_weight_manager.update_weights_from_feedback()
+                if updated:
+                    self.model_weights.update(updated)
+                    logger.info("✅ Applied feedback-driven weight updates")
+                    
+            except Exception as e:
+                logger.warning(f"Failed to load adaptive weights: {e}")
 
     def update_weight(self, model_name, new_weight):
         """
@@ -708,6 +745,10 @@ class AdaptiveWeights:
         Returns the current model weights.
         """
         return self.model_weights
+    
+    def get_model_weight(self, model_name, default_weight):
+        """Get adaptive weight for a model, falling back to default"""
+        return self.model_weights.get(model_name, default_weight)
 
 # Initialize AdaptiveWeights instance
 adaptive_weights = AdaptiveWeights()
