@@ -455,5 +455,21 @@
     "model_result": "\ud83e\udd16 Likely AI-Generated",
     "true_label": "human_created",
     "timestamp": "2025-07-04T03:49:45.394300"
+  },
+  {
+    "session_id": "130d63f7-b1e1-46eb-8898-3d63bbfe5af5",
+    "file_type": "image",
+    "filename": "PNG image 2.png",
+    "model_result": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "ai_generated",
+    "timestamp": "2025-07-04T05:02:10.701262"
+  },
+  {
+    "session_id": "4cf6e323-4070-44af-a1cb-6b1628ea89b6",
+    "file_type": "image",
+    "filename": "opyaday-5.jpg",
+    "model_result": "\ud83e\udd16 Likely AI-Generated",
+    "true_label": "human_created",
+    "timestamp": "2025-07-04T05:02:41.362845"
   }
 ]

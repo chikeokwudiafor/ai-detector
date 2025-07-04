@@ -6,3 +6,5 @@
 {"timestamp": "2025-07-04T04:28:35.118798", "event_type": "analysis_completed", "data": {"filename": "ChatGPT Image Jul 2, 2025, 03_35_34 AM.png", "file_type": "image", "result_type": "likely_ai", "confidence": 0.9990338087081909}}
 {"timestamp": "2025-07-04T04:32:31.772514", "event_type": "analysis_completed", "data": {"filename": "ChatGPT Image Jul 2, 2025, 03_34_55 AM.png", "file_type": "image", "result_type": "likely_ai", "confidence": 0.9990338087081909}}
 {"timestamp": "2025-07-04T04:34:38.341693", "event_type": "analysis_completed", "data": {"filename": "direct_text_input", "file_type": "text", "result_type": "almost_certainly_human", "confidence": 0.0012790030903286403}}
+{"timestamp": "2025-07-04T05:02:07.325816", "event_type": "analysis_completed", "data": {"filename": "PNG image 2.png", "file_type": "image", "result_type": "likely_ai", "confidence": 0.9941599369049072}}
+{"timestamp": "2025-07-04T05:02:36.342978", "event_type": "analysis_completed", "data": {"filename": "opyaday-5.jpg", "file_type": "image", "result_type": "likely_ai", "confidence": 0.999944806098938}}
