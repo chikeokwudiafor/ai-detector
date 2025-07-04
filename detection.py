@@ -494,7 +494,7 @@ class AIDetector:
             result_type = AIDetector._classify_confidence(final_confidence)
 
             # Cache and return
-            final_result = (result_type, final_confidence, [confidence])
+            final_result = (result_type, final_confidence, predictions)
             _cache_result(cache_key, final_result)
 
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
