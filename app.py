@@ -394,6 +394,81 @@ def monitoring_status():
     except Exception as e:
         return jsonify({'error': str(e), 'status': 'error'}), 500
 
+@app.route('/admin/export-csv')
+def export_feedback_csv():
+    """Export feedback data to CSV format"""
+    try:
+        from report_exporter import ReportExporter
+        exporter = ReportExporter()
+        csv_file = exporter.export_feedback_to_csv()
+        
+        if csv_file:
+            return jsonify({
+                'message': 'Feedback data exported to CSV',
+                'file_path': csv_file,
+                'status': 'success'
+            })
+        else:
+            return jsonify({
+                'message': 'No feedback data to export',
+                'status': 'no_data'
+            })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/export-markdown')
+def export_accuracy_markdown():
+    """Export accuracy report to Markdown format"""
+    try:
+        from report_exporter import ReportExporter
+        exporter = ReportExporter()
+        md_file = exporter.export_accuracy_report_to_markdown()
+        
+        return jsonify({
+            'message': 'Accuracy report exported to Markdown',
+            'file_path': md_file,
+            'status': 'success'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/export-analytics-csv')
+def export_analytics_csv():
+    """Export analytics data to CSV format"""
+    try:
+        from report_exporter import ReportExporter
+        exporter = ReportExporter()
+        csv_file = exporter.export_analytics_to_csv()
+        
+        if csv_file:
+            return jsonify({
+                'message': 'Analytics data exported to CSV',
+                'file_path': csv_file,
+                'status': 'success'
+            })
+        else:
+            return jsonify({
+                'message': 'No analytics data to export',
+                'status': 'no_data'
+            })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/export-all')
+def export_all_reports():
+    """Export all reports to CSV and Markdown formats"""
+    try:
+        from report_exporter import export_all_reports
+        results = export_all_reports()
+        
+        return jsonify({
+            'message': 'All reports exported successfully',
+            'exported_files': results,
+            'status': 'success'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
 
 @app.route("/health")
 def health_check():
