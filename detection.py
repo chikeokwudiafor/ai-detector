@@ -437,51 +437,58 @@ class AIDetector:
             if image.mode != 'RGB':
                 image = image.convert('RGB')
 
-            # Use primary model (Organika) for fast processing
-            primary_model = None
-            for model_info in manager.image_models:
-                if "Organika" in model_info['name']:
-                    primary_model = model_info
-                    break
-            
-            if not primary_model:
-                primary_model = manager.image_models[0]
+            # Run multiple models in parallel for speed
+            predictions = []
+            weights = []
+            predictions_data = []
 
-            try:
-                results = primary_model['model'](image)
-                confidence = AIDetector._parse_image_result(results)
-                
-                predictions_data = [{
-                    'model_name': primary_model['name'],
-                    'confidence': confidence,
-                    'weight': primary_model['weight'],
-                    'raw_result': results
-                }]
-                
-                logger.info(f"Primary model {primary_model['name']}: {confidence:.3f}")
-                
-                # Check for Organika override (high confidence)
-                if ("Organika" in primary_model['name'] and confidence >= 0.95):
-                    logger.info(f"🎯 ORGANIKA HIGH CONFIDENCE: {confidence:.3f}")
-                    result_type = AIDetector._classify_confidence(confidence)
-                    final_result = (result_type, confidence, [confidence])
-                    _cache_result(cache_key, final_result)
-                    return final_result
-                
-            except Exception as e:
-                logger.error(f"Primary model failed: {e}")
+            def process_model(model_info):
+                try:
+                    results = model_info['model'](image)
+                    confidence = AIDetector._parse_image_result(results)
+                    return {
+                        'model_name': model_info['name'],
+                        'confidence': confidence,
+                        'weight': model_info['weight'],
+                        'raw_result': results
+                    }
+                except Exception as e:
+                    logger.warning(f"Model {model_info['name']} failed: {e}")
+                    return None
+
+            # Process first 3 models for speed (parallel would be better but keeping it simple)
+            for model_info in manager.image_models[:3]:
+                result = process_model(model_info)
+                if result:
+                    predictions.append(result['confidence'])
+                    weights.append(result['weight'])
+                    predictions_data.append(result)
+
+            if not predictions:
                 return "processing_error", 0.0, []
 
-            # Apply minimal feature analysis
-            filename_features = AIDetector._analyze_filename(filename)
-            final_confidence = confidence
-            
-            # Apply filename boost if present
-            if filename_features:
-                for feature, adjustment in filename_features.items():
-                    final_confidence *= adjustment
+            # Check for Organika override BEFORE ensemble
+            organika_result = None
+            for pred_data in predictions_data:
+                if "Organika" in pred_data['model_name'] and pred_data['confidence'] >= 0.95:
+                    organika_result = pred_data
+                    break
 
-            final_confidence = min(final_confidence, 1.0)
+            if organika_result:
+                logger.info(f"🎯 ORGANIKA HIGH CONFIDENCE OVERRIDE: {organika_result['confidence']:.3f}")
+                result_type = AIDetector._classify_confidence(organika_result['confidence'])
+                final_result = (result_type, organika_result['confidence'], predictions)
+                _cache_result(cache_key, final_result)
+                return final_result
+
+            # Calculate ensemble confidence
+            ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
+
+            # Apply feature analysis
+            filename_features = AIDetector._analyze_filename(filename)
+            final_confidence = EnsembleVoter.apply_confidence_adjustments(
+                ensemble_confidence, metrics, filename_features, predictions_data
+            )
 
             # Classify result
             result_type = AIDetector._classify_confidence(final_confidence)
