@@ -1,21 +1,15 @@
 import json
 import os
 from datetime import datetime
-from contextlib import contextmanager
 
 # Simple file-based storage paths
 ANALYTICS_FILE = 'analytics/simple_analytics.json'
 FEEDBACK_FILE = 'feedback_data/user_feedback.json'
-CACHE_FILE = 'cache/analysis_cache.json'
 
 def ensure_directories():
     """Ensure required directories exist"""
-    for directory in ['analytics', 'feedback_data', 'cache']:
+    for directory in ['analytics', 'feedback_data']:
         os.makedirs(directory, exist_ok=True)
-
-def get_db_connection():
-    """Simple function for SQLite compatibility"""
-    return None
 
 def init_database():
     """Initialize file-based storage"""
@@ -26,17 +20,12 @@ def init_database():
         with open(ANALYTICS_FILE, 'w') as f:
             json.dump([], f)
 
-    # Initialize cache file
-    if not os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'w') as f:
-            json.dump({}, f)
-
 def log_analytics_db(event_type, ip_address, user_agent, referrer, data):
     """Log analytics to file (simplified)"""
     try:
-        # Skip detailed analytics for performance
+        # Only log important events
         if event_type == 'page_visit':
-            return  # Skip page visits entirely
+            return
 
         analytics_data = {
             'timestamp': datetime.now().isoformat(),
@@ -90,55 +79,10 @@ def get_analytics_summary():
                         total_analyses += 1
 
         return {
-            'total_page_visits': 0,
             'total_analyses': total_analyses,
-            'recent_activity': []
         }
     except Exception:
-        return {'total_page_visits': 0, 'total_analyses': 0, 'recent_activity': []}
-
-def cache_analysis_result(file_hash, file_type, result_type, confidence):
-    """Cache analysis result"""
-    try:
-        cache_data = {}
-        if os.path.exists(CACHE_FILE):
-            with open(CACHE_FILE, 'r') as f:
-                cache_data = json.load(f)
-
-        cache_data[file_hash] = {
-            'file_type': file_type,
-            'result_type': result_type,
-            'confidence': confidence,
-            'timestamp': datetime.now().isoformat()
-        }
-
-        # Keep only last 50 entries for performance
-        if len(cache_data) > 50:
-            sorted_items = sorted(cache_data.items(), key=lambda x: x[1]['timestamp'])
-            cache_data = dict(sorted_items[-50:])
-
-        with open(CACHE_FILE, 'w') as f:
-            json.dump(cache_data, f)
-    except Exception:
-        pass
-
-def get_cached_result(file_hash):
-    """Get cached analysis result"""
-    try:
-        if os.path.exists(CACHE_FILE):
-            with open(CACHE_FILE, 'r') as f:
-                cache_data = json.load(f)
-
-            if file_hash in cache_data:
-                cached = cache_data[file_hash]
-                # Check if cache is still fresh (1 hour)
-                cached_time = datetime.fromisoformat(cached['timestamp'])
-                if (datetime.now() - cached_time).total_seconds() < 3600:
-                    return cached['result_type'], cached['confidence']
-    except Exception:
-        pass
-
-    return None, None
+        return {'total_analyses': 0}
 
 # Initialize on import
 ensure_directories()
