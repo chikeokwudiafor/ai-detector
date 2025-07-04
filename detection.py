@@ -398,9 +398,19 @@ class AIDetector:
             final_result = (result_type, final_confidence, predictions)
             _cache_result(cache_key, final_result)
 
-            # Async logging to avoid blocking
+            # Log the result
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
             logger.info(f"Text result: {result_type} ({final_confidence:.3f}) in {processing_time:.1f}ms")
+
+            try:
+                model_logger = get_model_logger()
+                ensemble_result = {
+                    'result_type': result_type,
+                    'confidence': final_confidence
+                }
+                model_logger.log_prediction("text", filename, predictions_data, ensemble_result, processing_time)
+            except Exception as e:
+                logger.warning(f"Failed to log text result: {e}")
 
             return final_result
 
@@ -425,6 +435,20 @@ class AIDetector:
         cached_result = _get_cached_result(cache_key)
         if cached_result:
             logger.info("Returning cached image result")
+            
+            # Still log cached results for tracking
+            try:
+                model_logger = get_model_logger()
+                processing_time = 0.0  # Cached, so minimal time
+                ensemble_result = {
+                    'result_type': cached_result[0],
+                    'confidence': cached_result[1]
+                }
+                predictions_data = [{'model_name': 'cached', 'confidence': cached_result[1], 'weight': 1.0, 'raw_result': 'cached'}]
+                model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
+            except Exception as e:
+                logger.warning(f"Failed to log cached result: {e}")
+            
             return cached_result
 
         manager = get_model_manager()
@@ -479,6 +503,19 @@ class AIDetector:
                 result_type = AIDetector._classify_confidence(organika_result['confidence'])
                 final_result = (result_type, organika_result['confidence'], predictions)
                 _cache_result(cache_key, final_result)
+                
+                # Log the Organika override result
+                try:
+                    model_logger = get_model_logger()
+                    processing_time = (datetime.now() - start_time).total_seconds() * 1000
+                    ensemble_result = {
+                        'result_type': result_type,
+                        'confidence': organika_result['confidence']
+                    }
+                    model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
+                except Exception as e:
+                    logger.warning(f"Failed to log Organika override: {e}")
+                
                 return final_result
 
             # Calculate ensemble confidence
@@ -499,6 +536,17 @@ class AIDetector:
 
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
             logger.info(f"Image result: {result_type} ({final_confidence:.3f}) in {processing_time:.1f}ms")
+
+            # Log the ensemble result
+            try:
+                model_logger = get_model_logger()
+                ensemble_result = {
+                    'result_type': result_type,
+                    'confidence': final_confidence
+                }
+                model_logger.log_prediction("image", filename, predictions_data, ensemble_result, processing_time)
+            except Exception as e:
+                logger.warning(f"Failed to log ensemble result: {e}")
 
             return final_result
 
