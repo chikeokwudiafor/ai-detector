@@ -281,6 +281,14 @@ def submit_feedback():
                 json.dump(existing_feedback, f, indent=2)
 
             success = True
+            
+            # Trigger continuous feedback monitoring check
+            try:
+                from feedback_analyzer import continuous_monitor
+                continuous_monitor.check_for_updates()
+            except Exception as monitor_error:
+                app.logger.warning(f"Feedback monitoring check failed: {monitor_error}")
+                
         except Exception as e:
             app.logger.error(f"Feedback save error: {e}")
             success = False
@@ -334,6 +342,55 @@ def update_weights():
                 'message': 'No weight updates needed',
                 'status': 'no_changes'
             })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/accuracy-report')
+def get_accuracy_report():
+    """Get the latest comprehensive accuracy report"""
+    try:
+        from feedback_analyzer import FeedbackAnalyzer
+        analyzer = FeedbackAnalyzer()
+        report = analyzer.generate_comprehensive_report()
+        
+        return jsonify(report)
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/generate-report', methods=['POST'])
+def generate_report():
+    """Force generate and save a new accuracy report"""
+    try:
+        from feedback_analyzer import adaptive_weight_manager
+        report_file = adaptive_weight_manager.generate_and_save_report()
+        
+        if report_file:
+            return jsonify({
+                'message': 'Report generated successfully',
+                'report_file': report_file,
+                'status': 'success'
+            })
+        else:
+            return jsonify({
+                'message': 'Failed to generate report',
+                'status': 'error'
+            })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/monitoring-status')
+def monitoring_status():
+    """Get status of continuous feedback monitoring"""
+    try:
+        from feedback_analyzer import continuous_monitor
+        current_count = continuous_monitor.check_for_updates()
+        
+        return jsonify({
+            'current_feedback_count': current_count,
+            'last_feedback_count': continuous_monitor.last_feedback_count,
+            'last_report_time': continuous_monitor.last_report_time.isoformat() if continuous_monitor.last_report_time else None,
+            'status': 'active'
+        })
     except Exception as e:
         return jsonify({'error': str(e), 'status': 'error'}), 500
 
