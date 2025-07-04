@@ -11,9 +11,7 @@ _models_loaded = False
 AIDetector = None
 get_result_classification = None
 
-# Simple response cache
-_response_cache = {}
-_cache_ttl = 600  # 10 minutes TTL for faster updates
+# Removed response cache to avoid threading issues in Replit
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'aithentic-detector-2025-secure-key')
@@ -151,8 +149,6 @@ def index():
         file = request.files.get("file")
         text_content = request.form.get("text_content")
 
-        # Simple processing without complex caching
-
         # Handle direct text input
         if text_content and text_content.strip():
             if len(text_content.strip()) < 10:
@@ -212,7 +208,7 @@ def index():
                 'confidence': confidence
             })
 
-    response = render_template("index.html", 
+    return render_template("index.html", 
                          result=result, 
                          confidence=confidence, 
                          result_class=result_class,
@@ -220,15 +216,6 @@ def index():
                          result_description=result_description,
                          result_footer=result_footer if 'result_footer' in locals() else None,
                          session_id=session_id)
-
-    # Add performance headers for GET requests
-    if request.method == "GET":
-        from flask import make_response
-        resp = make_response(response)
-        resp.headers['Cache-Control'] = 'public, max-age=300'  # 5 minutes
-        return resp
-
-    return response
 
 @app.route("/about")
 def about():

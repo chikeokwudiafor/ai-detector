@@ -13,10 +13,9 @@ def ensure_directories():
     for directory in ['analytics', 'feedback_data', 'cache']:
         os.makedirs(directory, exist_ok=True)
 
-@contextmanager
 def get_db_connection():
-    """Dummy context manager for compatibility"""
-    yield None
+    """Simple function for SQLite compatibility"""
+    return None
 
 def init_database():
     """Initialize file-based storage"""

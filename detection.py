@@ -13,8 +13,6 @@ from transformers import pipeline
 import numpy as np
 from config import *
 
-import concurrent.futures
-from functools import partial
 import threading
 
 from results_manager import results_manager
@@ -139,13 +137,8 @@ class ModelManager:
             return self._model_cache[model_name]
             
         try:
-            # Load with optimizations
-            model = pipeline(
-                "text-classification", 
-                model=model_name,
-                device=0 if torch.cuda.is_available() else -1,  # GPU if available
-                torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
-            )
+            # Simple model loading without GPU optimizations
+            model = pipeline("text-classification", model=model_name)
             self._model_cache[model_name] = model
             logger.info(f"✓ Text model loaded: {model_name}")
             return model
@@ -159,12 +152,7 @@ class ModelManager:
                     return self._model_cache[fallback_name]
                     
                 try:
-                    model = pipeline(
-                        "text-classification", 
-                        model=fallback_name,
-                        device=0 if torch.cuda.is_available() else -1,
-                        torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
-                    )
+                    model = pipeline("text-classification", model=fallback_name)
                     self._model_cache[fallback_name] = model
                     logger.info(f"✓ Text model loaded (fallback): {fallback_name}")
                     return model
@@ -359,31 +347,36 @@ class AIDetector:
             if len(text_content) > MAX_TEXT_LENGTH:
                 text_content = text_content[:MAX_TEXT_LENGTH]
 
-            # Use only the best performing model for speed (first model)
-            primary_model = manager.text_models[0]
-            
-            try:
-                result = primary_model['model'](text_content)
-                confidence = AIDetector._parse_text_result(result)
-                
-                predictions = [confidence]
-                weights = [primary_model['weight']]
-                predictions_data = [{
-                    'model_name': primary_model['name'],
-                    'confidence': confidence,
-                    'weight': primary_model['weight'],
-                    'raw_result': result
-                }]
-                
-                logger.info(f"Primary model {primary_model['name']}: {confidence:.3f}")
-                
-            except Exception as e:
-                logger.error(f"Primary model failed: {e}")
+            # Run all text models sequentially
+            predictions = []
+            weights = []
+            predictions_data = []
+
+            for model_info in manager.text_models:
+                try:
+                    result = model_info['model'](text_content)
+                    confidence = AIDetector._parse_text_result(result)
+                    
+                    predictions.append(confidence)
+                    weights.append(model_info['weight'])
+                    predictions_data.append({
+                        'model_name': model_info['name'],
+                        'confidence': confidence,
+                        'weight': model_info['weight'],
+                        'raw_result': result
+                    })
+                    
+                    logger.info(f"Model {model_info['name']}: {confidence:.3f}")
+                    
+                except Exception as e:
+                    logger.warning(f"Model {model_info['name']} failed: {e}")
+                    continue
+
+            if not predictions:
                 return "processing_error", 0.0, []
 
-            # Fast ensemble calculation
-            ensemble_confidence = confidence  # Single model, no averaging needed
-            metrics = {'std_dev': 0.0, 'agreement': 1.0, 'model_count': 1}
+            # Calculate ensemble confidence
+            ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
 
             # Quick feature analysis
             filename_features = AIDetector._analyze_filename(filename)
@@ -461,32 +454,30 @@ class AIDetector:
             if image.mode != 'RGB':
                 image = image.convert('RGB')
 
-            # Run multiple models in parallel for speed
+            # Run all image models sequentially
             predictions = []
             weights = []
             predictions_data = []
 
-            def process_model(model_info):
+            for model_info in manager.image_models:
                 try:
                     results = model_info['model'](image)
                     confidence = AIDetector._parse_image_result(results)
-                    return {
+                    
+                    predictions.append(confidence)
+                    weights.append(model_info['weight'])
+                    predictions_data.append({
                         'model_name': model_info['name'],
                         'confidence': confidence,
                         'weight': model_info['weight'],
                         'raw_result': results
-                    }
+                    })
+                    
+                    logger.info(f"Model {model_info['name']}: {confidence:.3f}")
+                    
                 except Exception as e:
                     logger.warning(f"Model {model_info['name']} failed: {e}")
-                    return None
-
-            # Process first 3 models for speed (parallel would be better but keeping it simple)
-            for model_info in manager.image_models[:3]:
-                result = process_model(model_info)
-                if result:
-                    predictions.append(result['confidence'])
-                    weights.append(result['weight'])
-                    predictions_data.append(result)
+                    continue
 
             if not predictions:
                 return "processing_error", 0.0, []
