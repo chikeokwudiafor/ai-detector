@@ -1729,8 +1729,8 @@
                 <div class="upload-section" id="uploadSection">
                     <span class="upload-icon">📁</span>
                     <div class="upload-text">Drag & drop your file here</div>
-                    <div class="upload-subtext">or click to browse • Images and text files supported</div>
-                    <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt">
+                    <div class="upload-subtext">or click to browse • Images, text files, and PDFs supported</div>
+                    <input type="file" id="file" name="file" class="file-input" accept="image/*,.txt,.pdf">
 
                     <div class="file-info" id="fileInfo">
                         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
@@ -1993,7 +1993,7 @@
             const ext = filename.split('.').pop().toLowerCase();
             const types = {
                 'jpg': 'Image', 'jpeg': 'Image', 'png': 'Image', 'gif': 'Image', 'webp': 'Image',
-                'txt': 'Text Document',
+                'txt': 'Text Document', 'pdf': 'PDF Document',
                 'mp4': 'Video', 'mov': 'Video', 'avi': 'Video', 'mkv': 'Video', 'webm': 'Video'
             };
             return types[ext] || 'Unknown';

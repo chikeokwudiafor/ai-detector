@@ -1,3 +1,7 @@
+Adding PDF processing capabilities to the process_file function.
+```
+
+```python
 import os
 import uuid
 import json
@@ -101,12 +105,30 @@ def process_file(file, file_type, filename="unknown"):
         if file_type == "image":
             result_type, confidence, raw_scores = AIDetector.detect_image(file, filename)
         elif file_type == "text":
-            text_content = file.read().decode('utf-8')
-            if len(text_content.strip()) == 0:
-                return None, 0.0, "Text file is empty."
+            # Check if it's a PDF file
+            if filename.lower().endswith('.pdf'):
+                try:
+                    import PyPDF2
+                    pdf_reader = PyPDF2.PdfReader(file)
+                    text_content = ""
+                    for page in pdf_reader.pages:
+                        text_content += page.extract_text() + "\n"
+
+                    if len(text_content.strip()) == 0:
+                        return None, 0.0, "PDF file contains no extractable text."
+
+                except Exception as pdf_error:
+                    app.logger.error(f"PDF processing error: {pdf_error}")
+                    return None, 0.0, "Unable to extract text from PDF. Please ensure it's not password-protected or corrupted."
+            else:
+                # Regular text file
+                text_content = file.read().decode('utf-8')
+                if len(text_content.strip()) == 0:
+                    return None, 0.0, "Text file is empty."
+
             result_type, confidence, raw_scores = AIDetector.detect_text(text_content, filename)
         elif file_type == "video":
-            # Even if you’re not doing video detection yet, log it:
+            # Even if you're not doing video detection yet, log it:
             app.logger.warning("Video detection not implemented yet. Coming soon.")
             result_type = "video_not_implemented"
             confidence = 0.0
@@ -281,14 +303,14 @@ def submit_feedback():
                 json.dump(existing_feedback, f, indent=2)
 
             success = True
-            
+
             # Trigger continuous feedback monitoring check
             try:
                 from feedback_analyzer import continuous_monitor
                 continuous_monitor.check_for_updates()
             except Exception as monitor_error:
                 app.logger.warning(f"Feedback monitoring check failed: {monitor_error}")
-                
+
         except Exception as e:
             app.logger.error(f"Feedback save error: {e}")
             success = False
@@ -315,7 +337,7 @@ def feedback_analysis():
         analyzer = FeedbackAnalyzer()
         analysis = analyzer.analyze_model_performance()
         suggestions = analyzer.suggest_weight_adjustments()
-        
+
         return jsonify({
             'analysis': analysis,
             'suggestions': suggestions,
@@ -330,7 +352,7 @@ def update_weights():
     try:
         from feedback_analyzer import adaptive_weight_manager
         updated_weights = adaptive_weight_manager.update_weights_from_feedback(force_update=True)
-        
+
         if updated_weights:
             return jsonify({
                 'message': 'Weights updated successfully',
@@ -352,7 +374,7 @@ def get_accuracy_report():
         from feedback_analyzer import FeedbackAnalyzer
         analyzer = FeedbackAnalyzer()
         report = analyzer.generate_comprehensive_report()
-        
+
         return jsonify(report)
     except Exception as e:
         return jsonify({'error': str(e), 'status': 'error'}), 500
@@ -363,7 +385,7 @@ def generate_report():
     try:
         from feedback_analyzer import adaptive_weight_manager
         report_file = adaptive_weight_manager.generate_and_save_report()
-        
+
         if report_file:
             return jsonify({
                 'message': 'Report generated successfully',
@@ -384,7 +406,7 @@ def monitoring_status():
     try:
         from feedback_analyzer import continuous_monitor
         current_count = continuous_monitor.check_for_updates()
-        
+
         return jsonify({
             'current_feedback_count': current_count,
             'last_feedback_count': continuous_monitor.last_feedback_count,
@@ -401,7 +423,7 @@ def export_feedback_csv():
         from report_exporter import ReportExporter
         exporter = ReportExporter()
         csv_file = exporter.export_feedback_to_csv()
-        
+
         if csv_file:
             return jsonify({
                 'message': 'Feedback data exported to CSV',
@@ -423,7 +445,7 @@ def export_accuracy_markdown():
         from report_exporter import ReportExporter
         exporter = ReportExporter()
         md_file = exporter.export_accuracy_report_to_markdown()
-        
+
         return jsonify({
             'message': 'Accuracy report exported to Markdown',
             'file_path': md_file,
@@ -439,7 +461,7 @@ def export_analytics_csv():
         from report_exporter import ReportExporter
         exporter = ReportExporter()
         csv_file = exporter.export_analytics_to_csv()
-        
+
         if csv_file:
             return jsonify({
                 'message': 'Analytics data exported to CSV',
@@ -460,7 +482,7 @@ def export_all_reports():
     try:
         from report_exporter import export_all_reports
         results = export_all_reports()
-        
+
         return jsonify({
             'message': 'All reports exported successfully',
             'exported_files': results,
@@ -494,3 +516,4 @@ if __name__ == '__main__':
 
     # Delay DB and model init until first request
     app.run(host='0.0.0.0', port=5000)
+`

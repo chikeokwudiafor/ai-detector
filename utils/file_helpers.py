@@ -31,6 +31,7 @@ def get_safe_filename(filename):
     """Generate a safe filename for storage"""
     import re
     import uuid
+    from datetime import datetime
     
     # Remove unsafe characters
     safe_name = re.sub(r'[^a-zA-Z0-9._-]', '_', filename)

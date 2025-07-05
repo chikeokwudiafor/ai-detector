@@ -45,9 +45,9 @@ CONFIDENCE_THRESHOLD = 0.15  # Minimum confidence to show results
 
 # File processing
 MAX_TEXT_LENGTH = 1000
-SUPPORTED_IMAGE_FORMATS = ('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp')
-SUPPORTED_TEXT_FORMATS = ('.txt',)
-SUPPORTED_VIDEO_FORMATS = ('.mp4', '.avi', '.mov', '.mkv', '.webm')
+SUPPORTED_IMAGE_FORMATS = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
+SUPPORTED_TEXT_FORMATS = ('.txt', '.pdf')
+SUPPORTED_VIDEO_FORMATS = ('.mp4', '.mov', '.avi', '.mkv', '.webm')
 
 # Heuristic configurations
 HEURISTICS = {
