@@ -1,7 +1,3 @@
-Adding PDF processing capabilities to the process_file function.
-```
-
-```python
 import os
 import uuid
 import json
@@ -516,4 +512,3 @@ if __name__ == '__main__':
 
     # Delay DB and model init until first request
     app.run(host='0.0.0.0', port=5000)
-`
