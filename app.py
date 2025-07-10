@@ -497,6 +497,82 @@ def health_check():
         "timestamp": datetime.now().isoformat()
     }), 200
 
+@app.route("/api/detect", methods=["POST"])
+def api_detect():
+    """JSON API endpoint for SDK integration"""
+    try:
+        ensure_models_loaded()
+        
+        result_data = {
+            'success': False,
+            'result': None,
+            'confidence': None,
+            'result_type': None,
+            'error': None
+        }
+        
+        # Handle JSON input
+        if request.is_json:
+            data = request.get_json()
+            text_content = data.get('text_content')
+            
+            if text_content and text_content.strip():
+                result_type, confidence, error_msg = process_text_content(text_content.strip())
+                if error_msg:
+                    result_data['error'] = error_msg
+                    return jsonify(result_data), 400
+            else:
+                result_data['error'] = "No text content provided"
+                return jsonify(result_data), 400
+        else:
+            # Handle file upload
+            file = request.files.get("file")
+            text_content = request.form.get("text_content")
+            
+            if text_content and text_content.strip():
+                result_type, confidence, error_msg = process_text_content(text_content.strip())
+            elif file:
+                is_valid, file_type, error_msg = validate_file(file)
+                if not is_valid:
+                    result_data['error'] = error_msg
+                    return jsonify(result_data), 400
+                
+                result_type, confidence, error_msg = process_file(file, file_type, file.filename)
+            else:
+                result_data['error'] = "No file or text content provided"
+                return jsonify(result_data), 400
+            
+            if error_msg:
+                result_data['error'] = error_msg
+                return jsonify(result_data), 400
+        
+        # Get result classification
+        if result_type and confidence is not None:
+            result, result_class, result_icon, result_description, result_footer = get_result_classification(result_type)
+            
+            result_data.update({
+                'success': True,
+                'result': result,
+                'confidence': confidence,
+                'result_type': result_type,
+                'result_class': result_class,
+                'result_icon': result_icon,
+                'result_description': result_description,
+                'result_footer': result_footer
+            })
+            
+            # Log successful analysis
+            filename = file.filename if 'file' in locals() and file else "direct_text_input"
+            app.logger.info(f"API Analysis: {filename} -> {result_type} ({confidence:.3f})")
+        
+        return jsonify(result_data)
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 @app.route("/analytics")
 def analytics_dashboard():
     """Simple analytics dashboard (basic auth recommended for production)"""
