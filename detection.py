@@ -141,13 +141,12 @@ class ModelManager:
             return self._model_cache[model_name]
             
         try:
-            # Optimized model loading with device mapping and reduced precision
+            # Optimized model loading with device mapping - remove conflicting torch_dtype
             model = pipeline(
                 "text-classification", 
                 model=model_name,
                 device=-1,  # Force CPU to avoid GPU allocation overhead
-                torch_dtype=torch.float32,
-                model_kwargs={"torch_dtype": torch.float32}
+                model_kwargs={"torch_dtype": torch.float32, "low_cpu_mem_usage": True}
             )
             self._model_cache[model_name] = model
             logger.info(f"✓ Text model loaded: {model_name}")
@@ -166,7 +165,7 @@ class ModelManager:
                         "text-classification", 
                         model=fallback_name,
                         device=-1,
-                        torch_dtype=torch.float32
+                        model_kwargs={"torch_dtype": torch.float32, "low_cpu_mem_usage": True}
                     )
                     self._model_cache[fallback_name] = model
                     logger.info(f"✓ Text model loaded (fallback): {fallback_name}")
@@ -183,7 +182,7 @@ class ModelManager:
                 "image-classification", 
                 model=model_config['name'],
                 device=-1,  # Force CPU
-                torch_dtype=torch.float32
+                model_kwargs={"torch_dtype": torch.float32, "low_cpu_mem_usage": True}
             )
             logger.info(f"✓ Image model loaded: {model_config['name']}")
             return model
@@ -363,11 +362,11 @@ class AIDetector:
             return "model_unavailable", 0.0, []
 
         try:
-            # Optimize text length early
+            # Optimize text length early - use smaller chunk for speed
             original_length = len(text_content)
-            if original_length > MAX_TEXT_LENGTH:
-                text_content = text_content[:MAX_TEXT_LENGTH]
-                logger.info(f"Truncated text from {original_length} to {MAX_TEXT_LENGTH} chars")
+            if original_length > 400:  # Reduced from MAX_TEXT_LENGTH for faster processing
+                text_content = text_content[:400]
+                logger.info(f"Truncated text from {original_length} to 400 chars for faster processing")
 
             # Run models with optimized processing
             predictions = []
@@ -414,11 +413,10 @@ class AIDetector:
             final_result = (result_type, final_confidence, predictions)
             _cache_result(cache_key, final_result)
 
-            # Async logging (non-blocking)
+            # Skip expensive logging during processing for speed
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
             logger.info(f"Text: {result_type} ({final_confidence:.3f}) in {processing_time:.0f}ms")
 
-            # Skip detailed logging for performance - only log errors
             return final_result
 
         except Exception as e:
@@ -468,8 +466,8 @@ class AIDetector:
             if image.mode != 'RGB':
                 image = image.convert('RGB')
             
-            # Resize large images for faster processing
-            max_size = 1024
+            # Resize large images for faster processing - smaller size for speed
+            max_size = 512  # Reduced from 1024 for faster processing
             if image.width > max_size or image.height > max_size:
                 image.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
                 logger.info(f"Resized image to {image.size} for faster processing")

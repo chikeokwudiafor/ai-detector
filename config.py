@@ -44,7 +44,7 @@ IMAGE_MODELS = [
 CONFIDENCE_THRESHOLD = 0.15  # Minimum confidence to show results
 
 # File processing - optimized for speed
-MAX_TEXT_LENGTH = 800
+MAX_TEXT_LENGTH = 400  # Reduced for faster processing
 SUPPORTED_IMAGE_FORMATS = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
 SUPPORTED_TEXT_FORMATS = ('.txt', '.pdf')
 SUPPORTED_VIDEO_FORMATS = ('.mp4', '.mov', '.avi', '.mkv', '.webm')
