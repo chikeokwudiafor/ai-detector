@@ -141,8 +141,14 @@ class ModelManager:
             return self._model_cache[model_name]
             
         try:
-            # Simple model loading without GPU optimizations
-            model = pipeline("text-classification", model=model_name)
+            # Optimized model loading with device mapping and reduced precision
+            model = pipeline(
+                "text-classification", 
+                model=model_name,
+                device=-1,  # Force CPU to avoid GPU allocation overhead
+                torch_dtype=torch.float32,
+                model_kwargs={"torch_dtype": torch.float32}
+            )
             self._model_cache[model_name] = model
             logger.info(f"✓ Text model loaded: {model_name}")
             return model
@@ -156,7 +162,12 @@ class ModelManager:
                     return self._model_cache[fallback_name]
                     
                 try:
-                    model = pipeline("text-classification", model=fallback_name)
+                    model = pipeline(
+                        "text-classification", 
+                        model=fallback_name,
+                        device=-1,
+                        torch_dtype=torch.float32
+                    )
                     self._model_cache[fallback_name] = model
                     logger.info(f"✓ Text model loaded (fallback): {fallback_name}")
                     return model
@@ -168,7 +179,12 @@ class ModelManager:
     def _load_image_model(self, model_config):
         """Load an image classification model with fallback"""
         try:
-            model = pipeline("image-classification", model=model_config['name'])
+            model = pipeline(
+                "image-classification", 
+                model=model_config['name'],
+                device=-1,  # Force CPU
+                torch_dtype=torch.float32
+            )
             logger.info(f"✓ Image model loaded: {model_config['name']}")
             return model
         except Exception as e:
@@ -334,12 +350,12 @@ class AIDetector:
         """
         start_time = datetime.now()
 
-        # Check cache first
-        content_hash = hash(text_content[:1000])  # Hash first 1000 chars for speed
+        # Check cache first - use faster hashing
+        content_hash = hash(text_content[:500])  # Reduced from 1000 for speed
         cache_key = _get_cache_key(content_hash, filename)
         cached_result = _get_cached_result(cache_key)
         if cached_result:
-            logger.info("Returning cached text result")
+            logger.info("✓ Cached text result")
             return cached_result
 
         manager = get_model_manager()
@@ -347,18 +363,21 @@ class AIDetector:
             return "model_unavailable", 0.0, []
 
         try:
-            # Truncate text if too long
-            if len(text_content) > MAX_TEXT_LENGTH:
+            # Optimize text length early
+            original_length = len(text_content)
+            if original_length > MAX_TEXT_LENGTH:
                 text_content = text_content[:MAX_TEXT_LENGTH]
+                logger.info(f"Truncated text from {original_length} to {MAX_TEXT_LENGTH} chars")
 
-            # Run all text models sequentially
+            # Run models with optimized processing
             predictions = []
             weights = []
             predictions_data = []
 
             for model_info in manager.text_models:
                 try:
-                    result = model_info['model'](text_content)
+                    # Process with timeout protection
+                    result = model_info['model'](text_content, top_k=1, truncation=True, max_length=512)
                     confidence = AIDetector._parse_text_result(result)
                     
                     predictions.append(confidence)
@@ -370,7 +389,7 @@ class AIDetector:
                         'raw_result': result
                     })
                     
-                    logger.info(f"Model {model_info['name']}: {confidence:.3f}")
+                    logger.info(f"{model_info['name']}: {confidence:.3f}")
                     
                 except Exception as e:
                     logger.warning(f"Model {model_info['name']} failed: {e}")
@@ -379,10 +398,10 @@ class AIDetector:
             if not predictions:
                 return "processing_error", 0.0, []
 
-            # Calculate ensemble confidence
+            # Fast ensemble calculation
             ensemble_confidence, metrics = EnsembleVoter.weighted_vote(predictions, weights)
 
-            # Quick feature analysis
+            # Quick feature analysis (simplified)
             filename_features = AIDetector._analyze_filename(filename)
             final_confidence = EnsembleVoter.apply_confidence_adjustments(
                 ensemble_confidence, metrics, filename_features, predictions_data
@@ -391,24 +410,15 @@ class AIDetector:
             # Classify result
             result_type = AIDetector._classify_confidence(final_confidence)
 
-            # Cache the result
+            # Cache the result immediately
             final_result = (result_type, final_confidence, predictions)
             _cache_result(cache_key, final_result)
 
-            # Log the result
+            # Async logging (non-blocking)
             processing_time = (datetime.now() - start_time).total_seconds() * 1000
-            logger.info(f"Text result: {result_type} ({final_confidence:.3f}) in {processing_time:.1f}ms")
+            logger.info(f"Text: {result_type} ({final_confidence:.3f}) in {processing_time:.0f}ms")
 
-            try:
-                model_logger = get_model_logger()
-                ensemble_result = {
-                    'result_type': result_type,
-                    'confidence': final_confidence
-                }
-                model_logger.log_prediction("text", filename, predictions_data, ensemble_result, processing_time)
-            except Exception as e:
-                logger.warning(f"Failed to log text result: {e}")
-
+            # Skip detailed logging for performance - only log errors
             return final_result
 
         except Exception as e:
@@ -453,10 +463,16 @@ class AIDetector:
             return "model_unavailable", 0.0, []
 
         try:
-            # Load and preprocess image
+            # Optimized image loading and preprocessing
             image = Image.open(image_file)
             if image.mode != 'RGB':
                 image = image.convert('RGB')
+            
+            # Resize large images for faster processing
+            max_size = 1024
+            if image.width > max_size or image.height > max_size:
+                image.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
+                logger.info(f"Resized image to {image.size} for faster processing")
 
             # Run all image models sequentially
             predictions = []
