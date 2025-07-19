@@ -471,5 +471,13 @@
     "model_result": "\ud83e\udd16 Likely AI-Generated",
     "true_label": "human_created",
     "timestamp": "2025-07-04T05:02:41.362845"
+  },
+  {
+    "session_id": "edffa4b0-f907-4f4a-ac12-3b62d16e6995",
+    "file_type": "image",
+    "filename": "Gf5190LWkAAmfRp.jpeg",
+    "model_result": "\u2705 Almost Certainly Human",
+    "true_label": "human_created",
+    "timestamp": "2025-07-19T03:02:32.596864"
   }
 ]
