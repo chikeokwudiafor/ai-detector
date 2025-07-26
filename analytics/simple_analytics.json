@@ -8,3 +8,4 @@
 {"timestamp": "2025-07-04T04:34:38.341693", "event_type": "analysis_completed", "data": {"filename": "direct_text_input", "file_type": "text", "result_type": "almost_certainly_human", "confidence": 0.0012790030903286403}}
 {"timestamp": "2025-07-04T05:02:07.325816", "event_type": "analysis_completed", "data": {"filename": "PNG image 2.png", "file_type": "image", "result_type": "likely_ai", "confidence": 0.9941599369049072}}
 {"timestamp": "2025-07-04T05:02:36.342978", "event_type": "analysis_completed", "data": {"filename": "opyaday-5.jpg", "file_type": "image", "result_type": "likely_ai", "confidence": 0.999944806098938}}
+{"timestamp": "2025-07-19T05:57:10.237061", "event_type": "analysis_completed", "data": {"filename": "8a66a397-2f84-4c1c-8cd2-f81957efc7d4.png", "file_type": "image", "result_type": "almost_certainly_human", "confidence": 0.05391692935587674}}
