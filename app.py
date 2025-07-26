@@ -491,6 +491,59 @@ def export_all_reports():
     except Exception as e:
         return jsonify({'error': str(e), 'status': 'error'}), 500
 
+@app.route('/admin/custom-model/info')
+def custom_model_info():
+    """Get information about the custom model"""
+    try:
+        from custom_model_trainer import custom_trainer
+        info = custom_trainer.trainer.get_model_info()
+        
+        return jsonify({
+            'model_info': info,
+            'status': 'success'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/custom-model/train', methods=['POST'])
+def train_custom_model():
+    """Force train the custom model"""
+    try:
+        from custom_model_trainer import custom_trainer
+        success = custom_trainer.trainer.train_model()
+        
+        if success:
+            info = custom_trainer.trainer.get_model_info()
+            return jsonify({
+                'message': 'Custom model trained successfully',
+                'model_info': info,
+                'status': 'success'
+            })
+        else:
+            return jsonify({
+                'message': 'Failed to train custom model - not enough data',
+                'status': 'insufficient_data'
+            })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
+@app.route('/admin/custom-model/retrain-check')
+def check_custom_model_retrain():
+    """Check if custom model should be retrained"""
+    try:
+        from custom_model_trainer import custom_trainer
+        
+        should_retrain = custom_trainer.trainer.should_retrain()
+        current_info = custom_trainer.trainer.get_model_info()
+        
+        return jsonify({
+            'should_retrain': should_retrain,
+            'current_model': current_info,
+            'status': 'success'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e), 'status': 'error'}), 500
+
 
 @app.route("/health")
 def health_check():

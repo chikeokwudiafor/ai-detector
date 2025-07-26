@@ -325,6 +325,32 @@ class AIDetector:
     def _ensure_models_loaded():
         """Ensure models are loaded - for pre-warming if needed"""
         return get_model_manager()
+    
+    @staticmethod
+    def _get_custom_model_prediction(filename, file_type):
+        """Get prediction from custom feedback-trained model"""
+        try:
+            from custom_model_trainer import custom_trainer
+            
+            # Create entry data for custom model
+            entry_data = {
+                'filename': filename,
+                'file_type': file_type
+            }
+            
+            # Check if model needs updating
+            custom_trainer.check_and_update()
+            
+            # Get prediction
+            prediction, confidence = custom_trainer.trainer.predict(entry_data)
+            
+            if prediction is not None:
+                return confidence  # Return AI confidence
+            
+        except Exception as e:
+            logger.warning(f"Custom model prediction failed: {e}")
+        
+        return None
 
     @staticmethod
     def detect_text(text_content, filename="unknown.txt"):
@@ -355,6 +381,19 @@ class AIDetector:
             predictions = []
             weights = []
             predictions_data = []
+            
+            # Add custom model prediction if available
+            custom_confidence = AIDetector._get_custom_model_prediction(filename, "text")
+            if custom_confidence is not None:
+                predictions.append(custom_confidence)
+                weights.append(1.5)  # Good weight for feedback-trained model
+                predictions_data.append({
+                    'model_name': 'Custom Feedback Model',
+                    'confidence': custom_confidence,
+                    'weight': 1.5,
+                    'raw_result': 'custom_trained'
+                })
+                logger.info(f"Custom Model: {custom_confidence:.3f}")
 
             for model_info in manager.text_models:
                 try:
@@ -462,6 +501,19 @@ class AIDetector:
             predictions = []
             weights = []
             predictions_data = []
+            
+            # Add custom model prediction if available
+            custom_confidence = AIDetector._get_custom_model_prediction(filename, "image")
+            if custom_confidence is not None:
+                predictions.append(custom_confidence)
+                weights.append(1.5)  # Good weight for feedback-trained model
+                predictions_data.append({
+                    'model_name': 'Custom Feedback Model',
+                    'confidence': custom_confidence,
+                    'weight': 1.5,
+                    'raw_result': 'custom_trained'
+                })
+                logger.info(f"Custom Model: {custom_confidence:.3f}")
 
             for model_info in manager.image_models:
                 try:
