@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About – AIthentic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-blue: #1e40af;
+            --primary-blue-light: #3b82f6;
+            --secondary-gray: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-light: #e2e8f0;
+            --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-brand::before {
+            content: "🔍";
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .nav-links a.active {
+            color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid var(--border-light);
+        }
+        
+        .content-section h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-section p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .tool-card {
+            background: var(--secondary-gray);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+            background: white;
+        }
+        
+        .tool-type {
+            font-size: 0.875rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tool-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .tool-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.875rem;
+        }
+        
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow-medium);
+                border-top: 1px solid var(--border-light);
+                gap: 0;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                padding: 6rem 1rem 2rem;
+            }
+            
+            .content-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">AIthentic</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about" class="active">About</a></li>
+                <li><a href="/roadmap">Roadmap</a></li>
+                <li><a href="/license">License</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">About AIthentic</h1>
+            <p class="page-subtitle">
+                AIthentic uses advanced detection techniques to verify AI-generated content with professional-grade accuracy.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Our Approach</h2>
+            <p>
+                AIthentic employs an ensemble-based detection system that combines multiple state-of-the-art AI models
+                to provide reliable and accurate detection of AI-generated content. Our system analyzes images, text, 
+                and videos using weighted voting algorithms and confidence scoring to deliver trustworthy results.
+            </p>
+            <p>
+                We use a multi-model approach with fallback mechanisms to ensure high availability and robust 
+                performance across different types of content and generation methods.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>Detection Technologies</h2>
+            <p>Our detection capabilities are powered by the following advanced AI models and techniques:</p>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-type">Text Detection</div>
+                    <div class="tool-name">RoBERTa OpenAI Detector</div>
+                    <div class="tool-description">
+                        A fine-tuned RoBERTa model specifically designed to detect GPT-generated text with high accuracy.
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-type">Text Detection</div>
+                    <div class="tool-name">ChatGPT Detector RoBERTa</div>
+                    <div class="tool-description">
+                        Specialized model for detecting ChatGPT-generated content with enhanced performance on conversational text.
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-type">Image Detection</div>
+                    <div class="tool-name">AI Image Detector</div>
+                    <div class="tool-description">
+                        Advanced computer vision model trained to distinguish between AI-generated and human-created images.
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-type">Framework</div>
+                    <div class="tool-name">Hugging Face Transformers</div>
+                    <div class="tool-description">
+                        Industry-leading framework for deploying and running transformer-based models at scale.
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-type">Ensemble Method</div>
+                    <div class="tool-name">Weighted Voting</div>
+                    <div class="tool-description">
+                        Combines predictions from multiple models using weighted averages and confidence metrics.
+                    </div>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-type">Processing</div>
+                    <div class="tool-name">PyTorch & PIL</div>
+                    <div class="tool-description">
+                        High-performance tensor computation and image processing libraries for efficient analysis.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Quality Assurance</h2>
+            <p>
+                Our system includes comprehensive logging, confidence scoring, and agreement metrics to ensure 
+                transparency and reliability. We continuously monitor model performance and update our detection 
+                capabilities to stay ahead of evolving AI generation techniques.
+            </p>
+            <p>
+                All predictions include detailed confidence scores and model agreement metrics, allowing users 
+                to understand the reliability of each detection result.
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 AIthentic. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
